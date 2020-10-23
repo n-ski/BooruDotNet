@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Danbooru\BooruDotNet.Danbooru.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Gelbooru\BooruDotNet.Gelbooru.csproj" />
+    <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Tests.Shared\BooruDotNet.Tests.Shared.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
+  </ItemGroup>
+
+</Project>

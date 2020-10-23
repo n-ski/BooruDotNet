@@ -1,0 +1,16 @@
+<Project>
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <Authors>Sergey Volkov</Authors>
+    <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
+</Project>

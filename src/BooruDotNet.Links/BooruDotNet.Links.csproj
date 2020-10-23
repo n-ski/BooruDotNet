@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Version>0.1.0</Version>
+    <Description>A library for fetching posts from URLs (Danbooru, Gelbooru, etc.).</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
+  </ItemGroup>
+
+</Project>
