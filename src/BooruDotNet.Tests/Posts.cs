@@ -19,5 +19,17 @@ namespace BooruDotNet.Tests
 
             Assert.AreEqual(id, post.ID);
         }
+
+        [Test]
+        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253)]
+        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
+        public async Task GetByHash_Success(Type booruType, string hash, int expectedId)
+        {
+            var booru = BooruHelpers.Create<IBooruPostsByHash>(booruType);
+
+            var post = await booru.GetPostAsync(hash);
+
+            Assert.AreEqual(expectedId, post.ID);
+        }
     }
 }

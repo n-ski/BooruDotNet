@@ -8,7 +8,7 @@ using BooruDotNet.Resources;
 
 namespace BooruDotNet.Boorus
 {
-    public class Danbooru : BooruBase, IBooruPostsById
+    public class Danbooru : BooruBase, IBooruPostsById, IBooruPostsByHash
     {
         public Danbooru() : base()
         {
@@ -16,7 +16,16 @@ namespace BooruDotNet.Boorus
 
         public async Task<IPost> GetPostAsync(int id)
         {
-            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPost_Format, id);
+            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostId_Format, id);
+
+            using Stream jsonStream = await GetResponseStreamAsync(uri);
+
+            return await JsonSerializer.DeserializeAsync<DanbooruPost>(jsonStream);
+        }
+
+        public async Task<IPost> GetPostAsync(string hash)
+        {
+            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
             using Stream jsonStream = await GetResponseStreamAsync(uri);
 
