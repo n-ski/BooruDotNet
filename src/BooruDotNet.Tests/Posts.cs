@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Tests.Helpers;
@@ -30,6 +31,27 @@ namespace BooruDotNet.Tests
             var post = await booru.GetPostAsync(hash);
 
             Assert.AreEqual(expectedId, post.ID);
+        }
+
+        [Test]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        public void GetById_Fail(Type booruType)
+        {
+            var booru = BooruHelpers.Create<IBooruPostsById>(booruType);
+
+            Assert.ThrowsAsync<HttpRequestException>(() => booru.GetPostAsync(0));
+        }
+
+        [Test]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        public void GetByHash_Fail(Type booruType)
+        {
+            var booru = BooruHelpers.Create<IBooruPostsByHash>(booruType);
+            var hash = new string('0', 32);
+
+            Assert.ThrowsAsync<HttpRequestException>(() => booru.GetPostAsync(hash));
         }
     }
 }

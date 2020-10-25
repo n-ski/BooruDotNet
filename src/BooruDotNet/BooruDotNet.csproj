@@ -19,6 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Easy.Common" Version="3.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Update="Resources\PostUris.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -32,6 +41,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\PostUris.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PostUris.Designer.cs</LastGenOutput>

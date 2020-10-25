@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Resources;
+using Easy.Common;
 
 namespace BooruDotNet.Boorus
 {
@@ -25,6 +26,8 @@ namespace BooruDotNet.Boorus
 
         public async Task<IPost> GetPostAsync(string hash)
         {
+            Ensure.NotNullOrEmptyOrWhiteSpace(hash);
+
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
             using Stream jsonStream = await GetResponseStreamAsync(uri);
