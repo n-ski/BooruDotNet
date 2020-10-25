@@ -22,6 +22,18 @@ namespace BooruDotNet.Posts
 
         public Uri Uri => _postUriLazy.Value;
 
+        [JsonPropertyName("created_at")]
+        public DateTime CreationDate { get; set; }
+
+        [JsonPropertyName("image_width")]
+        public int Width { get; set; }
+
+        [JsonPropertyName("image_height")]
+        public int Height { get; set; }
+
+        [JsonPropertyName("file_size")]
+        public long? FileSize { get; set; }
+
         [JsonPropertyName("md5")]
         public string Hash { get; set; } = "";
 
@@ -38,6 +50,16 @@ namespace BooruDotNet.Posts
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> Tags { get; set; }
 
+        [JsonPropertyName("rating")]
+        [JsonConverter(typeof(RatingConverter))]
+        public Rating Rating { get; set; }
+
+        [JsonPropertyName("source")]
+        public string Source { get; set; } = "";
+
+        [JsonPropertyName("score")]
+        public int? Score { get; set; }
+
         [JsonPropertyName("tag_string_artist")]
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> ArtistTags { get; set; }
@@ -50,9 +72,9 @@ namespace BooruDotNet.Posts
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> CopyrightTags { get; set; }
 
-        //[JsonPropertyName("tag_string_general")]
-        //[JsonConverter(typeof(TagStringConverter))]
-        //public ImmutableArray<string> GeneralTags { get; set; }
+        [JsonPropertyName("tag_string_general")]
+        [JsonConverter(typeof(TagStringConverter))]
+        public ImmutableArray<string> GeneralTags { get; set; }
 
         [JsonPropertyName("tag_string_meta")]
         [JsonConverter(typeof(TagStringConverter))]

@@ -27,6 +27,18 @@ namespace BooruDotNet.Posts
 
         public Uri Uri => _postUriLazy.Value;
 
+        [JsonPropertyName("created_at")]
+        [JsonConverter(typeof(GelbooruDateTimeConverter))]
+        public DateTime CreationDate { get; set; }
+
+        [JsonPropertyName("width")]
+        public int Width { get; set; }
+
+        [JsonPropertyName("height")]
+        public int Height { get; set; }
+
+        public long? FileSize => null;
+
         [JsonPropertyName("hash")]
         public string Hash { get; set; } = "";
 
@@ -40,6 +52,16 @@ namespace BooruDotNet.Posts
         [JsonPropertyName("tags")]
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> Tags { get; set; }
+
+        [JsonPropertyName("rating")]
+        [JsonConverter(typeof(RatingConverter))]
+        public Rating Rating { get; set; }
+
+        [JsonPropertyName("source")]
+        public string Source { get; set; } = "";
+
+        [JsonPropertyName("score")]
+        public int? Score { get; set; }
 
         [JsonPropertyName("directory")]
         public string Directory { get; set; } = "";

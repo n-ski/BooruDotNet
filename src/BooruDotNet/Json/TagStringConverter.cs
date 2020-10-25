@@ -12,9 +12,17 @@ namespace BooruDotNet.Json
         public override ImmutableArray<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string tagString = reader.GetString();
-            string[] tags = tagString.Split(_separator);
 
-            return ImmutableArray.Create(tags);
+            if (tagString.Length > 0)
+            {
+                string[] tags = tagString.Split(_separator);
+
+                return ImmutableArray.Create(tags);
+            }
+            else
+            {
+                throw new JsonException();
+            }
         }
 
         public override void Write(Utf8JsonWriter writer, ImmutableArray<string> value, JsonSerializerOptions options)
