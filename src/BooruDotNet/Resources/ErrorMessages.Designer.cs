@@ -77,5 +77,14 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("PostInvalidId", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Couldn&apos;t retrieve a tag with the given name..
+        /// </summary>
+        internal static string TagInvalidName {
+            get {
+                return ResourceManager.GetString("TagInvalidName", resourceCulture);
+            }
+        }
     }
 }

@@ -123,4 +123,7 @@
   <data name="PostInvalidId" xml:space="preserve">
     <value>Couldn't retrieve a post with the given ID.</value>
   </data>
+  <data name="TagInvalidName" xml:space="preserve">
+    <value>Couldn't retrieve a tag with the given name.</value>
+  </data>
 </root>

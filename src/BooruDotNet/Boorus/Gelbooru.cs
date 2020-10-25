@@ -1,18 +1,17 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using BooruDotNet.Extensions;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Resources;
+using BooruDotNet.Tags;
 using Easy.Common;
 
 namespace BooruDotNet.Boorus
 {
-    public class Gelbooru : BooruBase, IBooruPostsById, IBooruPostsByHash
+    public class Gelbooru : BooruBase, IBooruPostsById, IBooruPostsByHash, IBooruTagByName
     {
         public Gelbooru() : base()
         {
@@ -22,8 +21,7 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostId_Format, id);
 
-            using Stream jsonStream = await GetResponseStreamAsync(uri);
-            GelbooruPost[] posts = await JsonSerializer.DeserializeAsync<GelbooruPost[]>(jsonStream);
+            GelbooruPost[] posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri);
 
             Ensure.That<HttpRequestException>(
                 posts.Length == 1,
@@ -51,6 +49,21 @@ namespace BooruDotNet.Boorus
                 ErrorMessages.PostInvalidHash);
 
             return await GetPostAsync(postId);
+        }
+
+        public async Task<ITag> GetTagAsync(string tagName)
+        {
+            Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
+
+            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruTagName_Format, tagName);
+
+            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(uri);
+
+            Ensure.That<HttpRequestException>(
+                tags.Length == 1,
+                ErrorMessages.TagInvalidName);
+
+            return tags[0];
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BooruDotNet.Boorus
@@ -41,6 +42,13 @@ namespace BooruDotNet.Boorus
             HttpResponseMessage response = await GetResponseAsync(requestUri);
 
             return await response.Content.ReadAsStreamAsync();
+        }
+
+        protected async static Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri)
+        {
+            using Stream jsonStream = await GetResponseStreamAsync(requestUri);
+
+            return await JsonSerializer.DeserializeAsync<T>(jsonStream);
         }
     }
 }

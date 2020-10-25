@@ -79,6 +79,15 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://danbooru.donmai.us/tags.json?search[name]={0}.
+        /// </summary>
+        internal static string DanbooruTagName_Format {
+            get {
+                return ResourceManager.GetString("DanbooruTagName_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to http://gelbooru.com/index.php?page=post&amp;s=list&amp;md5={0}.
         /// </summary>
         internal static string GelbooruPostHash_Format {
@@ -93,6 +102,15 @@ namespace BooruDotNet.Resources {
         internal static string GelbooruPostId_Format {
             get {
                 return ResourceManager.GetString("GelbooruPostId_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://gelbooru.com/index.php?page=dapi&amp;s=tag&amp;q=index&amp;name={0}&amp;json=1.
+        /// </summary>
+        internal static string GelbooruTagName_Format {
+            get {
+                return ResourceManager.GetString("GelbooruTagName_Format", resourceCulture);
             }
         }
     }
