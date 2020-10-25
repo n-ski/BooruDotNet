@@ -8,7 +8,7 @@ using BooruDotNet.Resources;
 
 namespace BooruDotNet.Boorus
 {
-    public class Gelbooru : BooruBase, IBooruPosts
+    public class Gelbooru : BooruBase, IBooruPostsById
     {
         public Gelbooru() : base()
         {

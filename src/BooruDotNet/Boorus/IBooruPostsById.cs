@@ -3,7 +3,7 @@ using BooruDotNet.Posts;
 
 namespace BooruDotNet.Boorus
 {
-    public interface IBooruPosts
+    public interface IBooruPostsById
     {
         Task<IPost> GetPostAsync(int id);
     }

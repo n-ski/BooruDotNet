@@ -13,7 +13,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru), 5632370)]
         public async Task GetById_Success(Type booruType, int id)
         {
-            var booru = BooruHelpers.Create<IBooruPosts>(booruType);
+            var booru = BooruHelpers.Create<IBooruPostsById>(booruType);
 
             var post = await booru.GetPostAsync(id);
 
