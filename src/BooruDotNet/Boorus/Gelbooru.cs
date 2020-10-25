@@ -8,19 +8,20 @@ using BooruDotNet.Resources;
 
 namespace BooruDotNet.Boorus
 {
-    public class Danbooru : BooruBase, IBooruPosts
+    public class Gelbooru : BooruBase, IBooruPosts
     {
-        public Danbooru() : base()
+        public Gelbooru() : base()
         {
         }
 
         public async Task<IPost> GetPostAsync(int id)
         {
-            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPost_Format, id);
+            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPost_Format, id);
 
             using Stream jsonStream = await GetResponseStreamAsync(uri);
+            GelbooruPost[] posts = await JsonSerializer.DeserializeAsync<GelbooruPost[]>(jsonStream);
 
-            return await JsonSerializer.DeserializeAsync<DanbooruPost>(jsonStream);
+            return posts[0];
         }
     }
 }

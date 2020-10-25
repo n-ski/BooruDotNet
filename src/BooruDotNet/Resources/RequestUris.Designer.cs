@@ -68,5 +68,14 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("DanbooruPost_Format", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://gelbooru.com/index.php?page=dapi&amp;s=post&amp;q=index&amp;id={0}&amp;json=1.
+        /// </summary>
+        internal static string GelbooruPost_Format {
+            get {
+                return ResourceManager.GetString("GelbooruPost_Format", resourceCulture);
+            }
+        }
     }
 }

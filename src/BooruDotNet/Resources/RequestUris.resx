@@ -120,4 +120,7 @@
   <data name="DanbooruPost_Format" xml:space="preserve">
     <value>https://danbooru.donmai.us/posts/{0}.json</value>
   </data>
+  <data name="GelbooruPost_Format" xml:space="preserve">
+    <value>https://gelbooru.com/index.php?page=dapi&amp;s=post&amp;q=index&amp;id={0}&amp;json=1</value>
+  </data>
 </root>

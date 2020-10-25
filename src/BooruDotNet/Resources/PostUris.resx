@@ -120,4 +120,7 @@
   <data name="Danbooru_Format" xml:space="preserve">
     <value>https://danbooru.donmai.us/posts/{0}</value>
   </data>
+  <data name="Gelbooru_Format" xml:space="preserve">
+    <value>https://gelbooru.com/index.php?page=post&amp;s=view&amp;id={0}</value>
+  </data>
 </root>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
+using BooruDotNet.Helpers;
 using BooruDotNet.Json;
 using BooruDotNet.Resources;
 
@@ -12,7 +13,7 @@ namespace BooruDotNet.Posts
 
         public DanbooruPost()
         {
-            _postUriLazy = new Lazy<Uri>(() => new Uri(string.Format(PostUris.Danbooru_Format, ID)));
+            _postUriLazy = new Lazy<Uri>(() => UriHelpers.CreateFormat(PostUris.Danbooru_Format, ID));
             FileUri = null!;
         }
 
