@@ -11,7 +11,7 @@ using Easy.Common;
 
 namespace BooruDotNet.Boorus
 {
-    public class Danbooru : BooruBase, IBooruPostsById, IBooruPostsByHash, IBooruTagByName
+    public class Danbooru : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {
         public Danbooru() : base()
         {

@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
+using BooruDotNet.Tags;
 using BooruDotNet.Tests.Helpers;
 using NUnit.Framework;
 

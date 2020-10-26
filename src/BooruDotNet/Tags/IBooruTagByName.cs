@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using BooruDotNet.Tags;
 
-namespace BooruDotNet.Boorus
+namespace BooruDotNet.Tags
 {
     public interface IBooruTagByName
     {

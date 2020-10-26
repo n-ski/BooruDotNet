@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
-using BooruDotNet.Posts;
 
-namespace BooruDotNet.Boorus
+namespace BooruDotNet.Posts
 {
-    public interface IBooruPostsByHash
+    public interface IBooruPostByHash
     {
         Task<IPost> GetPostAsync(string hash);
     }
