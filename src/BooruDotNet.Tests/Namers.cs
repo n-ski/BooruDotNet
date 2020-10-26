@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Namers;
+using BooruDotNet.Tags;
 using NUnit.Framework;
 
 namespace BooruDotNet.Tests
@@ -8,8 +9,9 @@ namespace BooruDotNet.Tests
     public class Namers
     {
         private static readonly Danbooru _booru = new Danbooru();
+        private static readonly TagCache _cache = new TagCache(_booru);
         private static readonly IPostNamer _hashNamer = new HashNamer();
-        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_booru);
+        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_cache.GetTagAsync);
 
         [Test]
         public async Task CreateHashName_Success()
