@@ -13,6 +13,11 @@ namespace BooruDotNet.Json
         {
             string tagString = reader.GetString();
 
+            if (tagString is null)
+            {
+                throw new JsonException();
+            }
+
             if (tagString.Length > 0)
             {
                 string[] tags = tagString.Split(_separator);
@@ -21,7 +26,7 @@ namespace BooruDotNet.Json
             }
             else
             {
-                throw new JsonException();
+                return ImmutableArray.Create<string>();
             }
         }
 

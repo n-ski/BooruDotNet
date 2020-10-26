@@ -1,8 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 using BooruDotNet.Json;
 
 namespace BooruDotNet.Tags
 {
+    [DebuggerDisplay(ITag.DebuggerDisplayString)]
     public class DanbooruTag : ITag
     {
         [JsonPropertyName("name")]
