@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BooruDotNet.Tags;
 
@@ -67,18 +66,22 @@ namespace BooruDotNet.Namers
 
             //// Step 2.
             // Append copyrights.
-            if (copyrightTags.Count > 1)
+            if (copyrightTags.Count > 0)
             {
-                nameBuilder
-                    // Get the most popular tag.
-                    .Append(copyrightTags[0].Name)
-                    .Append("_and_")
-                    .Append(copyrightTags.Count - 1)
-                    .Append("_more_");
-            }
-            else if (copyrightTags.Count == 1)
-            {
-                nameBuilder.Append(copyrightTags[0].Name).Append('_');
+                nameBuilder.Append(copyrightTags[0].Name);
+
+                if (copyrightTags.Count > 1)
+                {
+                    nameBuilder
+                        .Append("_and_")
+                        .Append(copyrightTags.Count - 1)
+                        .Append("_more_");
+                }
+                else
+                {
+                    nameBuilder.Append('_');
+
+                }
             }
 
             //// Step 3.

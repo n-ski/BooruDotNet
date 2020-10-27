@@ -33,8 +33,6 @@ namespace BooruDotNet.Namers
 
         public string Name(IPost post)
         {
-
-
             var artistTags = new List<ITag>();
             var copyrightTags = new List<ITag>();
             var characterTags = new List<ITag>();
@@ -81,7 +79,6 @@ namespace BooruDotNet.Namers
                             semaphore.Release();
                         }
                     });
-
                 });
 
                 Task.WhenAll(tasks).Wait();
@@ -108,7 +105,7 @@ namespace BooruDotNet.Namers
                     orderByCountThenByName(characterTags, true).ToArray(),
                     // TODO: figure out how copyright tags are sorted.
                     orderByCountThenByName(copyrightTags, true).ToArray(),
-                    orderByCountThenByName(artistTags, false).ToArray(),
+                    artistTags,
                     post.Hash)
                 : CreateName(post.ID, post.Hash);
         }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -26,6 +24,21 @@ namespace BooruDotNet.Namers
 
         protected override string CreateName(IReadOnlyList<ITag> characterTags, IReadOnlyList<ITag> copyrightTags, IReadOnlyList<ITag> artistTags, string hash)
         {
+            static StringBuilder joinAllTags(StringBuilder builder, IReadOnlyList<ITag> tags)
+            {
+                System.Diagnostics.Debug.Assert(tags.Count > 2);
+                int lengthExceptLast = tags.Count - 1;
+
+                for (int i = 0; i < lengthExceptLast; i++)
+                {
+                    builder.Append(tags[i].Name).Append(", ");
+                }
+
+                return builder
+                    .Append("and ")
+                    .Append(tags[lengthExceptLast].Name);
+            }
+
             StringBuilder nameBuilder = new StringBuilder();
 
             //// Step 1.
@@ -44,17 +57,7 @@ namespace BooruDotNet.Namers
             }
             else if (characterTags.Count > 2)
             {
-                int lengthExceptLast = characterTags.Count - 1;
-
-                for (int i = 0; i < lengthExceptLast; i++)
-                {
-                    nameBuilder.Append(characterTags[i].Name).Append(", ");
-                }
-
-                nameBuilder
-                    .Append("and ")
-                    .Append(characterTags[lengthExceptLast].Name)
-                    .Append(' ');
+                joinAllTags(nameBuilder, characterTags).Append(' ');
             }
             else if (characterTags.Count == 2)
             {
@@ -116,10 +119,12 @@ namespace BooruDotNet.Namers
             {
                 nameBuilder.Append(" drawn by ");
 
+                // Judging by #3498397@Danbooru there's no limit to a number of artists.
+                // That wasn't included in the unit tests because there's so many tags it
+                // breaks whatever algorithm Danbooru uses to create a filename.
                 if (artistTags.Count > 2)
                 {
-                    // TODO: how many artists are allowed?
-                    throw new NotImplementedException();
+                    joinAllTags(nameBuilder, artistTags);
                 }
                 else
                 {

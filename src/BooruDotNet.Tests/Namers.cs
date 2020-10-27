@@ -28,6 +28,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(4000206, "__original__6f48ffed50db8cba28890e8ea0106219")]
         [TestCase(4001525, "__4001525__1e2478198f9b217c51ea682ca54e88f6")]
+        [TestCase(4031417, "__sakura_miko_hololive_drawn_by_hoshimachi_suisei_artist_houshou_marine_artist_shigure_ui_and_tsukudani_norio__74cf170be86a8ec7a0a0cc420f762219")]
         [TestCase(4048966, "__drawn_by_zuizi__fce55cfd3f0d13ed59795c843c7814e2")]
         [TestCase(4050260, "__link_the_legend_of_zelda_and_1_more_drawn_by_india_swift_and_michael_doig__7353e754b624cbfa4e034d3bf348a46b")]
         [TestCase(4056776, "__artoria_pendragon_saber_nero_claudius_and_nero_claudius_fate_and_1_more_drawn_by_ishii_wami5285__9b56d855dcbeb438829b1a68a26930b1")]
@@ -50,6 +51,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(4000206, "_original  - 6f48ffed50db8cba28890e8ea0106219")]
         [TestCase(4001525, "#4001525 - 1e2478198f9b217c51ea682ca54e88f6")]
+        [TestCase(4031417, "sakura miko (hololive) drawn by hoshimachi_suisei_(artist), houshou_marine_(artist), shigure_ui, and tsukudani_norio - 74cf170be86a8ec7a0a0cc420f762219")]
         [TestCase(4048966, "_ drawn by zuizi - fce55cfd3f0d13ed59795c843c7814e2")]
         [TestCase(4050260, "link (the legend of zelda and 1 more) drawn by india_swift and michael_doig - 7353e754b624cbfa4e034d3bf348a46b")]
         [TestCase(4056776, "artoria pendragon, saber, nero claudius, and nero claudius (fate and 1 more) drawn by ishii_(wami5285) - 9b56d855dcbeb438829b1a68a26930b1")]
@@ -62,7 +64,7 @@ namespace BooruDotNet.Tests
         [TestCase(4171159, "_emil chronicle online drawn by ogami_kazuki - 18a03863c8a12cb0c9b6beab0de70198")]
         // TODO: case with multiple copyrights but no characters.
         // TODO: case with a character but no copyrights.
-        public async Task CreateDanbooruFancyName_Success(int postId, string expectedName)
+        public async Task CreateFancyName_Success(int postId, string expectedName)
         {
             var post = await _booru.GetPostAsync(postId);
 
