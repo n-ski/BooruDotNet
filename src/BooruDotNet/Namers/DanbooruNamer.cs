@@ -3,113 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Posts;
 using BooruDotNet.Tags;
-using Easy.Common;
 
 namespace BooruDotNet.Namers
 {
-    public class DanbooruNamer : IPostNamer
+    public class DanbooruNamer : TagNamerBase
     {
         private const int _maxAllowedCharacterNames = 5;
-        // Allow this many requests at once when retrieving tags.
-        private const int _maxSemaphoreCount = 5;
-        private static readonly Lazy<Regex> _bracketRegexLazy = new Lazy<Regex>(
-            () => new Regex(@"_\(.+?\)", RegexOptions.Compiled));
-        private readonly Func<string, Task<ITag>> _tagExtractorFunc;
 
-        public DanbooruNamer(IBooruTagByName tagExtractor)
-            : this(Ensure.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync)
+        public DanbooruNamer(IBooruTagByName tagExtractor) : base(tagExtractor)
         {
         }
 
-        public DanbooruNamer(Func<string, Task<ITag>> tagExtractorFunc)
+        public DanbooruNamer(Func<string, Task<ITag>> tagExtractorFunc) : base(tagExtractorFunc)
         {
-            _tagExtractorFunc = Ensure.NotNull(tagExtractorFunc, nameof(tagExtractorFunc));
-        }
-
-        public string Name(IPost post)
-        {
-            using var semaphore = new SemaphoreSlim(_maxSemaphoreCount);
-
-            var artistTags = new List<ITag>();
-            var copyrightTags = new List<ITag>();
-            var characterTags = new List<ITag>();
-
-            static void safeAdd(ICollection<ITag> list, ITag tag)
-            {
-                lock (list)
-                {
-                    list.Add(tag);
-                }
-            }
-
-            var tasks = post.Tags.Select(tagName =>
-            {
-                semaphore.Wait();
-
-                return Task.Run(async () =>
-                {
-                    try
-                    {
-                        ITag tag = await _tagExtractorFunc(tagName);
-
-                        switch (tag.Kind)
-                        {
-                            case TagKind.Artist:
-                                safeAdd(artistTags, tag);
-                                break;
-                            case TagKind.Copyright:
-                                safeAdd(copyrightTags, tag);
-                                break;
-                            case TagKind.Character:
-                                safeAdd(characterTags, tag);
-                                break;
-                        }
-                    }
-                    // Eat exception so the whole thing doesn't break.
-                    catch
-                    {
-                    }
-                    finally
-                    {
-                        semaphore.Release();
-                    }
-                });
-            });
-
-            Task.WhenAll(tasks).Wait();
-
-            static IEnumerable<ITag> orderByCountThenByName(IEnumerable<ITag> tags, bool descendNameOrder)
-            {
-                if (!tags.Any())
-                {
-                    return Array.Empty<ITag>();
-                }
-
-                static int getTagCount(ITag tag) => tag.Count;
-                static string getTagName(ITag tag) => tag.Name;
-
-                var byCountDescend = tags.OrderByDescending(getTagCount);
-                return descendNameOrder
-                    ? byCountDescend.ThenByDescending(getTagName)
-                    : byCountDescend.ThenBy(getTagName);
-            }
-
-            return characterTags.Count > 0 || copyrightTags.Count > 0 || artistTags.Count > 0
-                ? CreateName(
-                    orderByCountThenByName(characterTags, true).ToArray(),
-                    // TODO: figure out how copyright tags are sorted.
-                    orderByCountThenByName(copyrightTags, true).ToArray(),
-                    orderByCountThenByName(artistTags, false).ToArray(),
-                    post.Hash)
-                : $"__{post.ID}__{post.Hash}";
         }
 
         // IMPORTANT: lists must be sorted by tag count descending.
-        private string CreateName(IReadOnlyList<ITag> characterTags, IReadOnlyList<ITag> copyrightTags,
+        protected override string CreateName(IReadOnlyList<ITag> characterTags, IReadOnlyList<ITag> copyrightTags,
             IReadOnlyList<ITag> artistTags, string hash)
         {
             static StringBuilder joinTagsWithPrefix(
@@ -174,7 +86,7 @@ namespace BooruDotNet.Namers
             // NOTE: Danbooru keeps artist's aliases, so we do this before
             // appending artist credits.
             nameBuilder = new StringBuilder(
-                _bracketRegexLazy.Value.Replace(nameBuilder.ToString(), ""));
+                BracketRegex.Replace(nameBuilder.ToString(), ""));
 
             //// Step 4.
             // Append artists.
@@ -218,6 +130,11 @@ namespace BooruDotNet.Namers
             //// Step 6.
             // Combine everything.
             return string.Concat("__", new string(charList.ToArray()), "_", hash);
+        }
+
+        protected override string CreateName(int id, string hash)
+        {
+            return $"__{id}__{hash}";
         }
     }
 }
