@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
@@ -27,62 +27,45 @@ namespace BooruDotNet.Namers
         }
 
         // Allow this many requests at once when retrieving tags.
-        protected virtual int MaxActiveTagRequestsCount => 5;
+        protected virtual int MaxActiveTagRequestsCount => 6;
 
         private protected static Regex BracketRegex => _bracketRegexLazy.Value;
 
         public string Name(IPost post)
         {
-            var artistTags = new List<ITag>();
-            var copyrightTags = new List<ITag>();
-            var characterTags = new List<ITag>();
+            var artistTags = new ConcurrentQueue<ITag>();
+            var copyrightTags = new ConcurrentQueue<ITag>();
+            var characterTags = new ConcurrentQueue<ITag>();
 
-            static void safeAdd(ICollection<ITag> list, ITag tag)
-            {
-                lock (list)
+            Parallel.ForEach(
+                Partitioner.Create(post.Tags, EnumerablePartitionerOptions.NoBuffering),
+                new ParallelOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount },
+                tagName =>
                 {
-                    list.Add(tag);
-                }
-            }
-
-            using (var semaphore = new SemaphoreSlim(MaxActiveTagRequestsCount))
-            {
-                var tasks = post.Tags.Select(tagName =>
-                {
-                    semaphore.Wait();
-
-                    return Task.Run(async () =>
+                    try
                     {
-                        try
-                        {
-                            ITag tag = await _tagExtractorFunc(tagName);
+                        ITag tag = _tagExtractorFunc(tagName).Result;
 
-                            switch (tag.Kind)
-                            {
-                                case TagKind.Artist:
-                                    safeAdd(artistTags, tag);
-                                    break;
-                                case TagKind.Copyright:
-                                    safeAdd(copyrightTags, tag);
-                                    break;
-                                case TagKind.Character:
-                                    safeAdd(characterTags, tag);
-                                    break;
-                            }
-                        }
-                        // Eat exception so the whole thing doesn't break.
-                        catch
+                        switch (tag.Kind)
                         {
+                            case TagKind.Artist:
+                                artistTags.Enqueue(tag);
+                                break;
+                            case TagKind.Copyright:
+                                copyrightTags.Enqueue(tag);
+                                break;
+                            case TagKind.Character:
+                                characterTags.Enqueue(tag);
+                                break;
                         }
-                        finally
-                        {
-                            semaphore.Release();
-                        }
-                    });
+                    }
+                    catch
+                    {
+                    }
                 });
 
-                Task.WhenAll(tasks).Wait();
-            }
+            static int getTagCount(ITag tag) => tag.Count;
+            static string getTagName(ITag tag) => tag.Name;
 
             static IEnumerable<ITag> orderByCountThenByName(IEnumerable<ITag> tags, bool descendNameOrder)
             {
@@ -90,9 +73,6 @@ namespace BooruDotNet.Namers
                 {
                     return Array.Empty<ITag>();
                 }
-
-                static int getTagCount(ITag tag) => tag.Count;
-                static string getTagName(ITag tag) => tag.Name;
 
                 var byCountDescend = tags.OrderByDescending(getTagCount);
                 return descendNameOrder
@@ -105,7 +85,7 @@ namespace BooruDotNet.Namers
                     orderByCountThenByName(characterTags, true).ToArray(),
                     // TODO: figure out how copyright tags are sorted.
                     orderByCountThenByName(copyrightTags, true).ToArray(),
-                    artistTags,
+                    artistTags.OrderBy(getTagName).ToArray(),
                     post.Hash)
                 : CreateName(post.ID, post.Hash);
         }
