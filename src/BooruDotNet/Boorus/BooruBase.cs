@@ -16,6 +16,7 @@ namespace BooruDotNet.Boorus
             var client = new HttpClient(new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
+                MaxConnectionsPerServer = 5,
             });
 
             var assemblyName = typeof(BooruBase).Assembly.GetName();
