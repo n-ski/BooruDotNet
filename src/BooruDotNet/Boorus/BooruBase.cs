@@ -11,23 +11,6 @@ namespace BooruDotNet.Boorus
 {
     public abstract class BooruBase
     {
-        private static readonly Lazy<HttpClient> _globalHttpClientLazy = new Lazy<HttpClient>(() =>
-        {
-            var client = new HttpClient(new SocketsHttpHandler
-            {
-                AutomaticDecompression = DecompressionMethods.All,
-                MaxConnectionsPerServer = 5,
-            });
-
-            var assemblyName = typeof(BooruBase).Assembly.GetName();
-
-            client.DefaultRequestHeaders.UserAgent.Add(
-                new ProductInfoHeaderValue(
-                    assemblyName.Name!,
-                    assemblyName.Version!.ToString(3)));
-
-            return client;
-        });
         private static HttpClient? _customHttpClient;
 
         protected BooruBase()
@@ -37,7 +20,7 @@ namespace BooruDotNet.Boorus
         [AllowNull]
         public static HttpClient HttpClient
         {
-            protected get => _customHttpClient ?? _globalHttpClientLazy.Value;
+            protected get => _customHttpClient ?? SingletonHttpClient.Instance;
             set => _customHttpClient = value;
         }
 
