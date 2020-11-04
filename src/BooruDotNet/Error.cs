@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace BooruDotNet
 {
     internal static class Error
     {
-        internal static void If<T>(bool condition, params object?[]? ctorArgs) where T : Exception
+        internal static void If<T>([DoesNotReturnIf(true)] bool condition, params object?[]? ctorArgs) where T : Exception
         {
             if (condition)
             {
@@ -12,7 +13,7 @@ namespace BooruDotNet
             }
         }
 
-        internal static void IfNot<T>(bool condition, params object?[]? ctorArgs) where T : Exception
+        internal static void IfNot<T>([DoesNotReturnIf(false)] bool condition, params object?[]? ctorArgs) where T : Exception
         {
             If<T>(!condition, ctorArgs);
         }
