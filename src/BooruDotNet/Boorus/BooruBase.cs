@@ -41,26 +41,25 @@ namespace BooruDotNet.Boorus
             set => _customHttpClient = value;
         }
 
-        protected async static Task<HttpResponseMessage> GetResponseAsync(Uri requestUri)
+        protected async static Task<HttpResponseMessage> GetResponseAsync(Uri requestUri, bool ensureSuccess = true)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(
                 requestUri,
                 HttpCompletionOption.ResponseHeadersRead);
 
-            return response.EnsureSuccessStatusCode();
-        }
-
-        protected async static Task<Stream> GetResponseStreamAsync(Uri requestUri)
-        {
-            HttpResponseMessage response = await GetResponseAsync(requestUri);
-
-            return await response.Content.ReadAsStreamAsync();
+            return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
 
         protected async static Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri)
         {
-            using Stream jsonStream = await GetResponseStreamAsync(requestUri);
+            HttpResponseMessage response = await GetResponseAsync(requestUri);
 
+            return await DeserializeAsync<T>(response);
+        }
+
+        protected async static Task<T> DeserializeAsync<T>(HttpResponseMessage response)
+        {
+            using Stream jsonStream = await response.Content.ReadAsStreamAsync();
             return await JsonSerializer.DeserializeAsync<T>(jsonStream);
         }
     }

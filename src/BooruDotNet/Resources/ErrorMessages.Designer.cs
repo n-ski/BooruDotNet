@@ -61,29 +61,29 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the given hash..
+        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the hash &apos;{0}&apos;.
         /// </summary>
-        internal static string PostInvalidHash {
+        internal static string PostInvalidHashFormat {
             get {
-                return ResourceManager.GetString("PostInvalidHash", resourceCulture);
+                return ResourceManager.GetString("PostInvalidHashFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the given ID..
+        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the ID &apos;{0}&apos;.
         /// </summary>
-        internal static string PostInvalidId {
+        internal static string PostInvalidIdFormat {
             get {
-                return ResourceManager.GetString("PostInvalidId", resourceCulture);
+                return ResourceManager.GetString("PostInvalidIdFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a tag with the given name..
+        ///   Looks up a localized string similar to Couldn&apos;t retrieve a tag with the name &apos;{0}&apos;.
         /// </summary>
-        internal static string TagInvalidName {
+        internal static string TagInvalidNameFormat {
             get {
-                return ResourceManager.GetString("TagInvalidName", resourceCulture);
+                return ResourceManager.GetString("TagInvalidNameFormat", resourceCulture);
             }
         }
     }

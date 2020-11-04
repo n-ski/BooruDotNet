@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Tags;
@@ -29,7 +28,7 @@ namespace BooruDotNet.Tests
         {
             var booru = BooruHelpers.Create<IBooruTagByName>(booruType);
 
-            Assert.ThrowsAsync<HttpRequestException>(() => booru.GetTagAsync("ThisDoesNotExist"));
+            Assert.ThrowsAsync<InvalidTagNameException>(() => booru.GetTagAsync("ThisDoesNotExist"));
         }
     }
 }

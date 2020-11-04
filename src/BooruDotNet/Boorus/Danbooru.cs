@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
+using System.Net;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
@@ -21,9 +20,12 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostId_Format, id);
 
-            using Stream jsonStream = await GetResponseStreamAsync(uri);
+            HttpResponseMessage response = await GetResponseAsync(uri, false);
 
-            return await JsonSerializer.DeserializeAsync<DanbooruPost>(jsonStream);
+            Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
+            response.EnsureSuccessStatusCode();
+
+            return await DeserializeAsync<DanbooruPost>(response);
         }
 
         public async Task<IPost> GetPostAsync(string hash)
@@ -32,7 +34,12 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
-            return await GetResponseAndDeserializeAsync<DanbooruPost>(uri);
+            HttpResponseMessage response = await GetResponseAsync(uri, false);
+
+            Error.If<InvalidPostHashException>(response.StatusCode == HttpStatusCode.NotFound, hash);
+            response.EnsureSuccessStatusCode();
+
+            return await DeserializeAsync<DanbooruPost>(response);
         }
 
         public async Task<ITag> GetTagAsync(string tagName)
@@ -43,9 +50,7 @@ namespace BooruDotNet.Boorus
 
             DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri);
 
-            Ensure.That<HttpRequestException>(
-                tags.Length == 1,
-                ErrorMessages.TagInvalidName);
+            Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 
             return tags[0];
         }

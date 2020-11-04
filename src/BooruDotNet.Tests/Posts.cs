@@ -1,5 +1,4 @@
 using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
@@ -41,7 +40,7 @@ namespace BooruDotNet.Tests
         {
             var booru = BooruHelpers.Create<IBooruPostById>(booruType);
 
-            Assert.ThrowsAsync<HttpRequestException>(() => booru.GetPostAsync(0));
+            Assert.ThrowsAsync<InvalidPostIdException>(() => booru.GetPostAsync(0));
         }
 
         [Test]
@@ -52,7 +51,7 @@ namespace BooruDotNet.Tests
             var booru = BooruHelpers.Create<IBooruPostByHash>(booruType);
             var hash = new string('0', 32);
 
-            Assert.ThrowsAsync<HttpRequestException>(() => booru.GetPostAsync(hash));
+            Assert.ThrowsAsync<InvalidPostHashException>(() => booru.GetPostAsync(hash));
         }
     }
 }

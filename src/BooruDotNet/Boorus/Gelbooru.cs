@@ -23,9 +23,7 @@ namespace BooruDotNet.Boorus
 
             GelbooruPost[] posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri);
 
-            Ensure.That<HttpRequestException>(
-                posts.Length == 1,
-                ErrorMessages.PostInvalidHash);
+            Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
 
             return posts[0];
         }
@@ -42,11 +40,10 @@ namespace BooruDotNet.Boorus
             response.EnsureSuccessStatusCode();
 
             Uri redirectUri = response.RequestMessage.RequestUri;
+            // If redirect wasn't successful, then the redirect URI will stay the same.
             string id = HttpUtility.ParseQueryString(redirectUri.Query).Get("id");
 
-            Ensure.That<HttpRequestException>(
-                int.TryParse(id, out int postId),
-                ErrorMessages.PostInvalidHash);
+            Error.IfNot<InvalidPostHashException>(int.TryParse(id, out int postId), hash);
 
             return await GetPostAsync(postId);
         }
@@ -59,9 +56,7 @@ namespace BooruDotNet.Boorus
 
             GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(uri);
 
-            Ensure.That<HttpRequestException>(
-                tags.Length == 1,
-                ErrorMessages.TagInvalidName);
+            Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 
             return tags[0];
         }
