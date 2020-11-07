@@ -1,19 +1,20 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
+using BooruDotNet.Caches;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Namers;
+using BooruDotNet.Tests.Helpers;
 using NUnit.Framework;
 
 namespace BooruDotNet.Tests
 {
     public class Downloaders
     {
-        private static readonly Danbooru _booru = new Danbooru();
+        private static readonly PostCache _postCache = BooruHelpers.PostCaches[typeof(Danbooru)];
         private static readonly IPostNamer _namer = new HashNamer();
         private static readonly PostDownloader _downloader = new PostDownloader(SingletonHttpClient.Instance, _namer);
         private static readonly MD5 _md5 = MD5.Create();
@@ -27,7 +28,7 @@ namespace BooruDotNet.Tests
             [TestCase(4171159)]
             public async Task DownloadPost_Success(int postId)
             {
-                var post = await _booru.GetPostAsync(postId);
+                var post = await _postCache.GetPostAsync(postId);
                 var file = await _downloader.DownloadAsync(post, _tempDirectoryPath);
 
                 try
@@ -55,7 +56,7 @@ namespace BooruDotNet.Tests
         [TestCase(4171159)]
         public async Task DownloadCancellation_Success(int postId)
         {
-            var post = await _booru.GetPostAsync(postId);
+            var post = await _postCache.GetPostAsync(postId);
 
             using var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(50);

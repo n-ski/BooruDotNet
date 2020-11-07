@@ -14,7 +14,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru))]
         public async Task GetByName_Success(Type booruType, string name = "pantyhose")
         {
-            var booru = BooruHelpers.Create<IBooruTagByName>(booruType);
+            var booru = BooruHelpers.TagCaches[booruType];
 
             var tag = await booru.GetTagAsync(name);
 
@@ -26,7 +26,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru))]
         public void GetByName_Fail(Type booruType)
         {
-            var booru = BooruHelpers.Create<IBooruTagByName>(booruType);
+            var booru = BooruHelpers.TagCaches[booruType];
 
             Assert.ThrowsAsync<InvalidTagNameException>(() => booru.GetTagAsync("ThisDoesNotExist"));
         }

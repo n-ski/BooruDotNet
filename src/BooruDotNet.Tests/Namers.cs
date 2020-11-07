@@ -1,23 +1,24 @@
 ﻿using System.Threading.Tasks;
 using BooruDotNet.Boorus;
+using BooruDotNet.Caches;
 using BooruDotNet.Namers;
-using BooruDotNet.Tags;
+using BooruDotNet.Tests.Helpers;
 using NUnit.Framework;
 
 namespace BooruDotNet.Tests
 {
     public class Namers
     {
-        private static readonly Danbooru _booru = new Danbooru();
-        private static readonly TagCache _cache = new TagCache(_booru);
+        private static readonly PostCache _postCache = BooruHelpers.PostCaches[typeof(Danbooru)];
+        private static readonly TagCache _tagCache = BooruHelpers.TagCaches[typeof(Danbooru)];
         private static readonly IPostNamer _hashNamer = new HashNamer();
-        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_cache.GetTagAsync);
-        private static readonly IPostNamer _fancyNamer = new DanbooruFancyNamer(_cache.GetTagAsync);
+        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_tagCache);
+        private static readonly IPostNamer _fancyNamer = new DanbooruFancyNamer(_tagCache);
 
         [Test]
         public async Task CreateHashName_Success()
         {
-            var post = await _booru.GetPostAsync(123456);
+            var post = await _postCache.GetPostAsync(123456);
             var expectedName = post.Hash ?? "";
 
             var actualName = _hashNamer.Name(post);
@@ -41,7 +42,7 @@ namespace BooruDotNet.Tests
         [TestCase(4171159, "__emil_chronicle_online_drawn_by_ogami_kazuki__18a03863c8a12cb0c9b6beab0de70198")]
         public async Task CreateDanbooruName_Success(int postId, string expectedName)
         {
-            var post = await _booru.GetPostAsync(postId);
+            var post = await _postCache.GetPostAsync(postId);
 
             var actualName = _danbooruNamer.Name(post);
 
@@ -66,7 +67,7 @@ namespace BooruDotNet.Tests
         // TODO: case with a character but no copyrights.
         public async Task CreateFancyName_Success(int postId, string expectedName)
         {
-            var post = await _booru.GetPostAsync(postId);
+            var post = await _postCache.GetPostAsync(postId);
 
             var actualName = _fancyNamer.Name(post);
 

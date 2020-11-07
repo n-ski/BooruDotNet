@@ -14,7 +14,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru), 5632370)]
         public async Task GetById_Success(Type booruType, int id)
         {
-            var booru = BooruHelpers.Create<IBooruPostById>(booruType);
+            var booru = BooruHelpers.PostCaches[booruType];
 
             var post = await booru.GetPostAsync(id);
 
@@ -38,7 +38,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru))]
         public void GetById_Fail(Type booruType)
         {
-            var booru = BooruHelpers.Create<IBooruPostById>(booruType);
+            var booru = BooruHelpers.PostCaches[booruType];
 
             Assert.ThrowsAsync<InvalidPostIdException>(() => booru.GetPostAsync(0));
         }

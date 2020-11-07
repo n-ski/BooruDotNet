@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using BooruDotNet.Tags;
 using Easy.Common;
 
-namespace BooruDotNet.Tags
+namespace BooruDotNet.Caches
 {
-    public class TagCache
+    public class TagCache : AsyncCacheBase<string, ITag>, IBooruTagByName
     {
         private readonly IBooruTagByName _tagExtractor;
-        private readonly ConcurrentDictionary<string, Task<ITag>> _tags;
 
         public TagCache(IBooruTagByName tagExtractor, StringComparer? tagNameComparer = null)
+            : base(tagNameComparer ?? StringComparer.OrdinalIgnoreCase)
         {
             _tagExtractor = Ensure.NotNull(tagExtractor, nameof(tagExtractor));
-            _tags = new ConcurrentDictionary<string, Task<ITag>>(tagNameComparer ?? StringComparer.Ordinal);
         }
 
         public Task<ITag> GetTagAsync(string tagName)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
 
-            return _tags.GetOrAdd(tagName, RunTask);
+            return Cache.GetOrAdd(tagName, RunTask);
         }
 
         // Should be faster than specifying _tagExtractor.GetTagAsync as value factory
