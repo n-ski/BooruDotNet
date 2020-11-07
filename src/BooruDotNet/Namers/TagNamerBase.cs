@@ -87,7 +87,7 @@ namespace BooruDotNet.Namers
                     orderByCountThenByName(copyrightTags, true).ToArray(),
                     artistTags.OrderBy(getTagName).ToArray(),
                     post.Hash)
-                : CreateName(post.ID, post.Hash);
+                : CreateName(post.ID ?? 0, post.Hash);
         }
 
         protected abstract string CreateName(IReadOnlyList<ITag> characterTags, IReadOnlyList<ITag> copyrightTags,

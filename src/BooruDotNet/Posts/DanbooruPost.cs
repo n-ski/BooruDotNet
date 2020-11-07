@@ -18,7 +18,7 @@ namespace BooruDotNet.Posts
         }
 
         [JsonPropertyName("id")]
-        public int ID { get; set; }
+        public int? ID { get; set; }
 
         public Uri Uri => _postUriLazy.Value;
 
@@ -38,7 +38,7 @@ namespace BooruDotNet.Posts
         public string Hash { get; set; } = "";
 
         [JsonPropertyName("file_url")]
-        public Uri FileUri { get; set; }
+        public Uri? FileUri { get; set; }
 
         [JsonPropertyName("large_file_url")]
         public Uri? SampleImageUri { get; set; }
