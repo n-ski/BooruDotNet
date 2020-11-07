@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
@@ -16,39 +17,39 @@ namespace BooruDotNet.Boorus
         {
         }
 
-        public async Task<IPost> GetPostAsync(int id)
+        public async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostId_Format, id);
 
-            HttpResponseMessage response = await GetResponseAsync(uri, false);
+            HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false);
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken);
         }
 
-        public async Task<IPost> GetPostAsync(string hash)
+        public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(hash);
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
-            HttpResponseMessage response = await GetResponseAsync(uri, false);
+            HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false);
 
             Error.If<InvalidPostHashException>(response.StatusCode == HttpStatusCode.NotFound, hash);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken);
         }
 
-        public async Task<ITag> GetTagAsync(string tagName)
+        public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruTagName_Format, tagName);
 
-            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri);
+            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken);
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 

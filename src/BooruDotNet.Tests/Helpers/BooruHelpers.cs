@@ -11,6 +11,8 @@ namespace BooruDotNet.Tests.Helpers
         private static readonly Danbooru _danbooru = new Danbooru();
         private static readonly Gelbooru _gelbooru = new Gelbooru();
 
+        internal static TimeSpan TaskCancellationDelay { get; } = TimeSpan.FromMilliseconds(50);
+
         internal static IReadOnlyDictionary<Type, PostCache> PostCaches { get; } =
             new Dictionary<Type, PostCache>
             {

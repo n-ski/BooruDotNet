@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Tags;
 using Easy.Common;
@@ -15,18 +16,19 @@ namespace BooruDotNet.Caches
             _tagExtractor = Ensure.NotNull(tagExtractor, nameof(tagExtractor));
         }
 
-        public Task<ITag> GetTagAsync(string tagName)
+        public Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
 
-            return Cache.GetOrAdd(tagName, RunTask);
-        }
-
-        // Should be faster than specifying _tagExtractor.GetTagAsync as value factory
-        // directly, since Task.Run returns immediately.
-        private Task<ITag> RunTask(string tagName)
-        {
-            return Task.Run(() => _tagExtractor.GetTagAsync(tagName));
+            // Probably not a good idea to allow cancellation here, since it means we won't
+            // be able to get this tag later, at least not until cache flushing is implemented.
+            // See PostCache.cs.
+            // TODO: Needs testing.
+            return Cache.GetOrAdd(
+                tagName,
+                tag => Task.Run(
+                    () => _tagExtractor.GetTagAsync(tag, cancellationToken),
+                    cancellationToken));
         }
     }
 }

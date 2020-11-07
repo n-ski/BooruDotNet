@@ -18,7 +18,7 @@ namespace BooruDotNet.Namers
         private static readonly DataflowLinkOptions _linkOptions = new DataflowLinkOptions { PropagateCompletion = true };
 
         protected TagNamerBase(IBooruTagByName tagExtractor)
-            : this(Ensure.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync)
+            : this(tag => Ensure.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync(tag))
         {
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using BooruDotNet.Extensions;
@@ -17,18 +18,18 @@ namespace BooruDotNet.Boorus
         {
         }
 
-        public async Task<IPost> GetPostAsync(int id)
+        public async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
             Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostId_Format, id);
 
-            GelbooruPost[] posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri);
+            GelbooruPost[] posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken);
 
             Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
 
             return posts[0];
         }
 
-        public async Task<IPost> GetPostAsync(string hash)
+        public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(hash);
 
@@ -36,7 +37,7 @@ namespace BooruDotNet.Boorus
 
             // Gelbooru doesn't respond with JSON directly, but it does
             // redirect us to the actual post.
-            HttpResponseMessage response = await HttpClient.HeadAsync(uri);
+            HttpResponseMessage response = await HttpClient.HeadAsync(uri, cancellationToken);
             response.EnsureSuccessStatusCode();
 
             Uri redirectUri = response.RequestMessage.RequestUri;
@@ -45,16 +46,16 @@ namespace BooruDotNet.Boorus
 
             Error.IfNot<InvalidPostHashException>(int.TryParse(id, out int postId), hash);
 
-            return await GetPostAsync(postId);
+            return await GetPostAsync(postId, cancellationToken);
         }
 
-        public async Task<ITag> GetTagAsync(string tagName)
+        public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
         {
             Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruTagName_Format, tagName);
 
-            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(uri);
+            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(uri, cancellationToken);
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 

@@ -48,21 +48,21 @@ namespace BooruDotNet.Tests
 
                 Assert.AreEqual(hash, fileHash);
             }
-        }
 
-        [Test]
-        [TestCase(4067797)]
-        [TestCase(4166623)]
-        [TestCase(4171159)]
-        public async Task DownloadCancellation_Success(int postId)
-        {
-            var post = await _postCache.GetPostAsync(postId);
+            [Test]
+            [TestCase(4067797)]
+            [TestCase(4166623)]
+            [TestCase(4171159)]
+            public async Task DownloadPost_Cancellation(int postId)
+            {
+                var post = await _postCache.GetPostAsync(postId);
 
-            using var tokenSource = new CancellationTokenSource();
-            tokenSource.CancelAfter(50);
+                using var tokenSource = new CancellationTokenSource();
+                tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
 
-            Assert.ThrowsAsync<TaskCanceledException>(
-                () => _downloader.DownloadAsync(post, _tempDirectoryPath, tokenSource.Token));
+                Assert.ThrowsAsync<TaskCanceledException>(
+                    () => _downloader.DownloadAsync(post, _tempDirectoryPath, tokenSource.Token));
+            }
         }
 
         private static string GetHash(Stream stream)

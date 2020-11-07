@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
@@ -31,6 +32,34 @@ namespace BooruDotNet.Tests
             var post = await booru.GetPostAsync(hash);
 
             Assert.AreEqual(expectedId, post.ID);
+        }
+
+        [Test]
+        [TestCase(typeof(Danbooru), 123456)]
+        [TestCase(typeof(Gelbooru), 5632370)]
+        public void GetById_Cancellation(Type booruType, int id)
+        {
+            // IMPORTANT: create raw instance here to not mess with other tests.
+            // See PostCache.cs.
+            var booru = BooruHelpers.Create<IBooruPostById>(booruType);
+
+            using var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+
+            Assert.ThrowsAsync<TaskCanceledException>(() => booru.GetPostAsync(id, tokenSource.Token));
+        }
+
+        [Test]
+        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752")]
+        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752")]
+        public void GetByHash_Cancellation(Type booruType, string hash)
+        {
+            var booru = BooruHelpers.Create<IBooruPostByHash>(booruType);
+
+            using var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+
+            Assert.ThrowsAsync<TaskCanceledException>(() => booru.GetPostAsync(hash, tokenSource.Token));
         }
 
         [Test]

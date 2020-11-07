@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Tags;
@@ -19,6 +20,21 @@ namespace BooruDotNet.Tests
             var tag = await booru.GetTagAsync(name);
 
             Assert.AreEqual(name, tag.Name);
+        }
+
+        [Test]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        public void GetByName_Cancellation(Type booruType, string name = "pantyhose")
+        {
+            // IMPORTANT: create raw instance here to not mess with other tests.
+            // See TagsCache.cs.
+            var booru = BooruHelpers.Create<IBooruTagByName>(booruType);
+
+            using var tokenSource = new CancellationTokenSource();
+            tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+
+            Assert.ThrowsAsync<TaskCanceledException>(() => booru.GetTagAsync(name, tokenSource.Token));
         }
 
         [Test]
