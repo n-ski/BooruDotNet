@@ -13,5 +13,13 @@ namespace BooruDotNet.Extensions
 
             return Path.GetFileName(uri.AbsoluteUri);
         }
+
+        internal static string GetExtension(this Uri uri)
+        {
+            Ensure.NotNull(uri, nameof(uri));
+            Ensure.That(uri.IsAbsoluteUri, "URI is not absolute.");
+
+            return Path.GetExtension(uri.AbsoluteUri);
+        }
     }
 }

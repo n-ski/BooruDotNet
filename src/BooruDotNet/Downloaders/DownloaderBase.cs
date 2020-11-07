@@ -90,7 +90,7 @@ namespace BooruDotNet.Downloaders
             // Fast path.
             else
             {
-                foreach (var item in items)
+                foreach (T item in items)
                 {
                     yield return await DownloadAsync(item, targetDirectory, cancellationToken);
                 }
