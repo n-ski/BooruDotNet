@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Easy.Common;
@@ -15,6 +15,7 @@ namespace BooruDotNet.Namers
         private readonly Func<string, Task<ITag>> _tagExtractorFunc;
         private static readonly Lazy<Regex> _bracketRegexLazy = new Lazy<Regex>(
             () => new Regex(@"_\(.+?\)", RegexOptions.Compiled));
+        private static readonly DataflowLinkOptions _linkOptions = new DataflowLinkOptions { PropagateCompletion = true };
 
         protected TagNamerBase(IBooruTagByName tagExtractor)
             : this(Ensure.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync)
@@ -33,58 +34,64 @@ namespace BooruDotNet.Namers
 
         public string Name(IPost post)
         {
-            var artistTags = new ConcurrentQueue<ITag>();
-            var copyrightTags = new ConcurrentQueue<ITag>();
-            var characterTags = new ConcurrentQueue<ITag>();
+            // Keep tags separated. This is faster than enumerating
+            // over a large collection with all the tags using LINQ.
+            var artistTags = new List<ITag>();
+            var copyrightTags = new List<ITag>();
+            var characterTags = new List<ITag>();
 
-            Parallel.ForEach(
-                Partitioner.Create(post.Tags, EnumerablePartitionerOptions.NoBuffering),
-                new ParallelOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount },
-                tagName =>
+            // Get tags using provided function in parallel.
+            var getTagBlock = new TransformBlock<string, ITag>(
+                _tagExtractorFunc,
+                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount });
+
+            // Put tags into their own lists.
+            var addTagBlock = new ActionBlock<ITag>(tag =>
+            {
+                switch (tag.Kind)
                 {
-                    try
-                    {
-                        ITag tag = _tagExtractorFunc(tagName).Result;
+                    case TagKind.Artist:
+                        artistTags.Add(tag);
+                        break;
+                    case TagKind.Copyright:
+                        copyrightTags.Add(tag);
+                        break;
+                    case TagKind.Character:
+                        characterTags.Add(tag);
+                        break;
+                }
+            });
 
-                        switch (tag.Kind)
-                        {
-                            case TagKind.Artist:
-                                artistTags.Enqueue(tag);
-                                break;
-                            case TagKind.Copyright:
-                                copyrightTags.Enqueue(tag);
-                                break;
-                            case TagKind.Character:
-                                characterTags.Enqueue(tag);
-                                break;
-                        }
-                    }
-                    catch
-                    {
-                    }
-                });
+            // IMPORTANT: getTagBlock must propagate its completion if we want to wait for
+            // addTagBlock's completion. This is the correct usage as per MS docs.
+            getTagBlock.LinkTo(addTagBlock, _linkOptions);
 
+            // Add tags to the download "queue".
+            foreach (string tag in post.Tags)
+            {
+                getTagBlock.Post(tag);
+            }
+            getTagBlock.Complete();
+
+            // Wait until all the tags are processed.
+            addTagBlock.Completion.Wait();
+
+            // Keeping these as static methods should make calls to these faster.
             static int getTagCount(ITag tag) => tag.Count;
             static string getTagName(ITag tag) => tag.Name;
 
-            static IEnumerable<ITag> orderByCountThenByName(IEnumerable<ITag> tags, bool descendNameOrder)
+            static IEnumerable<ITag> orderByCountThenByName(IEnumerable<ITag> tags)
             {
-                if (!tags.Any())
-                {
-                    return Array.Empty<ITag>();
-                }
-
-                var byCountDescend = tags.OrderByDescending(getTagCount);
-                return descendNameOrder
-                    ? byCountDescend.ThenByDescending(getTagName)
-                    : byCountDescend.ThenBy(getTagName);
+                return tags
+                    .OrderByDescending(getTagCount)
+                    .ThenByDescending(getTagName);
             }
 
             return characterTags.Count > 0 || copyrightTags.Count > 0 || artistTags.Count > 0
                 ? CreateName(
-                    orderByCountThenByName(characterTags, true).ToArray(),
+                    orderByCountThenByName(characterTags).ToArray(),
                     // TODO: figure out how copyright tags are sorted.
-                    orderByCountThenByName(copyrightTags, true).ToArray(),
+                    orderByCountThenByName(copyrightTags).ToArray(),
                     artistTags.OrderBy(getTagName).ToArray(),
                     post.Hash)
                 : CreateName(post.ID ?? 0, post.Hash);
