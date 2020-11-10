@@ -7,6 +7,7 @@ using System.Threading.Tasks.Dataflow;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Easy.Common;
+using Easy.Common.Extensions;
 
 namespace BooruDotNet.Namers
 {
@@ -66,11 +67,24 @@ namespace BooruDotNet.Namers
             // addTagBlock's completion. This is the correct usage as per MS docs.
             getTagBlock.LinkTo(addTagBlock, _linkOptions);
 
-            // Add tags to the download "queue".
-            foreach (string tag in post.Tags)
+            // Fast path: post just the tags that we need.
+            if (post is IExtendedPostTags extendedPost)
             {
-                getTagBlock.Post(tag);
+                void postTag(string tag) => getTagBlock.Post(tag);
+
+                extendedPost.CharacterTags.ForEach(postTag);
+                extendedPost.CopyrightTags.ForEach(postTag);
+                extendedPost.ArtistTags.ForEach(postTag);
             }
+            // Slow path: post every tag.
+            else
+            {
+                foreach (string tag in post.Tags)
+                {
+                    getTagBlock.Post(tag);
+                }
+            }
+
             getTagBlock.Complete();
 
             // Wait until all the tags are processed.

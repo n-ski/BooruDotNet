@@ -7,7 +7,7 @@ using BooruDotNet.Resources;
 
 namespace BooruDotNet.Posts
 {
-    public class DanbooruPost : IPost
+    public class DanbooruPost : IPost, IExtendedPostTags
     {
         private readonly Lazy<Uri> _postUriLazy;
 
@@ -16,6 +16,8 @@ namespace BooruDotNet.Posts
             _postUriLazy = new Lazy<Uri>(() => UriHelpers.CreateFormat(PostUris.Danbooru_Format, ID));
             FileUri = null!;
         }
+
+        #region IPost implementation
 
         [JsonPropertyName("id")]
         public int? ID { get; set; }
@@ -60,6 +62,10 @@ namespace BooruDotNet.Posts
         [JsonPropertyName("score")]
         public int? Score { get; set; }
 
+        #endregion
+
+        #region IExtendedPostTags implementation
+
         [JsonPropertyName("tag_string_artist")]
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> ArtistTags { get; set; }
@@ -79,5 +85,7 @@ namespace BooruDotNet.Posts
         [JsonPropertyName("tag_string_meta")]
         [JsonConverter(typeof(TagStringConverter))]
         public ImmutableArray<string> MetaTags { get; set; }
+
+        #endregion
     }
 }
