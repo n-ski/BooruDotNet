@@ -11,12 +11,11 @@ namespace BooruDotNet.Posts
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     public class DanbooruPost : IPost, IExtendedPostTags
     {
-        private readonly Lazy<Uri> _postUriLazy;
+        private readonly Lazy<Uri?> _postUriLazy;
 
         public DanbooruPost()
         {
-            _postUriLazy = new Lazy<Uri>(() => UriHelpers.CreateFormat(PostUris.Danbooru_Format, ID));
-            FileUri = null!;
+            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelpers.CreateFormat(PostUris.Danbooru_Format, ID) : null);
         }
 
         #region IPost implementation
@@ -24,7 +23,7 @@ namespace BooruDotNet.Posts
         [JsonPropertyName("id")]
         public int? ID { get; set; }
 
-        public Uri Uri => _postUriLazy.Value;
+        public Uri? Uri => _postUriLazy.Value;
 
         [JsonPropertyName("created_at")]
         public DateTime CreationDate { get; set; }

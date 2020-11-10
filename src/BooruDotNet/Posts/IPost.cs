@@ -8,7 +8,7 @@ namespace BooruDotNet.Posts
         internal const string DebuggerDisplayString = "{Uri.AbsoluteUri,nq}";
 
         public int? ID { get; }
-        public Uri Uri { get; }
+        public Uri? Uri { get; }
         public DateTime CreationDate { get; }
         public int Width { get; }
         public int Height { get; }

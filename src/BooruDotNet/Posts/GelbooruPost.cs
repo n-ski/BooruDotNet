@@ -11,23 +11,21 @@ namespace BooruDotNet.Posts
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     public class GelbooruPost : IPost
     {
-        private readonly Lazy<Uri> _postUriLazy;
+        private readonly Lazy<Uri?> _postUriLazy;
         private readonly Lazy<Uri> _sampleImageUriLazy;
         private readonly Lazy<Uri> _previewImageUriLazy;
 
         public GelbooruPost()
         {
-            _postUriLazy = new Lazy<Uri>(() => UriHelpers.CreateFormat(PostUris.Gelbooru_Format, ID));
+            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelpers.CreateFormat(PostUris.Gelbooru_Format, ID) : null);
             _sampleImageUriLazy = new Lazy<Uri>(() => new Uri($"https://img2.gelbooru.com/samples/{Directory}/sample_{Hash}.jpg"));
             _previewImageUriLazy = new Lazy<Uri>(() => new Uri($"https://img1.gelbooru.com/thumbnails/{Directory}/thumbnail_{Hash}.jpg"));
-
-            FileUri = null!;
         }
 
         [JsonPropertyName("id")]
         public int? ID { get; set; }
 
-        public Uri Uri => _postUriLazy.Value;
+        public Uri? Uri => _postUriLazy.Value;
 
         [JsonPropertyName("created_at")]
         [JsonConverter(typeof(GelbooruDateTimeConverter))]
