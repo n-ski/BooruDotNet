@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Text.Json.Serialization;
 using BooruDotNet.Helpers;
 using BooruDotNet.Json;
@@ -7,6 +8,7 @@ using BooruDotNet.Resources;
 
 namespace BooruDotNet.Posts
 {
+    [DebuggerDisplay(IPost.DebuggerDisplayString)]
     public class DanbooruPost : IPost, IExtendedPostTags
     {
         private readonly Lazy<Uri> _postUriLazy;

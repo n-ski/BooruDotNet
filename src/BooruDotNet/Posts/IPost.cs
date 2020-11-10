@@ -5,6 +5,8 @@ namespace BooruDotNet.Posts
 {
     public interface IPost
     {
+        internal const string DebuggerDisplayString = "{Uri.AbsoluteUri,nq}";
+
         public int? ID { get; }
         public Uri Uri { get; }
         public DateTime CreationDate { get; }
