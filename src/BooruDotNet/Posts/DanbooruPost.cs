@@ -9,7 +9,7 @@ using BooruDotNet.Resources;
 namespace BooruDotNet.Posts
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
-    public class DanbooruPost : IPost, IExtendedPostTags
+    public class DanbooruPost : IPost, IPostExtendedTags
     {
         private readonly Lazy<Uri?> _postUriLazy;
 

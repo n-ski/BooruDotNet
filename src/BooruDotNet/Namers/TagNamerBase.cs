@@ -68,7 +68,7 @@ namespace BooruDotNet.Namers
             getTagBlock.LinkTo(addTagBlock, _linkOptions);
 
             // Fast path: post just the tags that we need.
-            if (post is IExtendedPostTags extendedPost)
+            if (post is IPostExtendedTags extendedPost)
             {
                 void postTag(string tag) => getTagBlock.Post(tag);
 

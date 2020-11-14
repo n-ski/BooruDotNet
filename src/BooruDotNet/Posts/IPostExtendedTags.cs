@@ -2,7 +2,7 @@
 
 namespace BooruDotNet.Posts
 {
-    public interface IExtendedPostTags : IPost
+    public interface IPostExtendedTags : IPost
     {
         ImmutableArray<string> ArtistTags { get; }
         ImmutableArray<string> CharacterTags { get; }
