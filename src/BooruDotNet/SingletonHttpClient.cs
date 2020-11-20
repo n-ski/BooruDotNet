@@ -7,15 +7,24 @@ namespace BooruDotNet
 {
     internal sealed class SingletonHttpClient : HttpClient
     {
+        private const int _maxConnectionsPerServer = 5;
         private static readonly Lazy<SingletonHttpClient> _instanceLazy =
             new Lazy<SingletonHttpClient>(() => new SingletonHttpClient());
 
         private SingletonHttpClient()
+#if NETCOREAPP
             : base(new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
-                MaxConnectionsPerServer = 5,
+                MaxConnectionsPerServer = _maxConnectionsPerServer,
             })
+#else
+            : base(new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                MaxConnectionsPerServer = _maxConnectionsPerServer,
+            })
+#endif
         {
             var assemblyName = typeof(SingletonHttpClient).Assembly.GetName();
 
