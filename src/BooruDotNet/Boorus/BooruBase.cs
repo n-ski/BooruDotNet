@@ -23,6 +23,17 @@ namespace BooruDotNet.Boorus
             set => _customHttpClient = value;
         }
 
+        protected async static Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken, bool ensureSuccess = true)
+        {
+            HttpResponseMessage response = await HttpClient.SendAsync(
+                request,
+                HttpCompletionOption.ResponseHeadersRead,
+                cancellationToken);
+
+            return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
+        }
+
         protected async static Task<HttpResponseMessage> GetResponseAsync(Uri requestUri,
             CancellationToken cancellationToken, bool ensureSuccess = true)
         {

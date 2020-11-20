@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BooruDotNet.Resources {
+namespace BooruDotNet.Search.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace BooruDotNet.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessages {
+    internal class UploadUris {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ErrorMessages() {
+        internal UploadUris() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace BooruDotNet.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Search.Resources.UploadUris", typeof(UploadUris).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,38 +61,11 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the hash &apos;{0}&apos;.
+        ///   Looks up a localized string similar to https://danbooru.donmai.us/iqdb_queries.json.
         /// </summary>
-        internal static string PostInvalidHashFormat {
+        internal static string Danbooru {
             get {
-                return ResourceManager.GetString("PostInvalidHashFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the ID &apos;{0}&apos;.
-        /// </summary>
-        internal static string PostInvalidIdFormat {
-            get {
-                return ResourceManager.GetString("PostInvalidIdFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a tag with the name &apos;{0}&apos;.
-        /// </summary>
-        internal static string TagInvalidNameFormat {
-            get {
-                return ResourceManager.GetString("TagInvalidNameFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to URI was not absolute..
-        /// </summary>
-        internal static string UriIsNotAbsolute {
-            get {
-                return ResourceManager.GetString("UriIsNotAbsolute", resourceCulture);
+                return ResourceManager.GetString("Danbooru", resourceCulture);
             }
         }
     }
