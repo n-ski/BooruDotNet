@@ -17,4 +17,10 @@
     <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Images\47faa37362c3eca37fb9cd7dab3545b8.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

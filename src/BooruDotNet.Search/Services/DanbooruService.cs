@@ -12,7 +12,7 @@ using Easy.Common;
 
 namespace BooruDotNet.Search.Services
 {
-    public class DanbooruService : ServiceBase, ISearchByUri
+    public class DanbooruService : ServiceBase, ISearchByUri, ISearchByFile
     {
         public DanbooruService()
             : base(HttpMethod.Get, new Uri(UploadUris.Danbooru))
@@ -29,9 +29,26 @@ namespace BooruDotNet.Search.Services
                 ["url"] = uri.AbsoluteUri,
             });
 
+            return await UploadAndDeserialize(content, cancellationToken);
+        }
+
+        public async Task<IEnumerable<IResult>> SearchBy(FileStream fileStream, CancellationToken cancellationToken = default)
+        {
+            Ensure.NotNull(fileStream, nameof(fileStream));
+
+            using HttpContent content = new MultipartFormDataContent
+            {
+                { new StreamContent(fileStream), "search[file]", Path.GetFileName(fileStream.Name) }
+            };
+
+            return await UploadAndDeserialize(content, cancellationToken);
+        }
+
+        private async Task<DanbooruResult[]> UploadAndDeserialize(HttpContent content, CancellationToken cancellationToken)
+        {
             using Stream responseStream = await UploadContent(content, cancellationToken);
 
-            return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(responseStream);
+            return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(responseStream, cancellationToken: cancellationToken);
         }
     }
 }
