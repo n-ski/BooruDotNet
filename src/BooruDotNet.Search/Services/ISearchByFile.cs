@@ -8,6 +8,6 @@ namespace BooruDotNet.Search.Services
 {
     public interface ISearchByFile
     {
-        Task<IEnumerable<IResult>> SearchBy(FileStream fileStream, CancellationToken cancellationToken = default);
+        Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default);
     }
 }

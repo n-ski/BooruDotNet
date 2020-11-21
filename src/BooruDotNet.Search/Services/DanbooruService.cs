@@ -19,7 +19,7 @@ namespace BooruDotNet.Search.Services
         {
         }
 
-        public async Task<IEnumerable<IResult>> SearchBy(Uri uri, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(uri, nameof(uri));
             Ensure.That(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
@@ -29,10 +29,10 @@ namespace BooruDotNet.Search.Services
                 ["url"] = uri.AbsoluteUri,
             });
 
-            return await UploadAndDeserialize(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken);
         }
 
-        public async Task<IEnumerable<IResult>> SearchBy(FileStream fileStream, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(fileStream, nameof(fileStream));
 
@@ -41,12 +41,12 @@ namespace BooruDotNet.Search.Services
                 { new StreamContent(fileStream), "search[file]", Path.GetFileName(fileStream.Name) }
             };
 
-            return await UploadAndDeserialize(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken);
         }
 
-        private async Task<DanbooruResult[]> UploadAndDeserialize(HttpContent content, CancellationToken cancellationToken)
+        private async Task<DanbooruResult[]> UploadAndDeserializeAsync(HttpContent content, CancellationToken cancellationToken)
         {
-            using Stream responseStream = await UploadContent(content, cancellationToken);
+            using Stream responseStream = await UploadContentAsync(content, cancellationToken);
 
             return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(responseStream, cancellationToken: cancellationToken);
         }

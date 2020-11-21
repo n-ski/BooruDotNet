@@ -2,6 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BooruDotNet.Posts;
+using BooruDotNet.Resources;
 
 namespace BooruDotNet.Json
 {
@@ -19,7 +20,10 @@ namespace BooruDotNet.Json
                 JsonSerializer.Serialize(writer, value, typeof(T), options);
             }
 
-            throw new JsonException($"Invalid post type. Expected: '{typeof(T)}'; actual: '{value.GetType()}'");
+            throw new JsonException(string.Format(
+                ErrorMessages.PostConverterInvalidTypeFormat,
+                typeof(T),
+                value.GetType()));
         }
     }
 }

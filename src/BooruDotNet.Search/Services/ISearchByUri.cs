@@ -8,6 +8,6 @@ namespace BooruDotNet.Search.Services
 {
     public interface ISearchByUri
     {
-        Task<IEnumerable<IResult>> SearchBy(Uri uri, CancellationToken cancellationToken = default);
+        Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default);
     }
 }

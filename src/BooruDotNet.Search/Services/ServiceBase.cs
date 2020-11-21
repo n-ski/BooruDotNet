@@ -24,7 +24,7 @@ namespace BooruDotNet.Search.Services
 
         protected Uri UploadUri { get; }
 
-        protected virtual async Task<Stream> UploadContent(HttpContent content, CancellationToken cancellationToken)
+        protected virtual async Task<Stream> UploadContentAsync(HttpContent content, CancellationToken cancellationToken)
         {
             using HttpRequestMessage message = new HttpRequestMessage(UploadMethod, UploadUri)
             {

@@ -61,6 +61,15 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid post type. Expected: &apos;{0}&apos;, actual: &apos;{1}&apos;..
+        /// </summary>
+        internal static string PostConverterInvalidTypeFormat {
+            get {
+                return ResourceManager.GetString("PostConverterInvalidTypeFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the hash &apos;{0}&apos;.
         /// </summary>
         internal static string PostInvalidHashFormat {

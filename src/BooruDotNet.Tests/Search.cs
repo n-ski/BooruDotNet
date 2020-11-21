@@ -1,35 +1,65 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Services;
+using BooruDotNet.Tests.Helpers;
 using NUnit.Framework;
 
 namespace BooruDotNet.Tests
 {
     public class Search
     {
-        [Test]
-        public async Task SearchByUri_Success()
+        private static readonly DanbooruService _danbooru = new DanbooruService();
+        private const int _testPostId = 123456;
+
+        public class ByUri
         {
-            var service = new DanbooruService();
+            private readonly Uri _testUri = new Uri("https://cdn.donmai.us/preview/47/fa/47faa37362c3eca37fb9cd7dab3545b8.jpg");
 
-            var results = await service.SearchBy(new Uri("https://cdn.donmai.us/preview/47/fa/47faa37362c3eca37fb9cd7dab3545b8.jpg"));
-            var firstResult = results.First();
+            [Test]
+            public async Task SearchByUri_Success()
+            {
+                var results = await _danbooru.SearchByAsync(_testUri);
+                var firstResult = results.First();
 
-            Assert.IsTrue(firstResult.Post.ID == 123456);
+                Assert.IsTrue(firstResult.Post.ID == _testPostId);
+            }
+
+            [Test]
+            public void SearchByUri_Cancellation()
+            {
+                using var tokenSource = new CancellationTokenSource();
+                tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+
+                Assert.ThrowsAsync<TaskCanceledException>(() => _danbooru.SearchByAsync(_testUri, tokenSource.Token));
+            }
         }
 
-        [Test]
-        public async Task SearchByFile_Success()
+        public class ByFile
         {
-            var service = new DanbooruService();
+            private const string _testFilePath = @".\Images\47faa37362c3eca37fb9cd7dab3545b8.jpg";
 
-            using var file = File.OpenRead(@".\Images\47faa37362c3eca37fb9cd7dab3545b8.jpg");
-            var results = await service.SearchBy(file);
-            var firstResult = results.First();
+            [Test]
+            public async Task SearchByFile_Success()
+            {
+                using var file = File.OpenRead(_testFilePath);
+                var results = await _danbooru.SearchByAsync(file);
+                var firstResult = results.First();
 
-            Assert.IsTrue(firstResult.Post.ID == 123456);
+                Assert.IsTrue(firstResult.Post.ID == _testPostId);
+            }
+
+            [Test]
+            public void SearchByFile_Cancellation()
+            {
+                using var file = File.OpenRead(_testFilePath);
+                using var tokenSource = new CancellationTokenSource();
+                tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+
+                Assert.ThrowsAsync<TaskCanceledException>(() => _danbooru.SearchByAsync(file, tokenSource.Token));
+            }
         }
     }
 }
