@@ -68,5 +68,23 @@ namespace BooruDotNet.Search.Resources {
                 return ResourceManager.GetString("Danbooru", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://iqdb.org/.
+        /// </summary>
+        internal static string Iqdb {
+            get {
+                return ResourceManager.GetString("Iqdb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://{0}.iqdb.org/.
+        /// </summary>
+        internal static string IqdbFormat {
+            get {
+                return ResourceManager.GetString("IqdbFormat", resourceCulture);
+            }
+        }
     }
 }

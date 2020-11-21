@@ -32,7 +32,8 @@ namespace BooruDotNet.Search.Services
             return await UploadAndDeserializeAsync(content, cancellationToken);
         }
 
-        public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchByAsync(
+            FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Ensure.NotNull(fileStream, nameof(fileStream));
 
@@ -44,11 +45,12 @@ namespace BooruDotNet.Search.Services
             return await UploadAndDeserializeAsync(content, cancellationToken);
         }
 
-        private async Task<DanbooruResult[]> UploadAndDeserializeAsync(HttpContent content, CancellationToken cancellationToken)
+        protected override async Task<IEnumerable<IResult>> DeserializeResponseAsync(
+            Stream responseStream, CancellationToken cancellationToken)
         {
-            using Stream responseStream = await UploadContentAsync(content, cancellationToken);
-
-            return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(responseStream, cancellationToken: cancellationToken);
+            return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(
+                responseStream,
+                cancellationToken: cancellationToken);
         }
     }
 }

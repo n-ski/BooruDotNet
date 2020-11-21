@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Resources;
+using BooruDotNet.Search.Results;
 using Easy.Common;
 
 namespace BooruDotNet.Search.Services
@@ -24,6 +26,14 @@ namespace BooruDotNet.Search.Services
 
         protected Uri UploadUri { get; }
 
+        protected async Task<IEnumerable<IResult>> UploadAndDeserializeAsync(
+            HttpContent content, CancellationToken cancellationToken)
+        {
+            using Stream responseStream = await UploadContentAsync(content, cancellationToken);
+
+            return await DeserializeResponseAsync(responseStream, cancellationToken);
+        }
+
         protected virtual async Task<Stream> UploadContentAsync(HttpContent content, CancellationToken cancellationToken)
         {
             using HttpRequestMessage message = new HttpRequestMessage(UploadMethod, UploadUri)
@@ -35,5 +45,8 @@ namespace BooruDotNet.Search.Services
 
             return await response.Content.ReadAsStreamAsync();
         }
+
+        protected abstract Task<IEnumerable<IResult>> DeserializeResponseAsync(
+            Stream responseStream, CancellationToken cancellationToken);
     }
 }

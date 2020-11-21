@@ -120,4 +120,10 @@
   <data name="Danbooru" xml:space="preserve">
     <value>https://danbooru.donmai.us/iqdb_queries.json</value>
   </data>
+  <data name="Iqdb" xml:space="preserve">
+    <value>https://iqdb.org/</value>
+  </data>
+  <data name="IqdbFormat" xml:space="preserve">
+    <value>https://{0}.iqdb.org/</value>
+  </data>
 </root>
