@@ -38,8 +38,8 @@ namespace BooruDotNet.Tests
         [TestCase(4060861, "__shishiro_botan_yukihana_lamy_mano_aloe_momosuzu_nene_omaru_polka_and_1_more_hololive_drawn_by_misono_denpachi__002754f8d993c5bf7645a6735abc2307")]
         [TestCase(4061119, "__original_drawn_by_i_takashi__590cb03c4efec8d13e3fb42c32c38efc")]
         [TestCase(4067797, "__kurata_mashiro_futaba_tsukushi_yashio_rui_hiromachi_nanami_and_kirigaya_touko_bang_dream_drawn_by_ayasaka__bd4750e801cc84fd2dc1d81ecfd4a3b0")]
+        [TestCase(4090626, "__vrchat_drawn_by_kirisame_mia__c903eb2db92678bba106c96b7e71a923")]
         [TestCase(4166623, "__paimon_and_lumine_genshin_impact_drawn_by_ichijiku_suisei__bbc70109203a07c913a2a0f8e418391e")]
-        [TestCase(4171159, "__emil_chronicle_online_drawn_by_ogami_kazuki__18a03863c8a12cb0c9b6beab0de70198")]
         public async Task CreateDanbooruName_Success(int postId, string expectedName)
         {
             var post = await _postCache.GetPostAsync(postId);
@@ -61,8 +61,8 @@ namespace BooruDotNet.Tests
         [TestCase(4060861, "shishiro botan, yukihana lamy, mano aloe, momosuzu nene, omaru polka, and 1 more (hololive) drawn by misono_denpachi - 002754f8d993c5bf7645a6735abc2307")]
         [TestCase(4061119, "_original drawn by i.takashi - 590cb03c4efec8d13e3fb42c32c38efc")]
         [TestCase(4067797, "kurata mashiro, futaba tsukushi, yashio rui, hiromachi nanami, and kirigaya touko (bang dream!) drawn by ayasaka - bd4750e801cc84fd2dc1d81ecfd4a3b0")]
+        [TestCase(4090626, "_vrchat drawn by kirisame_mia - c903eb2db92678bba106c96b7e71a923")]
         [TestCase(4166623, "paimon and lumine (genshin impact) drawn by ichijiku_suisei - bbc70109203a07c913a2a0f8e418391e")]
-        [TestCase(4171159, "_emil chronicle online drawn by ogami_kazuki - 18a03863c8a12cb0c9b6beab0de70198")]
         // TODO: case with multiple copyrights but no characters.
         // TODO: case with a character but no copyrights.
         public async Task CreateFancyName_Success(int postId, string expectedName)
