@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Net;
+using System.Net.Http;
+using System.Windows;
 using ReactiveUI;
 using Splat;
 
@@ -9,9 +11,16 @@ namespace BooruDotNet.Search.WPF
     /// </summary>
     public partial class App : Application
     {
-        public App()
+        static App()
         {
+            HttpClient = new HttpClient(new SocketsHttpHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All,
+            });
+
             Locator.CurrentMutable.RegisterViewsForViewModels(typeof(App).Assembly);
         }
+
+        internal static HttpClient HttpClient { get; }
     }
 }

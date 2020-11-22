@@ -1,4 +1,6 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
 
@@ -18,8 +20,26 @@ namespace BooruDotNet.Search.WPF.Views
             {
                 this.OneWayBind(
                     ViewModel,
-                    vm => vm.SampleText,
-                    v => v.SampleLabel.Content)
+                    vm => vm.SearchResults,
+                    v => v.ResultsControl.ItemsSource)
+                    .DisposeWith(d);
+
+                // Scroll to top when the results change.
+                ViewModel
+                    .WhenAnyValue(vm => vm.SearchResults)
+                    .Subscribe(_ => ResultsScrollViewer.ScrollToTop())
+                    .DisposeWith(d);
+
+                this.Bind(
+                    ViewModel,
+                    vm => vm.SearchUri,
+                    v => v.SearchUriTextBox.Text)
+                    .DisposeWith(d);
+
+                this.BindCommand(
+                    ViewModel,
+                    vm => vm.SearchCommand,
+                    v => v.SearchButton)
                     .DisposeWith(d);
             });
         }
