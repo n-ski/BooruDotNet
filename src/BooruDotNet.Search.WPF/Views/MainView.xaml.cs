@@ -2,6 +2,8 @@
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDotNet.Search.WPF.ViewModels;
@@ -100,6 +102,18 @@ namespace BooruDotNet.Search.WPF.Views
                     .InvokeCommand(this, v => v.ViewModel.SearchCommand)
                     .DisposeWith(d);
             });
+        }
+
+        // TODO: there's probably a better way to do this.
+        private void CancelSearchButton_Initialized(object sender, EventArgs e)
+        {
+            var button = (Button)sender;
+
+            // Ideally this better be disposed.
+            button
+                .Events().Click
+                .Select(_ => Unit.Default)
+                .InvokeCommand(this, v => v.ViewModel.CancelSearchCommand);
         }
     }
 }

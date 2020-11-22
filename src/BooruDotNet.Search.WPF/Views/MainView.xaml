@@ -18,7 +18,35 @@
 
     <xceed:BusyIndicator
         x:Name="SearchBusyIndicator"
-        DisplayAfter="0">
+        DisplayAfter="0"
+        ProgressBarStyle="{StaticResource CollapsedBar}">
+
+        <xceed:BusyIndicator.BusyContentTemplate>
+
+            <DataTemplate>
+
+                <StackPanel>
+
+                    <TextBlock
+                        Margin="{StaticResource ControlMargin}"
+                        FontSize="14"
+                        Text="Please wait&#x2026;"
+                        TextAlignment="Center" />
+
+                    <ProgressBar
+                        Width="200"
+                        Height="20"
+                        Margin="{StaticResource ControlMargin}"
+                        IsIndeterminate="True" />
+
+                    <Button
+                        Margin="{StaticResource ControlMargin}"
+                        HorizontalAlignment="Center"
+                        Content="Cancel"
+                        Initialized="CancelSearchButton_Initialized" />
+                </StackPanel>
+            </DataTemplate>
+        </xceed:BusyIndicator.BusyContentTemplate>
 
         <Grid
             Margin="{StaticResource ControlMargin}">

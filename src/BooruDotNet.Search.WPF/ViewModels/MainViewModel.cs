@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BooruDotNet.Search.Services;
@@ -26,13 +27,16 @@ namespace BooruDotNet.Search.WPF.ViewModels
         {
             _iqdbService = new IqdbService(App.HttpClient, "danbooru");
 
-            SearchCommand = ReactiveCommand.CreateFromTask(
-                // Task.Run(...) fixes the command blocking the UI.
-                () => Task.Run(LoadResultsAsync),
+            SearchCommand = ReactiveCommand.CreateFromObservable(
+                () => Observable.StartAsync(LoadResultsAsync).TakeUntil(CancelSearchCommand),
                 this.WhenAnyValue(x => x.SearchUri, uri => uri?.IsAbsoluteUri ?? false));
 
             SearchCommand.ThrownExceptions.Subscribe(ex =>
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
+
+            CancelSearchCommand = ReactiveCommand.Create(
+                () => { },
+                SearchCommand.IsExecuting);
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
 
@@ -85,10 +89,15 @@ namespace BooruDotNet.Search.WPF.ViewModels
         public bool IsSearching => _isSearching.Value;
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
+        public ReactiveCommand<Unit, Unit> CancelSearchCommand { get; }
 
-        private async Task<IEnumerable<ResultViewModel>> LoadResultsAsync()
+        private async Task<IEnumerable<ResultViewModel>> LoadResultsAsync(CancellationToken cancellationToken)
         {
-            var results = await _iqdbService.SearchByAsync(SearchUri).ConfigureAwait(false);
+            // Task.Run(...) fixes the command blocking the UI.
+            var task = Task
+                .Run(() => _iqdbService.SearchByAsync(SearchUri, cancellationToken), cancellationToken)
+                .ConfigureAwait(false);
+            var results = await task;
             return results.Select(r => new ResultViewModel(r));
         }
     }
