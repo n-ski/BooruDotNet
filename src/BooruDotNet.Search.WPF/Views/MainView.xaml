@@ -62,6 +62,8 @@
                 <ColumnDefinition
                     Width="1*" />
                 <ColumnDefinition
+                    Width="150" />
+                <ColumnDefinition
                     Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -69,7 +71,7 @@
                 x:Name="ResultsScrollViewer"
                 Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="3"
                 Focusable="False"
                 HorizontalScrollBarVisibility="Disabled"
                 VerticalScrollBarVisibility="Auto">
@@ -107,10 +109,35 @@
                 Margin="{StaticResource ControlMargin}"
                 VerticalContentAlignment="Center" />
 
+            <ComboBox
+                Name="ServicesComboBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="{StaticResource ControlMargin}"
+                SelectedIndex="0">
+
+                <ComboBox.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <StackPanel
+                            Orientation="Horizontal">
+
+                            <Image
+                                Margin="0,0,4,0"
+                                Source="{Binding Icon}" />
+
+                            <TextBlock
+                                Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
             <Button
                 x:Name="SearchButton"
                 Grid.Row="1"
-                Grid.Column="1"
+                Grid.Column="2"
                 Margin="{StaticResource ControlMargin}"
                 Content="Search!" />
         </Grid>

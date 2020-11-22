@@ -14,7 +14,7 @@ using Validation;
 
 namespace BooruDotNet.Search.Services
 {
-    public class IqdbService : ServiceBase, ISearchByUri, ISearchByFile
+    public class IqdbService : ServiceBase, ISearchByUriAndFile
     {
         private static readonly Lazy<Regex> _widthHeightRegexLazy = new Lazy<Regex>(() =>
             new Regex(@"^(\d+).(\d+) \[\w+\]$", RegexOptions.Compiled));

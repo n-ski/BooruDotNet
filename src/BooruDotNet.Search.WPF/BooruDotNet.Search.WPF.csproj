@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Images\AppIcon.ico" />
+    <None Remove="Assets\Images\Danbooru.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\Images\AppIcon.ico" />
+    <Resource Include="Assets\Images\Danbooru.ico" />
   </ItemGroup>
 
 </Project>

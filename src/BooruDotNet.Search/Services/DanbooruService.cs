@@ -12,7 +12,7 @@ using Validation;
 
 namespace BooruDotNet.Search.Services
 {
-    public class DanbooruService : ServiceBase, ISearchByUri, ISearchByFile
+    public class DanbooruService : ServiceBase, ISearchByUriAndFile
     {
         public DanbooruService(HttpClient httpClient)
             : base(httpClient, HttpMethod.Get, new Uri(UploadUris.Danbooru))

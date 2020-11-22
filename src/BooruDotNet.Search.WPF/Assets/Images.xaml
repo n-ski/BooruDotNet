@@ -11,4 +11,8 @@
         DecodePixelHeight="16"
         DecodePixelWidth="16"
         UriSource="./Images/AppIcon.ico" />
+
+    <BitmapImage
+        x:Key="DanbooruIcon"
+        UriSource="./Images/Danbooru.ico" />
 </ResourceDictionary>

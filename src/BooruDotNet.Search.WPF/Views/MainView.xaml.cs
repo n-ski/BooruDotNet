@@ -21,6 +21,10 @@ namespace BooruDotNet.Search.WPF.Views
             InitializeComponent();
             ViewModel = new MainViewModel();
 
+#if DEBUG
+            Title += " (Debug)";
+#endif
+
             this.WhenActivated(d =>
             {
                 #region Results bindings
@@ -77,11 +81,22 @@ namespace BooruDotNet.Search.WPF.Views
                     .Subscribe(_ => ResultsScrollViewer.ScrollToTop())
                     .DisposeWith(d);
 
+                #region Search URI TextBox
+
                 this.Bind(
                     ViewModel,
                     vm => vm.SearchUri,
                     v => v.SearchUriTextBox.Text)
                     .DisposeWith(d);
+
+                SearchUriTextBox
+                    .Events().KeyDown
+                    .Where(e => e.Key == Key.Enter)
+                    .Select(_ => Unit.Default)
+                    .InvokeCommand(this, v => v.ViewModel.SearchCommand)
+                    .DisposeWith(d);
+
+                #endregion
 
                 this.BindCommand(
                     ViewModel,
@@ -95,12 +110,21 @@ namespace BooruDotNet.Search.WPF.Views
                     v => v.SearchBusyIndicator.IsBusy)
                     .DisposeWith(d);
 
-                SearchUriTextBox
-                    .Events().KeyDown
-                    .Where(e => e.Key == Key.Enter)
-                    .Select(_ => Unit.Default)
-                    .InvokeCommand(this, v => v.ViewModel.SearchCommand)
+                #region Search services ComboBox
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.SearchServices,
+                    v => v.ServicesComboBox.ItemsSource)
                     .DisposeWith(d);
+
+                // One-way to source binding.
+                this
+                    .WhenAnyValue(v => v.ServicesComboBox.SelectedItem)
+                    .BindTo(this, v => v.ViewModel.SelectedService)
+                    .DisposeWith(d);
+
+                #endregion
             });
         }
 
