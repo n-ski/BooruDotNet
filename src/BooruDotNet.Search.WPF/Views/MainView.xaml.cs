@@ -18,11 +18,53 @@ namespace BooruDotNet.Search.WPF.Views
 
             this.WhenActivated(d =>
             {
+                #region Results bindings
+
                 this.OneWayBind(
                     ViewModel,
-                    vm => vm.SearchResults,
-                    v => v.ResultsControl.ItemsSource)
+                    vm => vm.SearchResultsBestMatches,
+                    v => v.BestResultsControl.ItemsSource)
                     .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.SearchResultsOtherMatches,
+                    v => v.OtherResultsControl.ItemsSource)
+                    .DisposeWith(d);
+
+                #endregion
+
+                #region Best results visibility
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.HasBestResults,
+                    v => v.BestResultsHeader.Visibility)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.HasBestResults,
+                    v => v.BestResultsControl.Visibility)
+                    .DisposeWith(d);
+
+                #endregion
+
+                #region Other results visibility
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.HasOtherResults,
+                    v => v.OtherResultsHeader.Visibility)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.HasOtherResults,
+                    v => v.OtherResultsControl.Visibility)
+                    .DisposeWith(d);
+
+                #endregion
 
                 // Scroll to top when the results change.
                 ViewModel
