@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Forms;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
 
@@ -89,6 +91,13 @@ namespace BooruDotNet.Search.WPF.Views
                     ViewModel,
                     vm => vm.IsSearching,
                     v => v.SearchBusyIndicator.IsBusy)
+                    .DisposeWith(d);
+
+                SearchUriTextBox
+                    .Events().KeyDown
+                    .Where(e => e.Key == Key.Enter)
+                    .Select(_ => Unit.Default)
+                    .InvokeCommand(this, v => v.ViewModel.SearchCommand)
                     .DisposeWith(d);
             });
         }
