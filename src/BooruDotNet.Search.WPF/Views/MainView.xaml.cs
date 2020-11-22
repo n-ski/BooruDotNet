@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Forms;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
 
@@ -82,6 +83,12 @@ namespace BooruDotNet.Search.WPF.Views
                     ViewModel,
                     vm => vm.SearchCommand,
                     v => v.SearchButton)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.IsSearching,
+                    v => v.SearchBusyIndicator.IsBusy)
                     .DisposeWith(d);
             });
         }

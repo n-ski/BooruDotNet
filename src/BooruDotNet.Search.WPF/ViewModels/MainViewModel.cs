@@ -20,6 +20,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResultsOther;
         private readonly ObservableAsPropertyHelper<bool> _hasBestResults;
         private readonly ObservableAsPropertyHelper<bool> _hasOtherResults;
+        private readonly ObservableAsPropertyHelper<bool> _isSearching;
 
         public MainViewModel()
         {
@@ -29,6 +30,11 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 // Task.Run(...) fixes the command blocking the UI.
                 () => Task.Run(LoadResultsAsync),
                 this.WhenAnyValue(x => x.SearchUri, uri => uri?.IsAbsoluteUri ?? false));
+
+            SearchCommand.ThrownExceptions.Subscribe(ex =>
+                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
+
+            _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
 
             _searchResults = SearchCommand.ToProperty(
                 this,
@@ -63,9 +69,6 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 .ToProperty(this, x => x.HasOtherResults);
 
             #endregion
-
-            SearchCommand.ThrownExceptions.Subscribe(ex =>
-                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
         }
 
         public Uri SearchUri
@@ -79,6 +82,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
         public IEnumerable<ResultViewModel> SearchResultsOtherMatches => _searchResultsOther.Value;
         public bool HasBestResults => _hasBestResults.Value;
         public bool HasOtherResults => _hasOtherResults.Value;
+        public bool IsSearching => _isSearching.Value;
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
 

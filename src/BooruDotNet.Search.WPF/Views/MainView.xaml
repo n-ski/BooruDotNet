@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveui="http://reactiveui.net"
     xmlns:viewmodels="clr-namespace:BooruDotNet.Search.WPF.ViewModels"
+    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="IQDB Image Search"
     Width="800"
     Height="450"
@@ -15,70 +16,75 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid
-        Margin="{StaticResource ControlMargin}">
+    <xceed:BusyIndicator
+        x:Name="SearchBusyIndicator"
+        DisplayAfter="0">
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="1*" />
-            <RowDefinition
-                Height="Auto" />
-        </Grid.RowDefinitions>
+        <Grid
+            Margin="{StaticResource ControlMargin}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="1*" />
-            <ColumnDefinition
-                Width="Auto" />
-        </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="1*" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <ScrollViewer
-            x:Name="ResultsScrollViewer"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Focusable="False"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="1*" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel>
+            <ScrollViewer
+                x:Name="ResultsScrollViewer"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Focusable="False"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
 
-                <TextBlock
-                    x:Name="BestResultsHeader"
-                    Margin="{StaticResource ControlMargin}"
-                    Style="{StaticResource ResultsHeader}"
-                    Text="Best matches" />
+                <StackPanel>
 
-                <ItemsControl
-                    x:Name="BestResultsControl"
-                    Margin="{StaticResource ControlMargin}"
-                    Style="{StaticResource ResultsControl}" />
+                    <TextBlock
+                        x:Name="BestResultsHeader"
+                        Margin="{StaticResource ControlMargin}"
+                        Style="{StaticResource ResultsHeader}"
+                        Text="Best matches" />
 
-                <TextBlock
-                    x:Name="OtherResultsHeader"
-                    Margin="{StaticResource ControlMargin}"
-                    Style="{StaticResource ResultsHeader}"
-                    Text="Other matches" />
+                    <ItemsControl
+                        x:Name="BestResultsControl"
+                        Margin="{StaticResource ControlMargin}"
+                        Style="{StaticResource ResultsControl}" />
 
-                <ItemsControl
-                    x:Name="OtherResultsControl"
-                    Margin="{StaticResource ControlMargin}"
-                    Style="{StaticResource ResultsControl}" />
-            </StackPanel>
-        </ScrollViewer>
+                    <TextBlock
+                        x:Name="OtherResultsHeader"
+                        Margin="{StaticResource ControlMargin}"
+                        Style="{StaticResource ResultsHeader}"
+                        Text="Other matches" />
 
-        <TextBox
-            x:Name="SearchUriTextBox"
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="{StaticResource ControlMargin}"
-            VerticalContentAlignment="Center" />
+                    <ItemsControl
+                        x:Name="OtherResultsControl"
+                        Margin="{StaticResource ControlMargin}"
+                        Style="{StaticResource ResultsControl}" />
+                </StackPanel>
+            </ScrollViewer>
 
-        <Button
-            x:Name="SearchButton"
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="{StaticResource ControlMargin}"
-            Content="Search!" />
-    </Grid>
+            <TextBox
+                x:Name="SearchUriTextBox"
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="{StaticResource ControlMargin}"
+                VerticalContentAlignment="Center" />
+
+            <Button
+                x:Name="SearchButton"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="{StaticResource ControlMargin}"
+                Content="Search!" />
+        </Grid>
+    </xceed:BusyIndicator>
 </reactiveui:ReactiveWindow>
