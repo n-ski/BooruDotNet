@@ -81,23 +81,6 @@ namespace BooruDotNet.Search.WPF.Views
                     .Subscribe(_ => ResultsScrollViewer.ScrollToTop())
                     .DisposeWith(d);
 
-                #region Search URI TextBox
-
-                this.Bind(
-                    ViewModel,
-                    vm => vm.SearchUri,
-                    v => v.SearchUriTextBox.Text)
-                    .DisposeWith(d);
-
-                SearchUriTextBox
-                    .Events().KeyDown
-                    .Where(e => e.Key == Key.Enter)
-                    .Select(_ => Unit.Default)
-                    .InvokeCommand(this, v => v.ViewModel.SearchCommand)
-                    .DisposeWith(d);
-
-                #endregion
-
                 this.BindCommand(
                     ViewModel,
                     vm => vm.SearchCommand,
@@ -119,9 +102,29 @@ namespace BooruDotNet.Search.WPF.Views
                     .DisposeWith(d);
 
                 // One-way to source binding.
-                this
-                    .WhenAnyValue(v => v.ServicesComboBox.SelectedItem)
+                this.WhenAnyValue(v => v.ServicesComboBox.SelectedItem)
                     .BindTo(this, v => v.ViewModel.SelectedService)
+                    .DisposeWith(d);
+
+                #endregion
+
+                #region Upload method ComboBox
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.UploadMethods,
+                    v => v.UploadMethodComboBox.ItemsSource)
+                    .DisposeWith(d);
+
+                this.WhenAnyValue(v => v.UploadMethodComboBox.SelectedItem)
+                    .BindTo(this, v => v.ViewModel.SelectedUploadMethod)
+                    .DisposeWith(d);
+
+                // TODO: probably better be replaced with TemplateSelector.
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.SelectedUploadMethod.ViewModel,
+                    v => v.UploadMethodViewHost.ViewModel)
                     .DisposeWith(d);
 
                 #endregion

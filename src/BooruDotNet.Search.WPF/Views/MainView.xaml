@@ -60,6 +60,10 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="60" />
+                <ColumnDefinition
                     Width="1*" />
                 <ColumnDefinition
                     Width="150" />
@@ -71,7 +75,7 @@
                 x:Name="ResultsScrollViewer"
                 Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="3"
+                Grid.ColumnSpan="5"
                 Focusable="False"
                 HorizontalScrollBarVisibility="Disabled"
                 VerticalScrollBarVisibility="Auto">
@@ -102,17 +106,32 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <TextBox
-                x:Name="SearchUriTextBox"
+            <TextBlock
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="{StaticResource ControlMargin}"
-                VerticalContentAlignment="Center" />
+                VerticalAlignment="Center"
+                Text="Upload:" />
+
+            <ComboBox
+                Name="UploadMethodComboBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="{StaticResource ControlMargin}"
+                DisplayMemberPath="Name"
+                SelectedIndex="0" />
+
+            <reactiveui:ViewModelViewHost
+                x:Name="UploadMethodViewHost"
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch" />
 
             <ComboBox
                 Name="ServicesComboBox"
                 Grid.Row="1"
-                Grid.Column="1"
+                Grid.Column="3"
                 Margin="{StaticResource ControlMargin}"
                 SelectedIndex="0">
 
@@ -137,7 +156,7 @@
             <Button
                 x:Name="SearchButton"
                 Grid.Row="1"
-                Grid.Column="2"
+                Grid.Column="4"
                 Margin="{StaticResource ControlMargin}"
                 Content="Search!" />
         </Grid>

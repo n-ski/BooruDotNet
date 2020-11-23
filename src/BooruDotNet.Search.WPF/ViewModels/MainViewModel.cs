@@ -14,8 +14,10 @@ namespace BooruDotNet.Search.WPF.ViewModels
     public class MainViewModel : ReactiveObject
     {
         private const double _bestMatchThreshold = 0.85;
-        private Uri _searchUri;
         private SearchServiceModel _selectedService;
+        private UploadMethodModel _selectedUploadMethod;
+        private readonly UriUploadViewModel _uriUploadViewModel;
+        private readonly FileUploadViewModel _fileUploadViewModel;
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResults;
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResultsBest;
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResultsOther;
@@ -25,9 +27,36 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
         public MainViewModel()
         {
+            _uriUploadViewModel = new UriUploadViewModel();
+            _fileUploadViewModel = new FileUploadViewModel();
+
+            SearchServices = new[]
+            {
+                WPF.SearchServices.Danbooru,
+                WPF.SearchServices.DanbooruIqdb
+            };
+
+            UploadMethods = new[]
+            {
+                new UploadMethodModel(UploadMethod.Uri, "URL", _uriUploadViewModel),
+                new UploadMethodModel(UploadMethod.File, "File", _fileUploadViewModel),
+            };
+
             SearchCommand = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(LoadResultsAsync).TakeUntil(CancelSearchCommand),
-                this.WhenAnyValue(x => x.SearchUri, uri => uri?.IsAbsoluteUri ?? false));
+                this.WhenAnyValue(
+                    x => x.SelectedUploadMethod,
+                    x => x._uriUploadViewModel.ImageUri,
+                    x => x._fileUploadViewModel.FileInfo,
+                    (model, uri, fileInfo) =>
+                    {
+                        return model?.Method switch
+                        {
+                            UploadMethod.Uri => uri?.IsAbsoluteUri ?? false,
+                            UploadMethod.File => fileInfo?.Exists ?? false,
+                            _ => false,
+                        };
+                    }));
 
             SearchCommand.ThrownExceptions.Subscribe(ex =>
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
@@ -71,24 +100,18 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 .ToProperty(this, x => x.HasOtherResults);
 
             #endregion
-
-            SearchServices = new[]
-            {
-                WPF.SearchServices.Danbooru,
-                WPF.SearchServices.DanbooruIqdb
-            };
-        }
-
-        public Uri SearchUri
-        {
-            get => _searchUri;
-            set => this.RaiseAndSetIfChanged(ref _searchUri, value);
         }
 
         public SearchServiceModel SelectedService
         {
             get => _selectedService;
             set => this.RaiseAndSetIfChanged(ref _selectedService, value);
+        }
+
+        public UploadMethodModel SelectedUploadMethod
+        {
+            get => _selectedUploadMethod;
+            set => this.RaiseAndSetIfChanged(ref _selectedUploadMethod, value);
         }
 
         public IEnumerable<ResultViewModel> SearchResults => _searchResults.Value;
@@ -98,6 +121,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
         public bool HasOtherResults => _hasOtherResults.Value;
         public bool IsSearching => _isSearching.Value;
         public IEnumerable<SearchServiceModel> SearchServices { get; }
+        public IEnumerable<UploadMethodModel> UploadMethods { get; }
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
         public ReactiveCommand<Unit, Unit> CancelSearchCommand { get; }
@@ -106,7 +130,23 @@ namespace BooruDotNet.Search.WPF.ViewModels
         {
             // Task.Run(...) fixes the command blocking the UI.
             var task = Task
-                .Run(() => SelectedService.SearchByAsync(SearchUri, cancellationToken), cancellationToken)
+                .Run(async () =>
+                {
+                    switch (SelectedUploadMethod.Method)
+                    {
+                        case UploadMethod.Uri:
+                            return await SelectedService.SearchByAsync(_uriUploadViewModel.ImageUri, cancellationToken);
+
+                        case UploadMethod.File:
+                            using (var fileStream = _fileUploadViewModel.FileInfo.OpenRead())
+                            {
+                                return await SelectedService.SearchByAsync(fileStream, cancellationToken);
+                            }
+
+                        default:
+                            throw new InvalidOperationException();
+                    }
+                }, cancellationToken)
                 .ConfigureAwait(false);
             var results = await task;
             return results.Select(r => new ResultViewModel(r));
