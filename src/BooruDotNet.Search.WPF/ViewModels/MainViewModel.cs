@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using BooruDotNet.Search.WPF.Helpers;
 using BooruDotNet.Search.WPF.Models;
 using ReactiveUI;
 
@@ -52,7 +53,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                     {
                         return model?.Method switch
                         {
-                            UploadMethod.Uri => uri?.IsAbsoluteUri ?? false,
+                            UploadMethod.Uri => UriHelper.IsValid(uri),
                             UploadMethod.File => fileInfo?.Exists ?? false,
                             _ => false,
                         };
@@ -62,7 +63,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
 
             CancelSearchCommand = ReactiveCommand.Create(
-                () => { },
+                CommandHelper.DoNothing,
                 SearchCommand.IsExecuting);
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
@@ -74,6 +75,8 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 initialValue: Enumerable.Empty<ResultViewModel>(),
                 scheduler: RxApp.MainThreadScheduler);
 
+            static bool hasAnyItems<T>(IEnumerable<T> enumerable) => enumerable.Any();
+
             #region Best results
 
             _searchResultsBest = this
@@ -83,7 +86,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             _hasBestResults = this
                 .WhenAnyValue(x => x.SearchResultsBestMatches)
-                .Select(results => results.Any())
+                .Select(hasAnyItems)
                 .ToProperty(this, x => x.HasBestResults);
 
             #endregion
@@ -97,7 +100,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             _hasOtherResults = this
                 .WhenAnyValue(x => x.SearchResultsOtherMatches)
-                .Select(results => results.Any())
+                .Select(hasAnyItems)
                 .ToProperty(this, x => x.HasOtherResults);
 
             #endregion
