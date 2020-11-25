@@ -66,6 +66,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 SearchCommand.IsExecuting);
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
+            _uriUploadViewModel.SearchCommand.InvokeCommand(SearchCommand);
 
             _searchResults = SearchCommand.ToProperty(
                 this,

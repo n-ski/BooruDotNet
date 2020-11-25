@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reactive;
 using ReactiveUI;
 
 namespace BooruDotNet.Search.WPF.ViewModels
@@ -9,6 +10,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
         public UriUploadViewModel()
         {
+            SearchCommand = ReactiveCommand.Create(() => { });
         }
 
         public Uri ImageUri
@@ -16,5 +18,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
             get => _imageUri;
             set => this.RaiseAndSetIfChanged(ref _imageUri, value);
         }
+
+        public ReactiveCommand<Unit, Unit> SearchCommand { get; }
     }
 }
