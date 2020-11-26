@@ -118,8 +118,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="{StaticResource ControlMargin}"
-                DisplayMemberPath="Name"
-                SelectedIndex="0" />
+                DisplayMemberPath="Name" />
 
             <reactiveui:ViewModelViewHost
                 x:Name="UploadMethodViewHost"

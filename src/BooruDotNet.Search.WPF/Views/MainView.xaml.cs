@@ -116,8 +116,11 @@ namespace BooruDotNet.Search.WPF.Views
                     v => v.UploadMethodComboBox.ItemsSource)
                     .DisposeWith(d);
 
-                this.WhenAnyValue(v => v.UploadMethodComboBox.SelectedItem)
-                    .BindTo(this, v => v.ViewModel.SelectedUploadMethod)
+                // Has to be a two-way binding since the viewmodel can also set upload method.
+                this.Bind(
+                    ViewModel,
+                    vm => vm.SelectedUploadMethod,
+                    v => v.UploadMethodComboBox.SelectedItem)
                     .DisposeWith(d);
 
                 // TODO: probably better be replaced with TemplateSelector.

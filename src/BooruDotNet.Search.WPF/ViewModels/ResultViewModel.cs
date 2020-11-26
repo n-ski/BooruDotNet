@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reactive;
 using System.Windows;
 using BooruDotNet.Search.Results;
+using BooruDotNet.Search.WPF.Interactions;
 using ReactiveUI;
 using Validation;
 
@@ -29,6 +30,9 @@ namespace BooruDotNet.Search.WPF.ViewModels
             {
                 Clipboard.SetText(_result.Source.ToString());
             });
+
+            SearchForSimilarCommand = ReactiveCommand.CreateFromObservable(
+                () => ImageInteractions.SearchForSimilar.Handle(ImageUri));
         }
 
         public Uri ImageUri => _result.PreviewImageUri;
@@ -38,7 +42,6 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
         public ReactiveCommand<Unit, Unit> OpenSourceCommand { get; }
         public ReactiveCommand<Unit, Unit> CopySourceUriCommand { get; }
-
-        // TODO: search for similar.
+        public ReactiveCommand<Unit, Unit> SearchForSimilarCommand { get; }
     }
 }

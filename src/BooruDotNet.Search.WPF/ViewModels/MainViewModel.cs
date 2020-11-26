@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BooruDotNet.Search.WPF.Helpers;
+using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.Models;
 using ReactiveUI;
 
@@ -42,6 +43,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 new UploadMethodModel(UploadMethod.Uri, "URL", _uriUploadViewModel),
                 new UploadMethodModel(UploadMethod.File, "File", _fileUploadViewModel),
             };
+            SetUploadMethod(UploadMethod.Uri);
 
             SearchCommand = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(LoadResultsAsync).TakeUntil(CancelSearchCommand),
@@ -104,6 +106,17 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 .ToProperty(this, x => x.HasOtherResults);
 
             #endregion
+
+            ImageInteractions.SearchForSimilar.RegisterHandler(interaction =>
+            {
+                SetUploadMethod(UploadMethod.Uri);
+                _uriUploadViewModel.ImageUri = interaction.Input;
+
+                // TODO: probably needs to be disposed.
+                SearchCommand.Execute().Subscribe();
+                // Handle the interaction.
+                interaction.SetOutput(Unit.Default);
+            });
         }
 
         public SearchServiceModel SelectedService
@@ -154,6 +167,11 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 .ConfigureAwait(false);
             var results = await task;
             return results.Select(r => new ResultViewModel(r));
+        }
+
+        private void SetUploadMethod(UploadMethod uploadMethod)
+        {
+            SelectedUploadMethod = UploadMethods.First(x => x.Method == uploadMethod);
         }
     }
 }

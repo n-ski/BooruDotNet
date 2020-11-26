@@ -30,6 +30,7 @@
             Width="150"
             Height="150"
             Margin="{StaticResource ControlMargin}"
+            d:Source="https://dummyimage.com/150/777/fff"
             RenderOptions.BitmapScalingMode="HighQuality" />
 
         <StackPanel
@@ -38,10 +39,12 @@
 
             <TextBlock
                 x:Name="ImageSizeText"
+                d:Text="150x150"
                 TextAlignment="Center" />
 
             <TextBlock
                 x:Name="SimilarityText"
+                d:Text="100% similarity"
                 TextAlignment="Center" />
         </StackPanel>
 
@@ -54,13 +57,22 @@
                 x:Name="OpenSourceButton"
                 Margin="{StaticResource ControlMargin}"
                 Content="&#xE774;"
-                Style="{StaticResource GlyphButton}" />
+                Style="{StaticResource GlyphButton}"
+                ToolTip="Open in browser" />
 
             <Button
                 x:Name="CopySourceButton"
                 Margin="{StaticResource ControlMargin}"
                 Content="&#xE8C8;"
-                Style="{StaticResource GlyphButton}" />
+                Style="{StaticResource GlyphButton}"
+                ToolTip="Copy source URL" />
+
+            <Button
+                x:Name="SearchButton"
+                Margin="{StaticResource ControlMargin}"
+                Content="&#xE721;"
+                Style="{StaticResource GlyphButton}"
+                ToolTip="Search for this image" />
         </StackPanel>
     </Grid>
 </reactiveui:ReactiveUserControl>

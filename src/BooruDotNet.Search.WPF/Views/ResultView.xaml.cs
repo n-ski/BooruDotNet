@@ -48,6 +48,12 @@ namespace BooruDotNet.Search.WPF.Views
                     vm => vm.CopySourceUriCommand,
                     v => v.CopySourceButton)
                     .DisposeWith(d);
+
+                this.BindCommand(
+                    ViewModel,
+                    vm => vm.SearchForSimilarCommand,
+                    v => v.SearchButton)
+                    .DisposeWith(d);
             });
         }
 
