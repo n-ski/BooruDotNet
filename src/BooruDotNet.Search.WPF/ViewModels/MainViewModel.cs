@@ -62,7 +62,11 @@ namespace BooruDotNet.Search.WPF.ViewModels
                     }));
 
             SearchCommand.ThrownExceptions.Subscribe(ex =>
-                MessageBox.Show(ex.Message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning));
+            {
+                var handle = MessageInteractions.Exception.Handle(ex);
+                var subscription = handle.Subscribe();
+                handle.Finally(subscription.Dispose);
+            });
 
             CancelSearchCommand = ReactiveCommand.Create(
                 CommandHelper.DoNothing,

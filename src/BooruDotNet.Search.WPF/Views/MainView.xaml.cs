@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
 
@@ -131,6 +132,21 @@ namespace BooruDotNet.Search.WPF.Views
                     .DisposeWith(d);
 
                 #endregion
+
+                MessageInteractions.Exception.RegisterHandler(interaction =>
+                {
+                    MessageBox.Show(
+                        string.Join(
+                            Environment.NewLine,
+                            "The following exception has occured:",
+                            interaction.Input.GetType(),
+                            interaction.Input.Message),
+                        "Exception",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Exclamation);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
             });
         }
 
