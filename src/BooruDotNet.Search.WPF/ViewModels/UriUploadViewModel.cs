@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive;
-using BooruDotNet.Search.WPF.Helpers;
+using BooruDotNet.Search.WPF.Interactions;
 using ReactiveUI;
 
 namespace BooruDotNet.Search.WPF.ViewModels
@@ -11,7 +11,13 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
         public UriUploadViewModel()
         {
-            SearchCommand = ReactiveCommand.Create(CommandHelper.DoNothing);
+            SearchCommand = ReactiveCommand.CreateFromObservable(
+                () => ImageInteractions.SearchForSimilar.Handle(ImageUri));
+
+            // Swallow the exception. MainViewModel handles the interaction by executing
+            // SearchCommand which also handles exceptions, so interacting with an exception
+            // here will in fact display 2 message boxes in case of an error.
+            SearchCommand.ThrownExceptions.Subscribe();
         }
 
         public Uri ImageUri

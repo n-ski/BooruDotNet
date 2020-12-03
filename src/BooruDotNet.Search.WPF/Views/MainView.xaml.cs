@@ -135,12 +135,14 @@ namespace BooruDotNet.Search.WPF.Views
 
                 MessageInteractions.Exception.RegisterHandler(interaction =>
                 {
+                    Exception exception = interaction.Input.InnerException ?? interaction.Input;
+
                     MessageBox.Show(
                         string.Join(
                             Environment.NewLine,
                             "The following exception has occured:",
-                            interaction.Input.GetType(),
-                            interaction.Input.Message),
+                            exception.GetType(),
+                            exception.Message),
                         "Exception",
                         MessageBoxButton.OK,
                         MessageBoxImage.Exclamation);

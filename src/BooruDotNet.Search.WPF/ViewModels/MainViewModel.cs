@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Search.WPF.Extensions;
 using BooruDotNet.Search.WPF.Helpers;
 using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.Models;
@@ -62,14 +61,13 @@ namespace BooruDotNet.Search.WPF.ViewModels
                     }));
 
             SearchCommand.ThrownExceptions.Subscribe(
-                ex => MessageInteractions.Exception.Handle(ex).SubscribeWithDispose());
+                async ex => await MessageInteractions.Exception.Handle(ex));
 
             CancelSearchCommand = ReactiveCommand.Create(
                 CommandHelper.DoNothing,
                 SearchCommand.IsExecuting);
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
-            _uriUploadViewModel.SearchCommand.InvokeCommand(SearchCommand);
 
             _searchResults = SearchCommand.ToProperty(
                 this,
@@ -107,12 +105,13 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             #endregion
 
-            ImageInteractions.SearchForSimilar.RegisterHandler(interaction =>
+            ImageInteractions.SearchForSimilar.RegisterHandler(async interaction =>
             {
                 SetUploadMethod(UploadMethod.Uri);
                 _uriUploadViewModel.ImageUri = interaction.Input;
 
-                SearchCommand.Execute().SubscribeWithDispose();
+                await SearchCommand.Execute();
+
                 // Handle the interaction.
                 interaction.SetOutput(Unit.Default);
             });

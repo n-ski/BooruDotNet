@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using BooruDotNet.Search.Results;
 using BooruDotNet.Search.WPF.Interactions;
@@ -33,6 +34,11 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             SearchForSimilarCommand = ReactiveCommand.CreateFromObservable(
                 () => ImageInteractions.SearchForSimilar.Handle(ImageUri));
+
+            // Swallow the exception. MainViewModel handles the interaction by executing
+            // SearchCommand which also handles exceptions, so interacting with an exception
+            // here will in fact display 2 message boxes in case of an error.
+            SearchForSimilarCommand.ThrownExceptions.Subscribe();
         }
 
         public Uri ImageUri => _result.PreviewImageUri;
