@@ -91,6 +91,7 @@
                     <ItemsControl
                         x:Name="BestResultsControl"
                         Margin="{StaticResource ControlMargin}"
+                        IsTabStop="False"
                         Style="{StaticResource ResultsControl}" />
 
                     <TextBlock
@@ -102,6 +103,7 @@
                     <ItemsControl
                         x:Name="OtherResultsControl"
                         Margin="{StaticResource ControlMargin}"
+                        IsTabStop="False"
                         Style="{StaticResource ResultsControl}" />
                 </StackPanel>
             </ScrollViewer>
@@ -125,7 +127,8 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 HorizontalContentAlignment="Stretch"
-                VerticalContentAlignment="Stretch" />
+                VerticalContentAlignment="Stretch"
+                IsTabStop="False" />
 
             <ComboBox
                 Name="ServicesComboBox"

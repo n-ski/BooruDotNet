@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http;
 using System.Windows;
+using PresentationTheme.Aero;
 using ReactiveUI;
 using Splat;
 
@@ -19,6 +20,8 @@ namespace BooruDotNet.Search.WPF
             });
 
             Locator.CurrentMutable.RegisterViewsForViewModels(typeof(App).Assembly);
+
+            AeroTheme.SetAsCurrentTheme();
         }
 
         internal static HttpClient HttpClient { get; }
