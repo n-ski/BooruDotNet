@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Fonts\Segoe MDL2 Assets.ttf" />
     <Resource Include="Assets\Images\AppIcon.ico" />
     <Resource Include="Assets\Images\Danbooru.ico" />
   </ItemGroup>

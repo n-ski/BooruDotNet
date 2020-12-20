@@ -56,23 +56,32 @@
             <Button
                 x:Name="OpenSourceButton"
                 Margin="{StaticResource ControlMargin}"
-                Content="&#xE774;"
                 Style="{StaticResource GlyphButton}"
-                ToolTip="Open in browser" />
+                ToolTip="Open in browser">
+                <Viewbox
+                    Child="{StaticResource IconLinkExternal}"
+                    Style="{StaticResource IconViewBox_16x}" />
+            </Button>
 
             <Button
                 x:Name="CopySourceButton"
                 Margin="{StaticResource ControlMargin}"
-                Content="&#xE8C8;"
                 Style="{StaticResource GlyphButton}"
-                ToolTip="Copy source URL" />
+                ToolTip="Copy source URL">
+                <Viewbox
+                    Child="{StaticResource IconLink}"
+                    Style="{StaticResource IconViewBox_16x}" />
+            </Button>
 
             <Button
                 x:Name="SearchButton"
                 Margin="{StaticResource ControlMargin}"
-                Content="&#xE721;"
                 Style="{StaticResource GlyphButton}"
-                ToolTip="Search for this image" />
+                ToolTip="Search for similar">
+                <Viewbox
+                    Child="{StaticResource IconSearch}"
+                    Style="{StaticResource IconViewBox_16x}" />
+            </Button>
         </StackPanel>
     </Grid>
 </reactiveui:ReactiveUserControl>
