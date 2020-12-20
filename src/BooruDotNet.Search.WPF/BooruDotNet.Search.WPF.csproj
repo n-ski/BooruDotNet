@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.96" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="PresentationTheme.Aero" Version="0.6.2" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="12.1.5" />
     <PackageReference Include="ReactiveUI.WPF" Version="12.1.5" />

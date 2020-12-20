@@ -1,6 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reactive;
+using System.Reactive.Linq;
+using BooruDotNet.Search.WPF.Interactions;
+using Humanizer.Bytes;
 using ReactiveUI;
 
 namespace BooruDotNet.Search.WPF.ViewModels
@@ -8,36 +10,21 @@ namespace BooruDotNet.Search.WPF.ViewModels
     public class FileUploadViewModel : ReactiveObject
     {
         private readonly ObservableAsPropertyHelper<FileInfo> _fileInfo;
-        private string _lastDirectory;
 
         public FileUploadViewModel()
         {
-            _lastDirectory = Environment.CurrentDirectory;
-
-            OpenFileCommand = ReactiveCommand.Create(() =>
+            OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                if (!Directory.Exists(_lastDirectory))
+                FileInfo fileInfo = await DialogInteractions.OpenFileBrowser.Handle("Images|*.jpg;*.jpeg;*.png;*.gif");
+
+                if (fileInfo.Length > 8 * ByteSize.BytesInMegabyte)
                 {
-                    _lastDirectory = Environment.CurrentDirectory;
+                    await MessageInteractions.Warning.Handle("File exceeds maximum file size of 8 MB.");
+                    return FileInfo;
                 }
-
-                var dialog = new Microsoft.Win32.OpenFileDialog
-                {
-                    Filter = "Images|*.jpg;*.jpeg;*.png;*.gif",
-                    InitialDirectory = _lastDirectory,
-                };
-
-                if (dialog.ShowDialog() == true)
-                {
-                    var fileInfo = new FileInfo(dialog.FileName);
-                    _lastDirectory = fileInfo.DirectoryName;
-
-                    return fileInfo;
-                }
-                // Return the previously selected file.
                 else
                 {
-                    return FileInfo;
+                    return fileInfo;
                 }
             });
 

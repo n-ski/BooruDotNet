@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -9,6 +10,7 @@ using System.Windows.Input;
 using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
+using Microsoft.Win32;
 
 namespace BooruDotNet.Search.WPF.Views
 {
@@ -17,8 +19,12 @@ namespace BooruDotNet.Search.WPF.Views
     /// </summary>
     public partial class MainView : ReactiveWindow<MainViewModel>
     {
+        private string _initialDirectory;
+
         public MainView()
         {
+            _initialDirectory = Environment.CurrentDirectory;
+
             InitializeComponent();
             ViewModel = new MainViewModel();
 
@@ -132,6 +138,46 @@ namespace BooruDotNet.Search.WPF.Views
                     .DisposeWith(d);
 
                 #endregion
+
+                DialogInteractions.OpenFileBrowser.RegisterHandler(interaction =>
+                {
+                    if (!Directory.Exists(_initialDirectory))
+                    {
+                        _initialDirectory = Environment.CurrentDirectory;
+                    }
+
+                    OpenFileDialog dialog = new OpenFileDialog
+                    {
+                        CheckFileExists = true,
+                        CheckPathExists = true,
+                        Filter = interaction.Input,
+                        InitialDirectory = _initialDirectory,
+                        Multiselect = false,
+                    };
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var fileInfo = new FileInfo(dialog.FileName);
+
+                        _initialDirectory = fileInfo.DirectoryName;
+                        interaction.SetOutput(fileInfo);
+                    }
+                    else
+                    {
+                        interaction.SetOutput(null);
+                    }
+                }).DisposeWith(d);
+
+                MessageInteractions.Warning.RegisterHandler(interaction =>
+                {
+                    MessageBox.Show(
+                        interaction.Input,
+                        "Warning",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
 
                 MessageInteractions.Exception.RegisterHandler(interaction =>
                 {
