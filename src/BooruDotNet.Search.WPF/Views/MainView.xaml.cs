@@ -9,8 +9,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.ViewModels;
-using ReactiveUI;
 using Microsoft.Win32;
+using ReactiveUI;
 
 namespace BooruDotNet.Search.WPF.Views
 {
@@ -27,6 +27,9 @@ namespace BooruDotNet.Search.WPF.Views
 
             InitializeComponent();
             ViewModel = new MainViewModel();
+
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(MainContentGrid, true);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(MainContentGrid, ViewModel);
 
 #if DEBUG
             Title += " (Debug)";

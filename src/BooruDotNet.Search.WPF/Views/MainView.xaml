@@ -49,6 +49,7 @@
         </xceed:BusyIndicator.BusyContentTemplate>
 
         <Grid
+            x:Name="MainContentGrid"
             Margin="{StaticResource ControlMargin}">
 
             <Grid.RowDefinitions>

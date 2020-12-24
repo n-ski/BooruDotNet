@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using BooruDotNet.Search.WPF.Extensions;
 using BooruDotNet.Search.WPF.Helpers;
 using BooruDotNet.Search.WPF.Interactions;
 using BooruDotNet.Search.WPF.Models;
+using GongSolutions.Wpf.DragDrop;
 using ReactiveUI;
 
 namespace BooruDotNet.Search.WPF.ViewModels
 {
-    public class MainViewModel : ReactiveObject
+    public class MainViewModel : ReactiveObject, IDropTarget
     {
         private const double _bestMatchThreshold = 0.85;
         private SearchServiceModel _selectedService;
@@ -25,6 +29,8 @@ namespace BooruDotNet.Search.WPF.ViewModels
         private readonly ObservableAsPropertyHelper<bool> _hasBestResults;
         private readonly ObservableAsPropertyHelper<bool> _hasOtherResults;
         private readonly ObservableAsPropertyHelper<bool> _isSearching;
+        // TODO: turn this into a setting.
+        private const bool _searchImmeaditelyAfterDrop = true;
 
         public MainViewModel()
         {
@@ -141,6 +147,38 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
         public ReactiveCommand<Unit, Unit> CancelSearchCommand { get; }
+
+        #region Drag and Drop
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
+                && files.Any(FileHelper.IsFileValid))
+            {
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+            else
+            {
+                dropInfo.Effects = DragDropEffects.None;
+            }
+        }
+
+        public async void Drop(IDropInfo dropInfo)
+        {
+            if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
+                && files.FirstOrDefault(FileHelper.IsFileValid) is string path)
+            {
+                SetUploadMethod(UploadMethod.File);
+                _fileUploadViewModel.FileInfo = new FileInfo(path);
+
+                if (_searchImmeaditelyAfterDrop)
+                {
+                    await SearchCommand.Execute();
+                }
+            }
+        }
+
+        #endregion
 
         private async Task<IEnumerable<ResultViewModel>> LoadResultsAsync(CancellationToken cancellationToken)
         {

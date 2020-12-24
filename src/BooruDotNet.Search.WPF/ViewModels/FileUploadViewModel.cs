@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
+using BooruDotNet.Search.WPF.Helpers;
 using BooruDotNet.Search.WPF.Interactions;
 using Humanizer.Bytes;
 using ReactiveUI;
@@ -9,13 +11,13 @@ namespace BooruDotNet.Search.WPF.ViewModels
 {
     public class FileUploadViewModel : ReactiveObject
     {
-        private readonly ObservableAsPropertyHelper<FileInfo> _fileInfo;
+        private FileInfo _fileInfo;
 
         public FileUploadViewModel()
         {
             OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
             {
-                FileInfo fileInfo = await DialogInteractions.OpenFileBrowser.Handle("Images|*.jpg;*.jpeg;*.png;*.gif");
+                FileInfo fileInfo = await DialogInteractions.OpenFileBrowser.Handle(FileHelper.OpenFileDialogFilter);
 
                 if (fileInfo.Length > 8 * ByteSize.BytesInMegabyte)
                 {
@@ -28,10 +30,14 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 }
             });
 
-            _fileInfo = OpenFileCommand.ToProperty(this, x => x.FileInfo);
+            OpenFileCommand.Subscribe(file => FileInfo = file);
         }
 
-        public FileInfo FileInfo => _fileInfo.Value;
+        public FileInfo FileInfo
+        {
+            get => _fileInfo;
+            set => this.RaiseAndSetIfChanged(ref _fileInfo, value);
+        }
 
         public ReactiveCommand<Unit, FileInfo> OpenFileCommand { get; }
     }
