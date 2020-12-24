@@ -88,7 +88,9 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             _searchResultsBest = this
                 .WhenAnyValue(x => x.SearchResults)
-                .Select(results => results.Where(result => result.Similarity > _bestMatchThreshold))
+                .Select(results => from result in results
+                                   where result.SourceUri != null && result.Similarity > _bestMatchThreshold
+                                   select result)
                 .ToProperty(this, x => x.SearchResultsBestMatches);
 
             _hasBestResults = this
@@ -102,7 +104,9 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             _searchResultsOther = this
                 .WhenAnyValue(x => x.SearchResults)
-                .Select(results => results.Where(result => result.Similarity <= _bestMatchThreshold))
+                .Select(results => from result in results
+                                   where result.SourceUri != null && result.Similarity <= _bestMatchThreshold
+                                   select result)
                 .ToProperty(this, x => x.SearchResultsOtherMatches);
 
             _hasOtherResults = this
