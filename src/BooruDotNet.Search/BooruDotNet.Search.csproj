@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <Version>0.1.0</Version>
     <Authors>Sergey Volkov</Authors>
-    <Product>Booru .NET Image Search</Product>
+    <Product Condition="'$(TargetFramework)' == 'netstandard2.1'">Booru .NET Image Search (.NET Standard 2.1)</Product>
+    <Product Condition="'$(TargetFramework)' == 'netcoreapp3.1'">Booru .NET Image Search (.NET Core 3.1)</Product>
     <Description>A simple library for reverse image searching (Danbooru, Gelbooru, etc.).</Description>
     <Copyright>Copyright (c) 2020 Sergey Volkov</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
