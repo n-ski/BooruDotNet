@@ -19,7 +19,14 @@ namespace BooruDotNet.Search.WPF
                 "Danbooru (IQDB)",
                 (BitmapImage)App.Current.Resources["DanbooruIcon"]));
 
+        private static readonly Lazy<SearchServiceModel> _gelbooruIqdbLazy = new Lazy<SearchServiceModel>(
+            () => new SearchServiceModel(
+                new IqdbService(App.HttpClient, "gelbooru"),
+                "Gelbooru (IQDB)",
+                (BitmapImage)App.Current.Resources["GelbooruIcon"]));
+
         internal static SearchServiceModel Danbooru => _danbooruLazy.Value;
         internal static SearchServiceModel DanbooruIqdb => _danbooruIqdbLazy.Value;
+        internal static SearchServiceModel GelbooruIqdb => _gelbooruIqdbLazy.Value;
     }
 }

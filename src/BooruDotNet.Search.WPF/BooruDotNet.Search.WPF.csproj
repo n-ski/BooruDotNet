@@ -27,8 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Images\AppIcon.ico" />
-    <Resource Include="Assets\Images\Danbooru.ico" />
+    <Resource Include="Assets\Images\*.ico" />
+    <Resource Include="Assets\Images\*.png" />
   </ItemGroup>
 
 </Project>

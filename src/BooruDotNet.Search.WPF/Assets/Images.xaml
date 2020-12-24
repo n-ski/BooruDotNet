@@ -15,4 +15,8 @@
     <BitmapImage
         x:Key="DanbooruIcon"
         UriSource="./Images/Danbooru.ico" />
+
+    <BitmapImage
+        x:Key="GelbooruIcon"
+        UriSource="./Images/Gelbooru.png" />
 </ResourceDictionary>

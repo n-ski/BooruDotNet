@@ -34,7 +34,8 @@ namespace BooruDotNet.Search.WPF.ViewModels
             SearchServices = new[]
             {
                 WPF.SearchServices.Danbooru,
-                WPF.SearchServices.DanbooruIqdb
+                WPF.SearchServices.DanbooruIqdb,
+                WPF.SearchServices.GelbooruIqdb,
             };
 
             UploadMethods = new[]
