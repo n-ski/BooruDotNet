@@ -1,8 +1,11 @@
-﻿using System.Reactive;
+﻿using System;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Threading;
 using BooruDotNet.Search.WPF.ViewModels;
 using ReactiveUI;
 
@@ -30,6 +33,14 @@ namespace BooruDotNet.Search.WPF.Views
                     .Where(e => e.Key == Key.Return)
                     .Select(_ => Unit.Default)
                     .InvokeCommand(this, v => v.ViewModel.SearchCommand)
+                    .DisposeWith(d);
+
+                ImageUriTextBox
+                    .Events().GotFocus
+                    // Text needs to be selected in background due to dispatcher timing issues.
+                    .Subscribe(_ => Dispatcher.InvokeAsync(
+                        ImageUriTextBox.SelectAll,
+                        DispatcherPriority.Background))
                     .DisposeWith(d);
             });
         }
