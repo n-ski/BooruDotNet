@@ -116,12 +116,12 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
             #endregion
 
-            ImageInteractions.SearchForSimilar.RegisterHandler(async interaction =>
+            ImageInteractions.SearchForSimilar.RegisterHandler(interaction =>
             {
                 SetUploadMethod(UploadMethod.Uri);
                 _uriUploadViewModel.ImageUri = interaction.Input;
 
-                await SearchCommand.Execute();
+                SearchCommand.Execute().Subscribe();
 
                 // Handle the interaction.
                 interaction.SetOutput(Unit.Default);
@@ -167,7 +167,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
             }
         }
 
-        public async void Drop(IDropInfo dropInfo)
+        public void Drop(IDropInfo dropInfo)
         {
             if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
                 && files.FirstOrDefault(FileHelper.IsFileValid) is string path)
@@ -177,7 +177,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
                 if (_searchImmeaditelyAfterDrop)
                 {
-                    await SearchCommand.Execute();
+                    SearchCommand.Execute().Subscribe();
                 }
             }
         }
