@@ -121,7 +121,8 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 SetUploadMethod(UploadMethod.Uri);
                 _uriUploadViewModel.ImageUri = interaction.Input;
 
-                SearchCommand.Execute().Subscribe();
+                // TODO: the subscription produced here needs to be disposed.
+                Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
 
                 // Handle the interaction.
                 interaction.SetOutput(Unit.Default);
@@ -177,7 +178,8 @@ namespace BooruDotNet.Search.WPF.ViewModels
 
                 if (_searchImmeaditelyAfterDrop)
                 {
-                    SearchCommand.Execute().Subscribe();
+                    // TODO: the subscription produced here needs to be disposed.
+                    Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
                 }
             }
         }
