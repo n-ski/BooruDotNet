@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using BooruDotNet.Boorus;
 using BooruDotNet.Caches;
+using BooruDotNet.Links;
 
 namespace BooruDotNet.Tests.Helpers
 {
@@ -31,6 +32,12 @@ namespace BooruDotNet.Tests.Helpers
         {
             T booru = (T)Activator.CreateInstance(type);
             return booru;
+        }
+
+        internal static void RegisterResolvers()
+        {
+            LinkResolver.RegisterResolver(new DanbooruResolver(_danbooru));
+            LinkResolver.RegisterResolver(new GelbooruResolver(_gelbooru));
         }
     }
 }
