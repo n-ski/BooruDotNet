@@ -19,7 +19,12 @@ namespace BooruDotNet.Search.WPF.ViewModels
             {
                 FileInfo fileInfo = await DialogInteractions.OpenFileBrowser.Handle(FileHelper.OpenFileDialogFilter);
 
-                if (fileInfo.Length > 8 * ByteSize.BytesInMegabyte)
+                // Return old file info if user didn't select any file or if file size exceeds 8 MiB.
+                if (fileInfo is null)
+                {
+                    return FileInfo;
+                }
+                else if (fileInfo.Length > 8 * ByteSize.BytesInMegabyte)
                 {
                     await MessageInteractions.Warning.Handle("File exceeds maximum file size of 8 MB.");
                     return FileInfo;
