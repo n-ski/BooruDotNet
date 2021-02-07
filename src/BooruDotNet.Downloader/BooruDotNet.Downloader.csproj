@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Version>0.1.0</Version>
+    <Authors>Sergey Volkov</Authors>
+    <Product>Booru Downloader</Product>
+    <Description>An application for downloading images from boorus (Danbooru, Gelbooru, etc.).</Description>
+    <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentUI.Core" Version="1.0.48" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
+  </ItemGroup>
+
+</Project>
