@@ -47,6 +47,9 @@ namespace BooruDotNet.Downloader.Views
                 this.BindCommand(ViewModel, vm => vm.RemoveSelection, v => v.RemoveSelectionButton)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.DownloadPosts, v => v.DownloadButton)
+                    .DisposeWith(d);
+
                 Interactions.OpenFileBrowser.RegisterHandler(interaction =>
                 {
                     if (!Directory.Exists(_initialDialogDirectory))
@@ -69,6 +72,21 @@ namespace BooruDotNet.Downloader.Views
 
                         _initialDialogDirectory = fileInfo.DirectoryName;
                         interaction.SetOutput(fileInfo);
+                    }
+                    else
+                    {
+                        interaction.SetOutput(null);
+                    }
+                }).DisposeWith(d);
+
+                Interactions.OpenFolderBrowser.RegisterHandler(interaction =>
+                {
+                    var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+
+                    if (dialog.ShowDialog() == true)
+                    {
+                        var directoryInfo = new DirectoryInfo(dialog.SelectedPath);
+                        interaction.SetOutput(directoryInfo);
                     }
                     else
                     {

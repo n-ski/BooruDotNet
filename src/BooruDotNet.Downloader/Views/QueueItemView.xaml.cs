@@ -19,13 +19,13 @@ namespace BooruDotNet.Downloader.Views
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.PreviewImageUri, v => v.PreviewImage.Source, CreateImageFromUri)
+                this.OneWayBind(ViewModel, vm => vm.Post.PreviewImageUri, v => v.PreviewImage.Source, CreateImageFromUri)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.SourceUri, v => v.SourceTextBlock.Text, StringifySource)
+                this.OneWayBind(ViewModel, vm => vm.Post.Uri, v => v.SourceTextBlock.Text, StringifySource)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.FileSize, v => v.FileSizeTextBlock.Text, StringifyFileSize)
+                this.OneWayBind(ViewModel, vm => vm.Post.FileSize, v => v.FileSizeTextBlock.Text, StringifyFileSize)
                     .DisposeWith(d);
             });
         }

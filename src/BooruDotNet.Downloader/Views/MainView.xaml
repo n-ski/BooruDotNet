@@ -29,12 +29,13 @@
                 Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel
+        <DockPanel
             Grid.Row="0"
-            Orientation="Horizontal">
+            LastChildFill="False">
 
             <fluentui:FabricSplitButton
                 x:Name="AddButton"
+                DockPanel.Dock="Left"
                 Margin="{StaticResource ControlMargin}"
                 Content="Add"
                 Effect="{StaticResource Depth4}"
@@ -58,11 +59,20 @@
 
             <Button
                 x:Name="RemoveSelectionButton"
+                DockPanel.Dock="Left"
                 Margin="{StaticResource ControlMargin}"
                 Content="Remove"
                 Effect="{StaticResource Depth4}"
                 Style="{StaticResource FabricButtonStyle}" />
-        </StackPanel>
+
+            <Button
+                x:Name="DownloadButton"
+                DockPanel.Dock="Right"
+                Margin="{StaticResource ControlMargin}"
+                Content="Download"
+                Effect="{StaticResource Depth4}"
+                Style="{StaticResource FabricPrimaryButtonStyle}" />
+        </DockPanel>
 
         <ListBox
             x:Name="QueuedItemsListBox"
