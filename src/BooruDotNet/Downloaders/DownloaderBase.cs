@@ -69,7 +69,7 @@ namespace BooruDotNet.Downloaders
             Ensure.Exists(new DirectoryInfo(targetDirectory));
             Ensure.That(items.Any(), "There is no items to download.");
 
-            System.Diagnostics.Debug.WriteLine($"Begin download {items.Count()} post(s) w/ {BatchSize} thread(s).", GetType().Name);
+            Logger.Debug($"Begin download {items.Count()} post(s) w/ {BatchSize} thread(s).", this);
 
             if (BatchSize > 1)
             {

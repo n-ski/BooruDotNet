@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -25,7 +24,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 .ToProperty(this, x => x.Links); // Doesn't work when shown as dialog.
 
 #if DEBUG
-            this.WhenAnyValue(x => x.Links).Subscribe(_ => Debug.WriteLine("you should see this"));
+            this.WhenAnyValue(x => x.Links).Subscribe(_ => Logger.Debug("you should see this"));
 #endif
 
             Ok = ReactiveCommand.Create(

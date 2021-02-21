@@ -90,7 +90,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 {
                     if (_queuedItems.Any(vm => vm.Post.Uri == uri))
                     {
-                        System.Diagnostics.Debug.WriteLine($"Skipped duplicate URL '{uri}'.", GetType().Name);
+                        Logger.Debug($"Skipped duplicate URL '{uri}'.", this);
                         continue;
                     }
 
@@ -129,9 +129,9 @@ namespace BooruDotNet.Downloader.ViewModels
             {
                 totalBytes += file.Length;
 
-                System.Diagnostics.Debug.WriteLine(
+                Logger.Debug(
                     $"Saved file '{file.FullName}' ({ByteSize.FromBytes(file.Length).Humanize("0.00")}).",
-                    GetType().Name);
+                    this);
             };
 
             sw.Stop();
@@ -139,9 +139,9 @@ namespace BooruDotNet.Downloader.ViewModels
             var byteSize = ByteSize.FromBytes(totalBytes);
             var rate = byteSize.Per(sw.Elapsed);
 
-            System.Diagnostics.Debug.WriteLine(
+            Logger.Debug(
                 $"Downloaded {byteSize.Humanize("0.00")} total in {sw.Elapsed.TotalSeconds:F3} s ({rate.Humanize("0.00")} avg).",
-                GetType().Name);
+                this);
         }
     }
 }

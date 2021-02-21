@@ -51,7 +51,7 @@ namespace BooruDotNet.Namers
                     }
                     catch (InvalidTagNameException)
                     {
-                        System.Diagnostics.Debug.WriteLine($"Got invalid tag '{tagName}'.", GetType().Name);
+                        Logger.Debug($"Got invalid tag '{tagName}'.", this);
                         return null;
                     }
                 },
