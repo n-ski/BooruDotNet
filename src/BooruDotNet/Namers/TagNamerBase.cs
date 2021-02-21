@@ -42,14 +42,25 @@ namespace BooruDotNet.Namers
             var characterTags = new List<ITag>();
 
             // Get tags using provided function in parallel.
-            var getTagBlock = new TransformBlock<string, ITag>(
-                _tagExtractorFunc,
+            var getTagBlock = new TransformBlock<string, ITag?>(
+                async tagName =>
+                {
+                    try
+                    {
+                        return await _tagExtractorFunc(tagName).ConfigureAwait(false);
+                    }
+                    catch (InvalidTagNameException)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Got invalid tag '{tagName}'.", GetType().Name);
+                        return null;
+                    }
+                },
                 new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount });
 
             // Put tags into their own lists.
-            var addTagBlock = new ActionBlock<ITag>(tag =>
+            var addTagBlock = new ActionBlock<ITag?>(tag =>
             {
-                switch (tag.Kind)
+                switch (tag?.Kind)
                 {
                     case TagKind.Artist:
                         artistTags.Add(tag);
