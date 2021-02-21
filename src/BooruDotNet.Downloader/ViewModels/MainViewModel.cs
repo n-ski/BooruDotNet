@@ -21,6 +21,10 @@ namespace BooruDotNet.Downloader.ViewModels
         private readonly ObservableCollectionExtended<QueueItemViewModel> _queuedItems;
         private IEnumerable<QueueItemViewModel> _selectedItems;
         private readonly ObservableAsPropertyHelper<bool> _isAddingPosts;
+        private readonly ObservableAsPropertyHelper<bool> _isDownloading;
+        private readonly ObservableAsPropertyHelper<bool> _isBusy;
+        private int _addedPosts;
+        private int _totalPostsToAdd;
 
         public MainViewModel()
         {
@@ -29,7 +33,8 @@ namespace BooruDotNet.Downloader.ViewModels
 
             // TODO https://www.reactiveui.net/docs/handbook/commands/canceling#cancellation-with-the-task-parallel-library
 
-            AddFromFile = ReactiveCommand.CreateFromTask(AddFromFileImpl);
+            AddFromFile = ReactiveCommand.CreateFromObservable(
+                () => Observable.StartAsync(AddFromFileImpl).TakeUntil(CancelAdd));
 
             AddFromFile.ThrownExceptions.Subscribe(
                 async ex => await Interactions.ShowErrorMessage.Handle(ex));
@@ -40,12 +45,23 @@ namespace BooruDotNet.Downloader.ViewModels
 
             _isAddingPosts = AddFromFile.IsExecuting.ToProperty(this, x => x.IsAddingPosts);
 
+            CancelAdd = ReactiveCommand.Create(
+                () => { },
+                this.WhenAnyValue(x => x.IsAddingPosts));
+
             DownloadPosts = ReactiveCommand.CreateFromTask(
                 DownloadPostsImpl,
                 this.WhenAnyValue(
                     x => x.IsAddingPosts,
                     x => x.QueuedItems.Count,
                     (isAdding, count) => !isAdding && count > 0));
+
+            _isDownloading = DownloadPosts.IsExecuting.ToProperty(this, x => x.IsDownloading);
+
+            _isBusy = Observable.Merge(
+                this.WhenAnyValue(x => x.IsAddingPosts),
+                this.WhenAnyValue(x => x.IsDownloading))
+                .ToProperty(this, x => x.IsBusy);
 
             DownloadPosts.ThrownExceptions.Subscribe(
                 async ex => await Interactions.ShowErrorMessage.Handle(ex));
@@ -59,9 +75,27 @@ namespace BooruDotNet.Downloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedItems, value);
         }
 
+        public int AddedPosts
+        {
+            get => _addedPosts;
+            private set => this.RaiseAndSetIfChanged(ref _addedPosts, value);
+        }
+
+        public int TotalPostsToAdd
+        {
+            get => _totalPostsToAdd;
+            private set => this.RaiseAndSetIfChanged(ref _totalPostsToAdd, value);
+        }
+
         public bool IsAddingPosts => _isAddingPosts.Value;
 
+        public bool IsDownloading => _isDownloading.Value;
+
+        public bool IsBusy => _isBusy.Value;
+
         public ReactiveCommand<Unit, Unit> AddFromFile { get; }
+
+        public ReactiveCommand<Unit, Unit> CancelAdd { get; }
 
         public ReactiveCommand<Unit, Unit> RemoveSelection { get; }
 
@@ -84,6 +118,8 @@ namespace BooruDotNet.Downloader.ViewModels
 
         private async Task ResolveLinksAsync(IEnumerable<string> links, CancellationToken cancellationToken)
         {
+            var urisToResolve = new List<Uri>(links.Count());
+
             foreach (string url in links)
             {
                 if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
@@ -94,18 +130,28 @@ namespace BooruDotNet.Downloader.ViewModels
                         continue;
                     }
 
-                    var post = await LinkResolver.ResolveAsync(uri, cancellationToken);
-
-                    // Skip if couldn't resolve the link or if the file is private/hidden.
-                    // TODO: notify about skipped posts.
-                    if (post?.FileUri is null)
-                    {
-                        continue;
-                    }
-
-                    var item = new QueueItemViewModel(post);
-                    _queuedItems.Add(item);
+                    urisToResolve.Add(uri);
                 }
+            }
+
+            AddedPosts = 0;
+            TotalPostsToAdd = urisToResolve.Count;
+
+            foreach (Uri uri in urisToResolve)
+            {
+                var post = await LinkResolver.ResolveAsync(uri, cancellationToken);
+
+                // Skip if couldn't resolve the link or if the file is private/hidden.
+                // TODO: notify about skipped posts.
+                if (post?.FileUri is null)
+                {
+                    continue;
+                }
+
+                var item = new QueueItemViewModel(post);
+                _queuedItems.Add(item);
+
+                ++AddedPosts;
             }
         }
 

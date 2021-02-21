@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:root="clr-namespace:BooruDotNet.Downloader"
     xmlns:vm="clr-namespace:BooruDotNet.Downloader.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="Booru Downloader"
     Width="800"
     Height="450"
@@ -15,71 +16,109 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid>
+    <Window.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="auto" />
-            <RowDefinition
-                Height="1*" />
-        </Grid.RowDefinitions>
+        <StackPanel
+            x:Key="AddPostsBusyContent">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="1*" />
-        </Grid.ColumnDefinitions>
-
-        <DockPanel
-            Grid.Row="0"
-            LastChildFill="False">
-
-            <fluentui:FabricSplitButton
-                x:Name="AddButton"
-                DockPanel.Dock="Left"
+            <TextBlock
+                Name="AddedItemsProgressLabel"
                 Margin="{StaticResource ControlMargin}"
-                Content="Add"
-                Effect="{StaticResource Depth4}"
-                ShowSplit="False">
+                Style="{StaticResource Text14px}"
+                TextAlignment="Center" />
 
-                <fluentui:FabricSplitButton.Menu>
-
-                    <ContextMenu>
-
-                        <MenuItem
-                            x:Name="AddFromUrlsMenuItem"
-                            Header="From URLs&#x2026;"
-                            IsEnabled="False" />
-
-                        <MenuItem
-                            x:Name="AddFromFileMenuItem"
-                            Header="From file&#x2026;" />
-                    </ContextMenu>
-                </fluentui:FabricSplitButton.Menu>
-            </fluentui:FabricSplitButton>
+            <ProgressBar
+                Name="AddedItemsProgressBar"
+                Margin="{StaticResource ControlMargin}"
+                Minimum="0" />
 
             <Button
-                x:Name="RemoveSelectionButton"
-                DockPanel.Dock="Left"
+                Name="CancelAddButton"
                 Margin="{StaticResource ControlMargin}"
-                Content="Remove"
+                Content="Cancel"
                 Effect="{StaticResource Depth4}"
                 Style="{StaticResource FabricButtonStyle}" />
+        </StackPanel>
+    </Window.Resources>
 
-            <Button
-                x:Name="DownloadButton"
-                DockPanel.Dock="Right"
-                MinWidth="200"
+    <xctk:BusyIndicator
+        x:Name="BusyIndicator">
+
+        <xctk:BusyIndicator.ProgressBarStyle>
+
+            <Style
+                TargetType="ProgressBar">
+
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Style>
+        </xctk:BusyIndicator.ProgressBarStyle>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel
+                Grid.Row="0"
+                LastChildFill="False">
+
+                <fluentui:FabricSplitButton
+                    x:Name="AddButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Add"
+                    Effect="{StaticResource Depth4}"
+                    ShowSplit="False">
+
+                    <fluentui:FabricSplitButton.Menu>
+
+                        <ContextMenu>
+
+                            <MenuItem
+                                x:Name="AddFromUrlsMenuItem"
+                                Header="From URLs&#x2026;"
+                                IsEnabled="False" />
+
+                            <MenuItem
+                                x:Name="AddFromFileMenuItem"
+                                Header="From file&#x2026;" />
+                        </ContextMenu>
+                    </fluentui:FabricSplitButton.Menu>
+                </fluentui:FabricSplitButton>
+
+                <Button
+                    x:Name="RemoveSelectionButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Remove"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
+
+                <Button
+                    x:Name="DownloadButton"
+                    DockPanel.Dock="Right"
+                    MinWidth="200"
+                    Margin="{StaticResource ControlMargin}"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricPrimaryButtonStyle}"
+                    d:Content="Download 100000 files" />
+            </DockPanel>
+
+            <ListBox
+                x:Name="QueuedItemsListBox"
+                Grid.Row="1"
+                Grid.Column="0"
                 Margin="{StaticResource ControlMargin}"
-                Effect="{StaticResource Depth4}"
-                Style="{StaticResource FabricPrimaryButtonStyle}"
-                d:Content="Download 100000 files" />
-        </DockPanel>
-
-        <ListBox
-            x:Name="QueuedItemsListBox"
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="{StaticResource ControlMargin}"
-            SelectionMode="Extended" />
-    </Grid>
+                SelectionMode="Extended" />
+        </Grid>
+    </xctk:BusyIndicator>
 </root:ReactiveFabricWindow>
