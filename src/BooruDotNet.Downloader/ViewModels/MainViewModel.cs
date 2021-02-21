@@ -24,11 +24,7 @@ namespace BooruDotNet.Downloader.ViewModels
             _queuedItems = new ObservableCollection<QueueItemViewModel>();
             QueuedItems = new ReadOnlyObservableCollection<QueueItemViewModel>(_queuedItems);
 
-            OpenUrlInputDialog = new Interaction<Unit, IEnumerable<string>>();
-
             // TODO https://www.reactiveui.net/docs/handbook/commands/canceling#cancellation-with-the-task-parallel-library
-
-            AddFromUrls = ReactiveCommand.CreateFromTask(AddFromUrlsImpl);
 
             AddFromFile = ReactiveCommand.CreateFromTask(AddFromFileImpl);
 
@@ -36,8 +32,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 () => _queuedItems.RemoveMany(SelectedItems),
                 this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() == true));
 
-            _isAddingPosts = Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
-                .ToProperty(this, x => x.IsAddingPosts);
+            _isAddingPosts = AddFromFile.IsExecuting.ToProperty(this, x => x.IsAddingPosts);
         }
 
         public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
@@ -50,27 +45,9 @@ namespace BooruDotNet.Downloader.ViewModels
 
         public bool IsAddingPosts => _isAddingPosts.Value;
 
-        public Interaction<Unit, IEnumerable<string>> OpenUrlInputDialog { get; }
-
-        public ReactiveCommand<Unit, Unit> AddFromUrls { get; }
-
         public ReactiveCommand<Unit, Unit> AddFromFile { get; }
 
         public ReactiveCommand<Unit, Unit> RemoveSelection { get; }
-
-        private async Task AddFromUrlsImpl(CancellationToken cancellationToken)
-        {
-            // TODO: fix this broken shit (see LinkInputViewModel.cs).
-            var links = await OpenUrlInputDialog.Handle(Unit.Default);
-
-            // Dialog was closed or no links specified.
-            if (links?.Any() != true)
-            {
-                return;
-            }
-
-            await ResolveLinksAsync(links, cancellationToken);
-        }
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)
         {

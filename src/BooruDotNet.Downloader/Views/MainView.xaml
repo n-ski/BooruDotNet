@@ -46,7 +46,8 @@
 
                         <MenuItem
                             x:Name="AddFromUrlsMenuItem"
-                            Header="From URLs&#x2026;" />
+                            Header="From URLs&#x2026;"
+                            IsEnabled="False" />
 
                         <MenuItem
                             x:Name="AddFromFileMenuItem"
