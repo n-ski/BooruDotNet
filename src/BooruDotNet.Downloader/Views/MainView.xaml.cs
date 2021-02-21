@@ -36,6 +36,15 @@ namespace BooruDotNet.Downloader.Views
 
             #endregion
 
+            #region Download busy content
+
+            DownloadBusyContent = (StackPanel)FindResource(nameof(DownloadBusyContent));
+            DownloadedFilesProgressLabel = (TextBlock)LogicalTreeHelper.FindLogicalNode(DownloadBusyContent, nameof(DownloadedFilesProgressLabel));
+            DownloadedFilesProgressBar = (ProgressBar)LogicalTreeHelper.FindLogicalNode(DownloadBusyContent, nameof(DownloadedFilesProgressBar));
+            CancelDownloadButton = (Button)LogicalTreeHelper.FindLogicalNode(DownloadBusyContent, nameof(CancelDownloadButton));
+
+            #endregion
+
             this.WhenActivated(d =>
             {
                 this.OneWayBind(ViewModel, vm => vm.IsBusy, v => v.BusyIndicator.IsBusy)
@@ -131,15 +140,15 @@ namespace BooruDotNet.Downloader.Views
 
                 this.OneWayBind(
                     ViewModel,
-                    vm => vm.TotalPostsToAdd,
+                    vm => vm.ProgressMaximum,
                     v => v.AddedItemsProgressLabel.Text,
                     total => $"Fetching posts from {"link".ToQuantity(total)}\u2026")
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.AddedPosts, v => v.AddedItemsProgressBar.Value)
+                this.OneWayBind(ViewModel, vm => vm.ProgressValue, v => v.AddedItemsProgressBar.Value)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.TotalPostsToAdd, v => v.AddedItemsProgressBar.Maximum)
+                this.OneWayBind(ViewModel, vm => vm.ProgressMaximum, v => v.AddedItemsProgressBar.Maximum)
                     .DisposeWith(d);
 
                 this.BindCommand(ViewModel, vm => vm.CancelAdd, v => v.CancelAddButton)
@@ -153,6 +162,33 @@ namespace BooruDotNet.Downloader.Views
                     .DisposeWith(d);
 
                 #endregion
+
+                #region Download busy content
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.ProgressMaximum,
+                    v => v.DownloadedFilesProgressLabel.Text,
+                    total => $"Downloading {"files".ToQuantity(total)}\u2026")
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.ProgressValue, v => v.DownloadedFilesProgressBar.Value)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.ProgressMaximum, v => v.DownloadedFilesProgressBar.Maximum)
+                    .DisposeWith(d);
+
+                this.BindCommand(ViewModel, vm => vm.CancelDownload, v => v.CancelDownloadButton)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.IsDownloading,
+                    v => v.BusyIndicator.BusyContent,
+                    isDownloading => isDownloading ? DownloadBusyContent : null)
+                    .DisposeWith(d);
+
+                #endregion
             });
         }
 
@@ -162,6 +198,15 @@ namespace BooruDotNet.Downloader.Views
         internal TextBlock AddedItemsProgressLabel { get; }
         internal ProgressBar AddedItemsProgressBar { get; }
         internal Button CancelAddButton { get; }
+
+        #endregion
+
+        #region Download busy content
+
+        internal StackPanel DownloadBusyContent { get; }
+        internal TextBlock DownloadedFilesProgressLabel { get; }
+        internal ProgressBar DownloadedFilesProgressBar { get; }
+        internal Button CancelDownloadButton { get; }
 
         #endregion
     }

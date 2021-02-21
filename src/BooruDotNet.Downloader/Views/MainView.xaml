@@ -39,6 +39,28 @@
                 Effect="{StaticResource Depth4}"
                 Style="{StaticResource FabricButtonStyle}" />
         </StackPanel>
+
+        <StackPanel
+            x:Key="DownloadBusyContent">
+
+            <TextBlock
+                Name="DownloadedFilesProgressLabel"
+                Margin="{StaticResource ControlMargin}"
+                Style="{StaticResource Text14px}"
+                TextAlignment="Center" />
+
+            <ProgressBar
+                Name="DownloadedFilesProgressBar"
+                Margin="{StaticResource ControlMargin}"
+                Minimum="0" />
+
+            <Button
+                Name="CancelDownloadButton"
+                Margin="{StaticResource ControlMargin}"
+                Content="Cancel"
+                Effect="{StaticResource Depth4}"
+                Style="{StaticResource FabricButtonStyle}" />
+        </StackPanel>
     </Window.Resources>
 
     <xctk:BusyIndicator

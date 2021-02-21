@@ -23,8 +23,8 @@ namespace BooruDotNet.Downloader.ViewModels
         private readonly ObservableAsPropertyHelper<bool> _isAddingPosts;
         private readonly ObservableAsPropertyHelper<bool> _isDownloading;
         private readonly ObservableAsPropertyHelper<bool> _isBusy;
-        private int _addedPosts;
-        private int _totalPostsToAdd;
+        private int _progressValue;
+        private int _progressMaximum;
 
         public MainViewModel()
         {
@@ -49,14 +49,18 @@ namespace BooruDotNet.Downloader.ViewModels
                 () => { },
                 this.WhenAnyValue(x => x.IsAddingPosts));
 
-            DownloadPosts = ReactiveCommand.CreateFromTask(
-                DownloadPostsImpl,
+            DownloadPosts = ReactiveCommand.CreateFromObservable(
+                () => Observable.StartAsync(DownloadPostsImpl).TakeUntil(CancelDownload),
                 this.WhenAnyValue(
                     x => x.IsAddingPosts,
                     x => x.QueuedItems.Count,
                     (isAdding, count) => !isAdding && count > 0));
 
             _isDownloading = DownloadPosts.IsExecuting.ToProperty(this, x => x.IsDownloading);
+
+            CancelDownload = ReactiveCommand.Create(
+                () => { },
+                this.WhenAnyValue(x => x.IsDownloading));
 
             _isBusy = Observable.Merge(
                 this.WhenAnyValue(x => x.IsAddingPosts),
@@ -75,16 +79,16 @@ namespace BooruDotNet.Downloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedItems, value);
         }
 
-        public int AddedPosts
+        public int ProgressValue
         {
-            get => _addedPosts;
-            private set => this.RaiseAndSetIfChanged(ref _addedPosts, value);
+            get => _progressValue;
+            private set => this.RaiseAndSetIfChanged(ref _progressValue, value);
         }
 
-        public int TotalPostsToAdd
+        public int ProgressMaximum
         {
-            get => _totalPostsToAdd;
-            private set => this.RaiseAndSetIfChanged(ref _totalPostsToAdd, value);
+            get => _progressMaximum;
+            private set => this.RaiseAndSetIfChanged(ref _progressMaximum, value);
         }
 
         public bool IsAddingPosts => _isAddingPosts.Value;
@@ -100,6 +104,8 @@ namespace BooruDotNet.Downloader.ViewModels
         public ReactiveCommand<Unit, Unit> RemoveSelection { get; }
 
         public ReactiveCommand<Unit, Unit> DownloadPosts { get; }
+
+        public ReactiveCommand<Unit, Unit> CancelDownload { get; }
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)
         {
@@ -134,8 +140,8 @@ namespace BooruDotNet.Downloader.ViewModels
                 }
             }
 
-            AddedPosts = 0;
-            TotalPostsToAdd = urisToResolve.Count;
+            ProgressValue = 0;
+            ProgressMaximum = urisToResolve.Count;
 
             foreach (Uri uri in urisToResolve)
             {
@@ -151,7 +157,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 var item = new QueueItemViewModel(post);
                 _queuedItems.Add(item);
 
-                ++AddedPosts;
+                ++ProgressValue;
             }
         }
 
@@ -167,12 +173,16 @@ namespace BooruDotNet.Downloader.ViewModels
             var downloader = App.PostDownloader;
             downloader.BatchSize = 4; // TODO: needs to be a setting.
 
+            ProgressValue = 0;
+            ProgressMaximum = QueuedItems.Count;
+
             var posts = QueuedItems.Select(q => q.Post);
             long totalBytes = 0;
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
             await foreach (var file in downloader.DownloadAsync(posts, directory.FullName, cancellationToken))
             {
+                ++ProgressValue;
                 totalBytes += file.Length;
 
                 Logger.Debug(
