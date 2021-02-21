@@ -88,6 +88,12 @@ namespace BooruDotNet.Downloader.ViewModels
             {
                 if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
                 {
+                    if (_queuedItems.Any(vm => vm.Post.Uri == uri))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Skipped duplicate URL '{uri}'.", GetType().Name);
+                        continue;
+                    }
+
                     var post = await LinkResolver.ResolveAsync(uri, cancellationToken);
 
                     // Skip if couldn't resolve the link or if the file is private/hidden.
