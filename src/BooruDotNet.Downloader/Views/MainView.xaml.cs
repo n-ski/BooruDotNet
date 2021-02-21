@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Downloader.ViewModels;
+using Humanizer;
 using Microsoft.Win32;
 using ReactiveUI;
 
@@ -48,6 +49,13 @@ namespace BooruDotNet.Downloader.Views
                     .DisposeWith(d);
 
                 this.BindCommand(ViewModel, vm => vm.DownloadPosts, v => v.DownloadButton)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.QueuedItems.Count, 
+                    v => v.DownloadButton.Content,
+                    count => count > 0 ? $"Download {"file".ToQuantity(count)}" : "Download")
                     .DisposeWith(d);
 
                 Interactions.OpenFileBrowser.RegisterHandler(interaction =>

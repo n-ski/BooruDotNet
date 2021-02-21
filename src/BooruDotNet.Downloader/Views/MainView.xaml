@@ -68,10 +68,11 @@
             <Button
                 x:Name="DownloadButton"
                 DockPanel.Dock="Right"
+                MinWidth="200"
                 Margin="{StaticResource ControlMargin}"
-                Content="Download"
                 Effect="{StaticResource Depth4}"
-                Style="{StaticResource FabricPrimaryButtonStyle}" />
+                Style="{StaticResource FabricPrimaryButtonStyle}"
+                d:Content="Download 100000 files" />
         </DockPanel>
 
         <ListBox
