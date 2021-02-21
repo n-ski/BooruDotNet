@@ -1,10 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Downloader.ViewModels;
 using Microsoft.Win32;
 using ReactiveUI;
@@ -71,7 +74,20 @@ namespace BooruDotNet.Downloader.Views
                     {
                         interaction.SetOutput(null);
                     }
-                });
+                }).DisposeWith(d);
+
+                Interactions.ShowErrorMessage.RegisterHandler(interaction =>
+                {
+                    var message = ExceptionHelper.GetAllMessages(interaction.Input);
+
+                    MessageBox.Show(
+                        message,
+                        "Warning",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
             });
         }
     }

@@ -28,6 +28,9 @@ namespace BooruDotNet.Downloader.ViewModels
 
             AddFromFile = ReactiveCommand.CreateFromTask(AddFromFileImpl);
 
+            AddFromFile.ThrownExceptions.Subscribe(
+                async ex => await Interactions.ShowErrorMessage.Handle(ex));
+
             RemoveSelection = ReactiveCommand.Create(
                 () => _queuedItems.RemoveMany(SelectedItems),
                 this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() == true));
