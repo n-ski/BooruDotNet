@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Links;
 using DynamicData;
 using DynamicData.Binding;
@@ -46,7 +47,7 @@ namespace BooruDotNet.Downloader.ViewModels
             _isAddingPosts = AddFromFile.IsExecuting.ToProperty(this, x => x.IsAddingPosts);
 
             CancelAdd = ReactiveCommand.Create(
-                () => { },
+                ReactiveHelper.DoNothing,
                 this.WhenAnyValue(x => x.IsAddingPosts));
 
             DownloadPosts = ReactiveCommand.CreateFromObservable(
@@ -59,7 +60,7 @@ namespace BooruDotNet.Downloader.ViewModels
             _isDownloading = DownloadPosts.IsExecuting.ToProperty(this, x => x.IsDownloading);
 
             CancelDownload = ReactiveCommand.Create(
-                () => { },
+                ReactiveHelper.DoNothing,
                 this.WhenAnyValue(x => x.IsDownloading));
 
             _isBusy = Observable.Merge(

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using BooruDotNet.Downloader.Helpers;
 using ReactiveUI;
 
 namespace BooruDotNet.Downloader.ViewModels
@@ -28,7 +29,7 @@ namespace BooruDotNet.Downloader.ViewModels
 #endif
 
             Ok = ReactiveCommand.Create(
-                () => { },
+                ReactiveHelper.DoNothing,
                 this.WhenAnyValue(x => x.Links, links => links?.Any() == true));
         }
 

@@ -4,6 +4,7 @@ using System.Windows.Controls.Primitives;
 using BooruDotNet.Downloader.ViewModels;
 using ReactiveUI;
 using System;
+using BooruDotNet.Downloader.Helpers;
 
 namespace BooruDotNet.Downloader.Views
 {
@@ -28,13 +29,13 @@ namespace BooruDotNet.Downloader.Views
                 OkButton
                     .Events().Click
                     .Do(_ => DialogResult = true)
-                    .Subscribe(_ => { })
+                    .Subscribe(ReactiveHelper.DoNothing)
                     .DisposeWith(d);
 
                 CancelButton
                     .Events().Click
                     .Do(_ => DialogResult = false)
-                    .Subscribe(_ => { })
+                    .Subscribe(ReactiveHelper.DoNothing)
                     .DisposeWith(d);
             });
         }
