@@ -81,6 +81,7 @@
                 Width="90"
                 Margin="{StaticResource ControlMargin}"
                 Content="OK"
+                Effect="{StaticResource Depth4}"
                 Style="{StaticResource FabricPrimaryButtonStyle}" />
 
             <Button
@@ -88,6 +89,7 @@
                 Width="90"
                 Margin="{StaticResource ControlMargin}"
                 Content="Cancel"
+                Effect="{StaticResource Depth4}"
                 Style="{StaticResource FabricButtonStyle}" />
         </StackPanel>
     </Grid>
