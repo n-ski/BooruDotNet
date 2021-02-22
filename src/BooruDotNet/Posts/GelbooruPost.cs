@@ -12,13 +12,23 @@ namespace BooruDotNet.Posts
     public class GelbooruPost : IPost
     {
         private readonly Lazy<Uri?> _postUriLazy;
-        private readonly Lazy<Uri> _sampleImageUriLazy;
+        private readonly Lazy<Uri?> _sampleImageUriLazy;
         private readonly Lazy<Uri> _previewImageUriLazy;
 
         public GelbooruPost()
         {
             _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelpers.CreateFormat(PostUris.Gelbooru_Format, ID) : null);
-            _sampleImageUriLazy = new Lazy<Uri>(() => new Uri($"https://img2.gelbooru.com/samples/{Directory}/sample_{Hash}.jpg"));
+            _sampleImageUriLazy = new Lazy<Uri?>(() =>
+            {
+                if (Sample == 1)
+                {
+                    return new Uri($"https://img3.gelbooru.com//samples/{Directory}/sample_{Hash}.jpg");
+                }
+                else
+                {
+                    return FileUri;
+                }
+            });
             _previewImageUriLazy = new Lazy<Uri>(() => new Uri($"https://img1.gelbooru.com/thumbnails/{Directory}/thumbnail_{Hash}.jpg"));
         }
 
@@ -65,5 +75,8 @@ namespace BooruDotNet.Posts
 
         [JsonPropertyName("directory")]
         public string Directory { get; set; } = "";
+
+        [JsonPropertyName("sample")]
+        public int Sample { get; set; }
     }
 }
