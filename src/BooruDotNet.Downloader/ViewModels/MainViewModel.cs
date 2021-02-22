@@ -70,6 +70,11 @@ namespace BooruDotNet.Downloader.ViewModels
 
             DownloadPosts.ThrownExceptions.Subscribe(
                 async ex => await Interactions.ShowErrorMessage.Handle(ex));
+
+            OpenSettingsInteraction = new Interaction<Unit, Unit>();
+
+            OpenSettingsCommand = ReactiveCommand.CreateFromObservable(
+                () => OpenSettingsInteraction.Handle(Unit.Default));
         }
 
         public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
@@ -98,6 +103,8 @@ namespace BooruDotNet.Downloader.ViewModels
 
         public bool IsBusy => _isBusy.Value;
 
+        public Interaction<Unit, Unit> OpenSettingsInteraction { get; }
+
         public ReactiveCommand<Unit, Unit> AddFromFile { get; }
 
         public ReactiveCommand<Unit, Unit> CancelAdd { get; }
@@ -107,6 +114,8 @@ namespace BooruDotNet.Downloader.ViewModels
         public ReactiveCommand<Unit, Unit> DownloadPosts { get; }
 
         public ReactiveCommand<Unit, Unit> CancelDownload { get; }
+
+        public ReactiveCommand<Unit, Unit> OpenSettingsCommand { get; }
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)
         {
@@ -172,7 +181,7 @@ namespace BooruDotNet.Downloader.ViewModels
             }
 
             var downloader = App.PostDownloader;
-            downloader.BatchSize = 4; // TODO: needs to be a setting.
+            downloader.BatchSize = Settings.Default.BatchSize;
 
             ProgressValue = 0;
             ProgressMaximum = QueuedItems.Count;

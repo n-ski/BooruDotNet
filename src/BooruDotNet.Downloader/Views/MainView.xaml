@@ -133,6 +133,14 @@
                     Effect="{StaticResource Depth4}"
                     Style="{StaticResource FabricPrimaryButtonStyle}"
                     d:Content="Download 100000 files" />
+
+                <Button
+                    x:Name="SettingsButton"
+                    DockPanel.Dock="Right"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Settings&#x2026;"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
             </DockPanel>
 
             <ListBox

@@ -189,6 +189,21 @@ namespace BooruDotNet.Downloader.Views
                     .DisposeWith(d);
 
                 #endregion
+
+                this.BindCommand(ViewModel, vm => vm.OpenSettingsCommand, v => v.SettingsButton)
+                    .DisposeWith(d);
+
+                ViewModel.OpenSettingsInteraction.RegisterHandler(interaction =>
+                {
+                    var settingsView = new SettingsView
+                    {
+                        Owner = this,
+                    };
+
+                    settingsView.ShowDialog();
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
             });
         }
 
