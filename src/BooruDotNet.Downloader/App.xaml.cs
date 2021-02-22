@@ -26,6 +26,7 @@ namespace BooruDotNet.Downloader
             Locator.CurrentMutable.Register(() => new QueueItemView(), typeof(IViewFor<QueueItemViewModel>));
             Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
             Locator.CurrentMutable.Register(() => new PostView(), typeof(IViewFor<PostViewModel>));
+            Locator.CurrentMutable.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
 
             var danbooru = new Danbooru();
             var gelbooru = new Gelbooru();

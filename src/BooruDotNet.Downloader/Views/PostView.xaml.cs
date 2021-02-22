@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
-using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Downloader.ViewModels;
 using ReactiveUI;
 
@@ -27,7 +26,7 @@ namespace BooruDotNet.Downloader.Views
                     .Subscribe()
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.PostPreviewImage.Source, ImageHelper.CreateImageFromUri)
+                this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.MediaPreview.ViewModel.Uri)
                     .DisposeWith(d);
 
                 CloseButton

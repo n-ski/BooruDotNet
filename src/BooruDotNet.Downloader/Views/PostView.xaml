@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:root="clr-namespace:BooruDotNet.Downloader"
+    xmlns:v="clr-namespace:BooruDotNet.Downloader.Views"
     xmlns:vm="clr-namespace:BooruDotNet.Downloader.ViewModels"
     Title="Post Preview"
     Width="600"
@@ -25,12 +26,10 @@
                 Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Image
-            x:Name="PostPreviewImage"
+        <v:MediaView
+            x:Name="MediaPreview"
             Grid.Row="0"
-            Margin="{StaticResource ControlMargin}"
-            Effect="{StaticResource Depth16}"
-            RenderOptions.BitmapScalingMode="HighQuality" />
+            Margin="{StaticResource ControlMargin}" />
 
         <Button
             x:Name="CloseButton"
