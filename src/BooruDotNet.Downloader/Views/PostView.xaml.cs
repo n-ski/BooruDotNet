@@ -24,7 +24,7 @@ namespace BooruDotNet.Downloader.Views
                     {
                         CalculateWindowAspectRatio(vm.Post.Width, vm.Post.Height);
                     })
-                    .Subscribe(ReactiveHelper.DoNothing)
+                    .Subscribe()
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.PostPreviewImage.Source, ImageHelper.CreateImageFromUri)
@@ -33,7 +33,7 @@ namespace BooruDotNet.Downloader.Views
                 CloseButton
                     .Events().Click
                     .Do(_ => DialogResult = false)
-                    .Subscribe(ReactiveHelper.DoNothing)
+                    .Subscribe()
                     .DisposeWith(d);
             });
         }

@@ -45,7 +45,7 @@ namespace BooruDotNet.Downloader.Views
 
                         postView.ShowDialog();
                     })
-                    .Subscribe(ReactiveHelper.DoNothing)
+                    .Subscribe()
                     .DisposeWith(d);
             });
         }

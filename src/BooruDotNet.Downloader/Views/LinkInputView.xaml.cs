@@ -29,13 +29,13 @@ namespace BooruDotNet.Downloader.Views
                 OkButton
                     .Events().Click
                     .Do(_ => DialogResult = true)
-                    .Subscribe(ReactiveHelper.DoNothing)
+                    .Subscribe()
                     .DisposeWith(d);
 
                 CancelButton
                     .Events().Click
                     .Do(_ => DialogResult = false)
-                    .Subscribe(ReactiveHelper.DoNothing)
+                    .Subscribe()
                     .DisposeWith(d);
             });
         }
