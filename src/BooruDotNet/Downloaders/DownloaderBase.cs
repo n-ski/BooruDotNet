@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -15,18 +16,19 @@ namespace BooruDotNet.Downloaders
 {
     public abstract class DownloaderBase<T> : IDownloader where T : notnull
     {
-        private int _batchSize;
+        private DownloaderOptions? _userOptions;
+        private static readonly DownloaderOptions _defaultOptionsLazy = new DownloaderOptions();
 
         protected DownloaderBase(HttpClient httpClient)
         {
             HttpClient = Ensure.NotNull(httpClient, nameof(httpClient));
-            BatchSize = 1;
         }
 
-        public int BatchSize
+        [AllowNull]
+        public DownloaderOptions Options
         {
-            get => _batchSize;
-            set => _batchSize = Math.Max(1, value);
+            get => _userOptions ?? _defaultOptionsLazy;
+            set => _userOptions = value;
         }
 
         protected HttpClient HttpClient { get; }
@@ -69,11 +71,13 @@ namespace BooruDotNet.Downloaders
             Ensure.Exists(new DirectoryInfo(targetDirectory));
             Ensure.That(items.Any(), "There is no items to download.");
 
-            if (BatchSize > 1)
+            int batchSize = Options.BatchSize;
+
+            if (batchSize > 1)
             {
                 var transformBlock = new TransformBlock<T, FileInfo>(
                     item => DownloadAsync(item, targetDirectory, cancellationToken),
-                    new ExecutionDataflowBlockOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = BatchSize });
+                    new ExecutionDataflowBlockOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = batchSize });
 
                 foreach (T item in items)
                 {
@@ -87,7 +91,6 @@ namespace BooruDotNet.Downloaders
                     yield return await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
-            // Fast path.
             else
             {
                 foreach (T item in items)

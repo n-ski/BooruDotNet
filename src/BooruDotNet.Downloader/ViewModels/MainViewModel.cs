@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Downloader.Helpers;
+using BooruDotNet.Downloaders;
 using BooruDotNet.Links;
 using DynamicData;
 using DynamicData.Binding;
@@ -180,11 +181,16 @@ namespace BooruDotNet.Downloader.ViewModels
                 return;
             }
 
+            var batchSize = Settings.Default.BatchSize;
+            var options = new PostDownloaderOptions(
+                batchSize,
+                false); // TODO: needs to be a setting.
+
             var downloader = App.Downloaders[Settings.Default.FileNamingStyle];
-            downloader.BatchSize = Settings.Default.BatchSize;
+            downloader.Options = options;
 
             Logger.Debug(
-                $"Begin download ({"file".ToQuantity(QueuedItems.Count)}, {"thread".ToQuantity(downloader.BatchSize)}, {downloader.GetType().Name}, {Settings.Default.FileNamingStyle}).",
+                $"Begin download ({"file".ToQuantity(QueuedItems.Count)}, {"thread".ToQuantity(batchSize)}, {downloader.GetType().Name}, {Settings.Default.FileNamingStyle}).",
                 this);
 
             ProgressValue = 0;
