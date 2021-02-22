@@ -5,5 +5,8 @@
     <Setting Name="BatchSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">2</Value>
     </Setting>
+    <Setting Name="FileNamingStyle" Type="BooruDotNet.Downloader.FileNamingStyle" Scope="User">
+      <Value Profile="(Default)">Hash</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

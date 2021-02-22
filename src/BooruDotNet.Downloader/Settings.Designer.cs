@@ -34,5 +34,17 @@ namespace BooruDotNet.Downloader {
                 this["BatchSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Hash")]
+        public global::BooruDotNet.Downloader.FileNamingStyle FileNamingStyle {
+            get {
+                return ((global::BooruDotNet.Downloader.FileNamingStyle)(this["FileNamingStyle"]));
+            }
+            set {
+                this["FileNamingStyle"] = value;
+            }
+        }
     }
 }

@@ -21,6 +21,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="30" />
             <RowDefinition
                 Height="Auto" />
@@ -50,8 +52,25 @@
             HorizontalAlignment="Right"
             DisplayMemberPath="." />
 
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{StaticResource ControlMargin}"
+            VerticalAlignment="Center"
+            Style="{StaticResource Text14px}"
+            Text="File naming style:" />
+
+        <ComboBox
+            x:Name="FileNamingStyleComboBox"
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="140"
+            Margin="{StaticResource ControlMargin}"
+            HorizontalAlignment="Right"
+            DisplayMemberPath="." />
+
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalAlignment="Right"

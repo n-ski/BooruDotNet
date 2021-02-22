@@ -180,8 +180,12 @@ namespace BooruDotNet.Downloader.ViewModels
                 return;
             }
 
-            var downloader = App.PostDownloader;
+            var downloader = App.Downloaders[Settings.Default.FileNamingStyle];
             downloader.BatchSize = Settings.Default.BatchSize;
+
+            Logger.Debug(
+                $"Begin download ({"file".ToQuantity(QueuedItems.Count)}, {"thread".ToQuantity(downloader.BatchSize)}, {downloader.GetType().Name}, {Settings.Default.FileNamingStyle}).",
+                this);
 
             ProgressValue = 0;
             ProgressMaximum = QueuedItems.Count;

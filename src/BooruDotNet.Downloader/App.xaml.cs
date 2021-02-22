@@ -1,10 +1,13 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using BooruDotNet.Boorus;
+using BooruDotNet.Caches;
 using BooruDotNet.Downloader.ViewModels;
 using BooruDotNet.Downloader.Views;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Links;
 using BooruDotNet.Namers;
+using BooruDotNet.Posts;
 using ReactiveUI;
 using Splat;
 
@@ -29,11 +32,17 @@ namespace BooruDotNet.Downloader
             LinkResolver.RegisterResolver(new DanbooruResolver(danbooru));
             LinkResolver.RegisterResolver(new GelbooruResolver(gelbooru));
 
-            PostNamer = new HashNamer();
-            PostDownloader = new PostDownloader(SingletonHttpClient.Instance, PostNamer);
+            var httpClient = SingletonHttpClient.Instance;
+            var tagCache = new TagCache(danbooru);
+
+            Downloaders = new Dictionary<FileNamingStyle, DownloaderBase<IPost>>
+            {
+                [FileNamingStyle.Hash] = new PostDownloader(httpClient, new HashNamer()),
+                [FileNamingStyle.DanbooruStrict] = new PostDownloader(httpClient, new DanbooruNamer(tagCache)),
+                [FileNamingStyle.DanbooruFancy] = new PostDownloader(httpClient, new DanbooruFancyNamer(tagCache)),
+            };
         }
 
-        internal static IPostNamer PostNamer { get; } // TODO: needs to be a setting.
-        internal static PostDownloader PostDownloader { get; }
+        internal static IReadOnlyDictionary<FileNamingStyle, DownloaderBase<IPost>> Downloaders { get; }
     }
 }
