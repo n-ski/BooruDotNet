@@ -23,6 +23,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="30" />
             <RowDefinition
                 Height="Auto" />
@@ -69,8 +71,20 @@
             HorizontalAlignment="Right"
             DisplayMemberPath="." />
 
+        <CheckBox
+            x:Name="IgnoreArchiveFilesCheckBox"
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="{StaticResource ControlMargin}">
+
+            <TextBlock
+                Style="{StaticResource Text14px}"
+                Text="Prefer animated media over archive files" />
+        </CheckBox>
+
         <StackPanel
-            Grid.Row="3"
+            Grid.Row="4"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalAlignment="Right"

@@ -10,6 +10,7 @@ namespace BooruDotNet.Downloader.ViewModels
     {
         private int _batchSize;
         private FileNamingStyle _fileNamingStyle;
+        private bool _ignoreArchiveFiles;
         // Set an arbitrary limit for now.
         // TODO: re-implement with IntegerUpDown.
         private static readonly IEnumerable<int> _batchSizes = Enumerable.Range(1, 6).ToArray();
@@ -34,6 +35,12 @@ namespace BooruDotNet.Downloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _fileNamingStyle, value);
         }
 
+        public bool IgnoreArchiveFiles
+        {
+            get => _ignoreArchiveFiles;
+            set => this.RaiseAndSetIfChanged(ref _ignoreArchiveFiles, value);
+        }
+
         public IEnumerable<int> BatchSizes => _batchSizes;
 
         public IEnumerable<FileNamingStyle> FileNamingStyles => _fileNamingStyles;
@@ -46,6 +53,7 @@ namespace BooruDotNet.Downloader.ViewModels
 
             BatchSize = Math.Clamp(settings.BatchSize, _batchSizes.Min(), _batchSizes.Max());
             FileNamingStyle = settings.FileNamingStyle;
+            IgnoreArchiveFiles = settings.IgnoreArchiveFiles;
         }
 
         private void SaveSettingsImpl()
@@ -54,6 +62,7 @@ namespace BooruDotNet.Downloader.ViewModels
 
             settings.BatchSize = BatchSize;
             settings.FileNamingStyle = FileNamingStyle;
+            settings.IgnoreArchiveFiles = IgnoreArchiveFiles;
 
             settings.Save();
         }

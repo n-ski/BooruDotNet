@@ -8,5 +8,8 @@
     <Setting Name="FileNamingStyle" Type="BooruDotNet.Downloader.FileNamingStyle" Scope="User">
       <Value Profile="(Default)">Hash</Value>
     </Setting>
+    <Setting Name="IgnoreArchiveFiles" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

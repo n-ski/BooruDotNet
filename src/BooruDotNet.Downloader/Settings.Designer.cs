@@ -46,5 +46,17 @@ namespace BooruDotNet.Downloader {
                 this["FileNamingStyle"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IgnoreArchiveFiles {
+            get {
+                return ((bool)(this["IgnoreArchiveFiles"]));
+            }
+            set {
+                this["IgnoreArchiveFiles"] = value;
+            }
+        }
     }
 }

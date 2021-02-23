@@ -2,7 +2,6 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
-using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Downloader.ViewModels;
 using ReactiveUI;
 
@@ -30,6 +29,9 @@ namespace BooruDotNet.Downloader.Views
                     .DisposeWith(d);
 
                 this.Bind(ViewModel, vm => vm.FileNamingStyle, v => v.FileNamingStyleComboBox.SelectedItem)
+                    .DisposeWith(d);
+
+                this.Bind(ViewModel, vm => vm.IgnoreArchiveFiles, v => v.IgnoreArchiveFilesCheckBox.IsChecked)
                     .DisposeWith(d);
 
                 this.BindCommand(ViewModel, vm => vm.SaveSettings, v => v.OkButton)

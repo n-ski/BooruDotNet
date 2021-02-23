@@ -184,7 +184,7 @@ namespace BooruDotNet.Downloader.ViewModels
             var batchSize = Settings.Default.BatchSize;
             var options = new PostDownloaderOptions(
                 batchSize,
-                false); // TODO: needs to be a setting.
+                Settings.Default.IgnoreArchiveFiles);
 
             var downloader = App.Downloaders[Settings.Default.FileNamingStyle];
             downloader.Options = options;
