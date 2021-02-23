@@ -26,6 +26,9 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.Post.PreviewImageUri, v => v.PreviewImage.Source, ImageHelper.CreateImageFromUri)
                     .DisposeWith(d);
 
+                this.OneWayBind(ViewModel, vm => vm.Post.ID, v => v.PostIdTextBlock.Text, StringifyId)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.Post.Uri, v => v.SourceTextBlock.Text, StringifySource)
                     .DisposeWith(d);
 
@@ -48,6 +51,11 @@ namespace BooruDotNet.Downloader.Views
                     .Subscribe()
                     .DisposeWith(d);
             });
+        }
+
+        private string StringifyId(int? id)
+        {
+            return $"Post ID: {(id.HasValue ? id.Value.ToString() : "unknown")}";
         }
 
         private static string StringifySource(Uri uri)
