@@ -8,6 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:root="clr-namespace:BooruDotNet.Downloader"
     xmlns:vm="clr-namespace:BooruDotNet.Downloader.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="Settings"
     Width="500"
     fluentui:FabricExtra.CompactMode="True"
@@ -48,14 +49,17 @@
             Style="{StaticResource Text14px}"
             Text="Batch size:" />
 
-        <ComboBox
-            x:Name="BatchSizeComboBox"
+        <xctk:IntegerUpDown
+            x:Name="BatchSizeUpDown"
             Grid.Row="0"
             Grid.Column="1"
-            Width="80"
+            Width="100"
             Margin="{StaticResource ControlMargin}"
             HorizontalAlignment="Right"
-            DisplayMemberPath="." />
+            VerticalContentAlignment="Center"
+            FontSize="14"
+            Minimum="1"
+            Style="{StaticResource FabricNumericUpDown}" />
 
         <TextBlock
             Grid.Row="1"

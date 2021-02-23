@@ -19,10 +19,7 @@ namespace BooruDotNet.Downloader.Views
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.BatchSizes, v => v.BatchSizeComboBox.ItemsSource)
-                    .DisposeWith(d);
-
-                this.Bind(ViewModel, vm => vm.BatchSize, v => v.BatchSizeComboBox.SelectedItem)
+                this.Bind(ViewModel, vm => vm.BatchSize, v => v.BatchSizeUpDown.Value)
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.FileNamingStyles, v => v.FileNamingStyleComboBox.ItemsSource)

@@ -47,14 +47,21 @@
                 <ResourceDictionary
                     Source="/FluentUI;component/Styles/FabricUI.Controls.xaml" />
 
+                <ResourceDictionary
+                    Source="/Assets/Styles/FabricRepeatButton.xaml" />
+                <ResourceDictionary
+                    Source="/Assets/Styles/FabricButtonSpinner.xaml" />
+                <ResourceDictionary
+                    Source="/Assets/Styles/FabricNumericUpDown.xaml" />
+
                 <ResourceDictionary>
 
                     <Thickness
                         x:Key="ControlMargin"
+                        Bottom="5"
                         Left="5"
-                        Top="5"
                         Right="5"
-                        Bottom="5" />
+                        Top="5" />
 
                     <Style
                         x:Key="Text14px"
