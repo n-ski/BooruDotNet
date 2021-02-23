@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fluentui="clr-namespace:FluentUI;assembly=FluentUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:root="clr-namespace:BooruDotNet.Downloader"
     xmlns:v="clr-namespace:BooruDotNet.Downloader.Views"
@@ -13,6 +14,7 @@
     Height="630"
     MinWidth="350"
     MinHeight="350"
+    fluentui:FabricExtra.CompactMode="True"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
