@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
@@ -259,6 +260,11 @@ namespace BooruDotNet.Downloader.ViewModels
             Logger.Debug(
                 $"Downloaded {byteSize.Humanize("0.00")} total in {sw.Elapsed.TotalSeconds:F3} s ({rate.Humanize("0.00")} avg).",
                 this);
+
+            if (Settings.Default.PlaySoundWhenComplete)
+            {
+                SystemSounds.Asterisk.Play();
+            }
         }
     }
 }

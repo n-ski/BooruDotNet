@@ -70,5 +70,17 @@ namespace BooruDotNet.Downloader {
                 this["NotifyAboutSkippedPosts"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PlaySoundWhenComplete {
+            get {
+                return ((bool)(this["PlaySoundWhenComplete"]));
+            }
+            set {
+                this["PlaySoundWhenComplete"] = value;
+            }
+        }
     }
 }

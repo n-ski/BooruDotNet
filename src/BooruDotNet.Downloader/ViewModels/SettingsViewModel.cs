@@ -12,6 +12,7 @@ namespace BooruDotNet.Downloader.ViewModels
         private FileNamingStyle _fileNamingStyle;
         private bool _ignoreArchiveFiles;
         private bool _notifyAboutSkippedPosts;
+        private bool _playSoundWhenComplete;
         private static readonly IEnumerable<FileNamingStyle> _fileNamingStyles = Enum.GetValues(typeof(FileNamingStyle)).Cast<FileNamingStyle>();
 
         public SettingsViewModel()
@@ -45,6 +46,12 @@ namespace BooruDotNet.Downloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _notifyAboutSkippedPosts, value);
         }
 
+        public bool PlaySoundWhenComplete
+        {
+            get => _playSoundWhenComplete;
+            set => this.RaiseAndSetIfChanged(ref _playSoundWhenComplete, value);
+        }
+
         public IEnumerable<FileNamingStyle> FileNamingStyles => _fileNamingStyles;
 
         public ReactiveCommand<Unit, Unit> SaveSettings { get; }
@@ -57,6 +64,7 @@ namespace BooruDotNet.Downloader.ViewModels
             FileNamingStyle = settings.FileNamingStyle;
             IgnoreArchiveFiles = settings.IgnoreArchiveFiles;
             NotifyAboutSkippedPosts = settings.NotifyAboutSkippedPosts;
+            PlaySoundWhenComplete = settings.PlaySoundWhenComplete;
         }
 
         private void SaveSettingsImpl()
@@ -67,6 +75,7 @@ namespace BooruDotNet.Downloader.ViewModels
             settings.FileNamingStyle = FileNamingStyle;
             settings.IgnoreArchiveFiles = IgnoreArchiveFiles;
             settings.NotifyAboutSkippedPosts = NotifyAboutSkippedPosts;
+            settings.PlaySoundWhenComplete = PlaySoundWhenComplete;
 
             settings.Save();
         }

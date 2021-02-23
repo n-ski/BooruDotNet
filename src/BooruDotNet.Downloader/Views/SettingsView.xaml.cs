@@ -34,6 +34,9 @@ namespace BooruDotNet.Downloader.Views
                 this.Bind(ViewModel, vm => vm.NotifyAboutSkippedPosts, v => v.NotifyAboutSkippedPostsCheckBox.IsChecked)
                     .DisposeWith(d);
 
+                this.Bind(ViewModel, vm => vm.PlaySoundWhenComplete, v => v.PlaySoundWhenCompleteCheckBox.IsChecked)
+                    .DisposeWith(d);
+
                 this.BindCommand(ViewModel, vm => vm.SaveSettings, v => v.OkButton)
                     .DisposeWith(d);
 

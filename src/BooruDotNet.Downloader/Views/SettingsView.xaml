@@ -31,6 +31,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="30" />
             <RowDefinition
                 Height="Auto" />
@@ -104,8 +106,20 @@
                 Text="Notify about posts that were not added" />
         </CheckBox>
 
+        <CheckBox
+            x:Name="PlaySoundWhenCompleteCheckBox"
+            Grid.Row="4"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="{StaticResource ControlMargin}">
+
+            <TextBlock
+                Style="{StaticResource Text14px}"
+                Text="Play a sound when the download is complete" />
+        </CheckBox>
+
         <StackPanel
-            Grid.Row="5"
+            Grid.Row="6"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalAlignment="Right"
