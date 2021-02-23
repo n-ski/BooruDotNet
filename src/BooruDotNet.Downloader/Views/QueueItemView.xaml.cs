@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
@@ -40,13 +41,30 @@ namespace BooruDotNet.Downloader.Views
                     .Where(e => e.ClickCount == 2)
                     .Do(_ =>
                     {
-                        var postView = new PostView
-                        {
-                            Owner = Window.GetWindow(this),
-                            ViewModel = new PostViewModel(ViewModel.Post),
-                        };
+                        var windows = Application.Current.Windows.OfType<PostView>();
+                        var postUri = ViewModel.Post.Uri;
 
-                        postView.ShowDialog();
+                        // Try to set focus to the existing window first.
+                        if (windows.FirstOrDefault(w => Equals(w.Tag, postUri)) is PostView postView)
+                        {
+                            if (postView.WindowState == WindowState.Minimized)
+                            {
+                                postView.WindowState = WindowState.Normal;
+                            }
+
+                            postView.Focus();
+                        }
+                        else
+                        {
+                            postView = new PostView
+                            {
+                                Owner = Window.GetWindow(this),
+                                Tag = postUri,
+                                ViewModel = new PostViewModel(ViewModel.Post),
+                            };
+
+                            postView.Show();
+                        }
                     })
                     .Subscribe()
                     .DisposeWith(d);

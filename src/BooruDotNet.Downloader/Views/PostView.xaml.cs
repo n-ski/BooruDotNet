@@ -31,7 +31,7 @@ namespace BooruDotNet.Downloader.Views
 
                 CloseButton
                     .Events().Click
-                    .Do(_ => DialogResult = false)
+                    .Do(_ => Close())
                     .Subscribe()
                     .DisposeWith(d);
             });
