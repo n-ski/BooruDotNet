@@ -79,6 +79,8 @@ namespace BooruDotNet.Downloader.Views
                     count => count > 0 ? $"Download {"file".ToQuantity(count)}" : "Download")
                     .DisposeWith(d);
 
+                #region Global interactions
+
                 Interactions.OpenFileBrowser.RegisterHandler(interaction =>
                 {
                     if (!Directory.Exists(_initialDialogDirectory))
@@ -127,14 +129,21 @@ namespace BooruDotNet.Downloader.Views
                 {
                     var message = ExceptionHelper.GetAllMessages(interaction.Input);
 
-                    MessageBox.Show(
-                        message,
-                        "Warning",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                    MessageHelper.Warning(message);
 
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);
+
+                Interactions.ShowWarning.RegisterHandler(interaction =>
+                {
+                    var message = interaction.Input;
+
+                    MessageHelper.Warning(message);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
+
+                #endregion
 
                 #region Add posts busy content
 

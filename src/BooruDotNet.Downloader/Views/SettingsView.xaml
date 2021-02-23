@@ -29,6 +29,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="30" />
             <RowDefinition
                 Height="Auto" />
@@ -90,8 +92,20 @@
                 Text="Prefer animated media over archive files" />
         </CheckBox>
 
+        <CheckBox
+            x:Name="NotifyAboutSkippedPostsCheckBox"
+            Grid.Row="3"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="{StaticResource ControlMargin}">
+
+            <TextBlock
+                Style="{StaticResource Text14px}"
+                Text="Notify about posts that were not added" />
+        </CheckBox>
+
         <StackPanel
-            Grid.Row="4"
+            Grid.Row="5"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             HorizontalAlignment="Right"

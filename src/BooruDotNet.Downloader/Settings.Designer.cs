@@ -58,5 +58,17 @@ namespace BooruDotNet.Downloader {
                 this["IgnoreArchiveFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotifyAboutSkippedPosts {
+            get {
+                return ((bool)(this["NotifyAboutSkippedPosts"]));
+            }
+            set {
+                this["NotifyAboutSkippedPosts"] = value;
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Downloader.Helpers;
@@ -32,8 +33,6 @@ namespace BooruDotNet.Downloader.ViewModels
         {
             _queuedItems = new ObservableCollectionExtended<QueueItemViewModel>();
             QueuedItems = new ReadOnlyObservableCollection<QueueItemViewModel>(_queuedItems);
-
-            // TODO https://www.reactiveui.net/docs/handbook/commands/canceling#cancellation-with-the-task-parallel-library
 
             AddFromFile = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(AddFromFileImpl).TakeUntil(CancelAdd));
@@ -136,6 +135,7 @@ namespace BooruDotNet.Downloader.ViewModels
         private async Task ResolveLinksAsync(IEnumerable<string> links, CancellationToken cancellationToken)
         {
             var urisToResolve = new List<Uri>(links.Count());
+            int duplicateUrlCount = 0;
 
             foreach (string url in links)
             {
@@ -143,6 +143,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 {
                     if (_queuedItems.Any(vm => vm.Post.Uri == uri))
                     {
+                        ++duplicateUrlCount;
                         Logger.Debug($"Skipped duplicate URL '{uri}'.", this);
                         continue;
                     }
@@ -153,15 +154,16 @@ namespace BooruDotNet.Downloader.ViewModels
 
             ProgressValue = 0;
             ProgressMaximum = urisToResolve.Count;
+            int unresolvedPostCount = 0;
 
             foreach (Uri uri in urisToResolve)
             {
                 var post = await LinkResolver.ResolveAsync(uri, cancellationToken);
 
                 // Skip if couldn't resolve the link or if the file is private/hidden.
-                // TODO: notify about skipped posts.
                 if (post?.FileUri is null)
                 {
+                    ++unresolvedPostCount;
                     continue;
                 }
 
@@ -169,6 +171,45 @@ namespace BooruDotNet.Downloader.ViewModels
                 _queuedItems.Add(item);
 
                 ++ProgressValue;
+            }
+
+            if (Settings.Default.NotifyAboutSkippedPosts)
+            {
+                bool hasDuplicates = duplicateUrlCount > 0;
+                bool hasUnresolvedPosts = unresolvedPostCount > 0;
+
+                if (hasDuplicates || hasUnresolvedPosts)
+                {
+                    int errorsTotal = duplicateUrlCount + unresolvedPostCount;
+
+                    var messageBuilder = new StringBuilder().AppendFormat(
+                        "{0} {1} not added.",
+                        "post".ToQuantity(errorsTotal),
+                        errorsTotal > 1 ? "were" : "was");
+
+                    if (hasDuplicates)
+                    {
+                        // TODO: needs a better message.
+                        messageBuilder
+                            .Append(Environment.NewLine)
+                            .AppendFormat(
+                                "> {0} {1} already in the queue.",
+                                "post".ToQuantity(duplicateUrlCount),
+                                duplicateUrlCount > 1 ? "are" : "is");
+                    }
+
+                    if (hasUnresolvedPosts)
+                    {
+                        messageBuilder
+                            .Append(Environment.NewLine)
+                            .AppendFormat(
+                                "> {0} {1} skipped (invalid input URL or file URL is missing).",
+                                "post".ToQuantity(unresolvedPostCount),
+                                unresolvedPostCount > 1 ? "were" : "was");
+                    }
+
+                    await Interactions.ShowWarning.Handle(messageBuilder.ToString());
+                }
             }
         }
 
