@@ -69,6 +69,9 @@ namespace BooruDotNet.Downloader.Views
                 this.BindCommand(ViewModel, vm => vm.RemoveSelection, v => v.RemoveSelectionButton)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.ClearQueue, v => v.ClearQueueButton)
+                    .DisposeWith(d);
+
                 this.BindCommand(ViewModel, vm => vm.DownloadPosts, v => v.DownloadButton)
                     .DisposeWith(d);
 

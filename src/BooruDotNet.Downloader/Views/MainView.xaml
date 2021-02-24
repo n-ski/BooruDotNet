@@ -126,6 +126,14 @@
                     Style="{StaticResource FabricButtonStyle}" />
 
                 <Button
+                    x:Name="ClearQueueButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Clear Queue"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
+
+                <Button
                     x:Name="DownloadButton"
                     DockPanel.Dock="Right"
                     MinWidth="200"

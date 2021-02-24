@@ -45,6 +45,10 @@ namespace BooruDotNet.Downloader.ViewModels
                 () => _queuedItems.RemoveMany(SelectedItems),
                 this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() == true));
 
+            ClearQueue = ReactiveCommand.Create(
+                _queuedItems.Clear,
+                this.WhenAnyValue(x => x._queuedItems.Count, count => count > 0));
+
             _isAddingPosts = AddFromFile.IsExecuting.ToProperty(this, x => x.IsAddingPosts);
 
             CancelAdd = ReactiveCommand.Create(
@@ -111,6 +115,8 @@ namespace BooruDotNet.Downloader.ViewModels
         public ReactiveCommand<Unit, Unit> CancelAdd { get; }
 
         public ReactiveCommand<Unit, Unit> RemoveSelection { get; }
+
+        public ReactiveCommand<Unit, Unit> ClearQueue { get; }
 
         public ReactiveCommand<Unit, Unit> DownloadPosts { get; }
 
