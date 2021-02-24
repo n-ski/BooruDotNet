@@ -94,5 +94,29 @@ namespace BooruDotNet.Downloader {
                 this["OverwriteExistingFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AskLocationBeforeDownload {
+            get {
+                return ((bool)(this["AskLocationBeforeDownload"]));
+            }
+            set {
+                this["AskLocationBeforeDownload"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DownloadLocation {
+            get {
+                return ((string)(this["DownloadLocation"]));
+            }
+            set {
+                this["DownloadLocation"] = value;
+            }
+        }
     }
 }

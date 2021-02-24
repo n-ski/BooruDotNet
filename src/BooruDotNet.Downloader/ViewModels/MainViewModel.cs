@@ -222,24 +222,51 @@ namespace BooruDotNet.Downloader.ViewModels
 
         private async Task DownloadPostsImpl(CancellationToken cancellationToken)
         {
-            var directory = await Interactions.OpenFolderBrowser.Handle(Unit.Default);
+            var settings = Settings.Default;
+            string targetDirectory;
 
-            if (directory is null)
+            static async Task<string> showFolderDialog()
+            {
+                var directory = await Interactions.OpenFolderBrowser.Handle(Unit.Default);
+
+                return directory?.FullName;
+            }
+
+            if (settings.AskLocationBeforeDownload)
+            {
+                targetDirectory = await showFolderDialog();
+            }
+            else if (!Directory.Exists(settings.DownloadLocation))
+            {
+                // Let the user know that directory doesn't exist anymore.
+                await Interactions.ShowWarning.Handle(string.Join(
+                    Environment.NewLine,
+                    $"Directory '{settings.DownloadLocation}' doesn't exist.",
+                    "Download directory setting was changed to the default."));
+
+                targetDirectory = await showFolderDialog();
+            }
+            else
+            {
+                targetDirectory = settings.DownloadLocation;
+            }
+
+            if (targetDirectory is null)
             {
                 return;
             }
 
-            var batchSize = Settings.Default.BatchSize;
+            var batchSize = settings.BatchSize;
             var options = new PostDownloaderOptions(
                 batchSize,
-                Settings.Default.OverwriteExistingFiles,
-                Settings.Default.IgnoreArchiveFiles);
+                settings.OverwriteExistingFiles,
+                settings.IgnoreArchiveFiles);
 
-            var downloader = App.Downloaders[Settings.Default.FileNamingStyle];
+            var downloader = App.Downloaders[settings.FileNamingStyle];
             downloader.Options = options;
 
             Logger.Debug(
-                $"Begin download ({"file".ToQuantity(QueuedItems.Count)}, {"thread".ToQuantity(batchSize)}, {downloader.GetType().Name}, {Settings.Default.FileNamingStyle}).",
+                $"Begin download ({"file".ToQuantity(QueuedItems.Count)}, {"thread".ToQuantity(batchSize)}, {downloader.GetType().Name}, {settings.FileNamingStyle}).",
                 this);
 
             ProgressValue = 0;
@@ -249,7 +276,7 @@ namespace BooruDotNet.Downloader.ViewModels
             long totalBytes = 0;
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            await foreach (var file in downloader.DownloadAsync(posts, directory.FullName, cancellationToken))
+            await foreach (var file in downloader.DownloadAsync(posts, targetDirectory, cancellationToken))
             {
                 ++ProgressValue;
                 totalBytes += file.Length;
@@ -268,7 +295,7 @@ namespace BooruDotNet.Downloader.ViewModels
                 $"Downloaded {byteSize.Humanize("0.00")} total in {sw.Elapsed.TotalSeconds:F3} s ({rate.Humanize("0.00")} avg).",
                 this);
 
-            if (Settings.Default.PlaySoundWhenComplete)
+            if (settings.PlaySoundWhenComplete)
             {
                 SystemSounds.Asterisk.Play();
             }
