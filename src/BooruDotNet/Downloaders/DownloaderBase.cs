@@ -17,7 +17,7 @@ namespace BooruDotNet.Downloaders
     public abstract class DownloaderBase<T> : IDownloader where T : notnull
     {
         private DownloaderOptions? _userOptions;
-        private static readonly DownloaderOptions _defaultOptionsLazy = new DownloaderOptions();
+        private static readonly DownloaderOptions _defaultOptions = new DownloaderOptions();
 
         protected DownloaderBase(HttpClient httpClient)
         {
@@ -27,7 +27,7 @@ namespace BooruDotNet.Downloaders
         [AllowNull]
         public DownloaderOptions Options
         {
-            get => _userOptions ?? _defaultOptionsLazy;
+            get => _userOptions ?? _defaultOptions;
             set => _userOptions = value;
         }
 
@@ -41,8 +41,14 @@ namespace BooruDotNet.Downloaders
             Ensure.Exists(new DirectoryInfo(targetDirectory));
             Error.If<ArgumentNullException>(item is null, nameof(item));
 
-            string tempFilePath = GetRandomTempFilePath();
-            Uri downloadUri = GetDownloadUri(item);
+            string targetFilePath = Path.Combine(
+                targetDirectory,
+                GetFileName(item));
+
+            if (Options.OverwriteExisting || !File.Exists(targetFilePath))
+            {
+                string tempFilePath = GetRandomTempFilePath();
+                Uri downloadUri = GetDownloadUri(item);
 
                 using (HttpResponseMessage response = await HttpClient.GetAsync(
                     downloadUri,
@@ -55,11 +61,12 @@ namespace BooruDotNet.Downloaders
                     await response.Content.CopyToAsync(tempFileStream).ConfigureAwait(false);
                 }
 
-            string targetFilePath = Path.Combine(
-                targetDirectory,
-                GetFileName(item));
-
-            MoveFileSafe(tempFilePath, targetFilePath);
+                MoveFileSafe(tempFilePath, targetFilePath);
+            }
+            else
+            {
+                Logger.Debug($"File '{targetFilePath}' already exists.", this);
+            }
 
             return new FileInfo(targetFilePath);
         }
