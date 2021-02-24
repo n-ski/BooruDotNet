@@ -13,6 +13,7 @@ namespace BooruDotNet.Downloader.ViewModels
         private bool _ignoreArchiveFiles;
         private bool _notifyAboutSkippedPosts;
         private bool _playSoundWhenComplete;
+        private bool _overwirteExistingFiles;
         private static readonly IEnumerable<FileNamingStyle> _fileNamingStyles = Enum.GetValues(typeof(FileNamingStyle)).Cast<FileNamingStyle>();
 
         public SettingsViewModel()
@@ -52,6 +53,12 @@ namespace BooruDotNet.Downloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _playSoundWhenComplete, value);
         }
 
+        public bool OverwriteExistingFiles
+        {
+            get => _overwirteExistingFiles;
+            set => this.RaiseAndSetIfChanged(ref _overwirteExistingFiles, value);
+        }
+
         public IEnumerable<FileNamingStyle> FileNamingStyles => _fileNamingStyles;
 
         public ReactiveCommand<Unit, Unit> SaveSettings { get; }
@@ -65,6 +72,7 @@ namespace BooruDotNet.Downloader.ViewModels
             IgnoreArchiveFiles = settings.IgnoreArchiveFiles;
             NotifyAboutSkippedPosts = settings.NotifyAboutSkippedPosts;
             PlaySoundWhenComplete = settings.PlaySoundWhenComplete;
+            OverwriteExistingFiles = settings.OverwriteExistingFiles;
         }
 
         private void SaveSettingsImpl()
@@ -76,6 +84,7 @@ namespace BooruDotNet.Downloader.ViewModels
             settings.IgnoreArchiveFiles = IgnoreArchiveFiles;
             settings.NotifyAboutSkippedPosts = NotifyAboutSkippedPosts;
             settings.PlaySoundWhenComplete = PlaySoundWhenComplete;
+            settings.OverwriteExistingFiles = OverwriteExistingFiles;
 
             settings.Save();
         }

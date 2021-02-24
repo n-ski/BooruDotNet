@@ -226,6 +226,7 @@ namespace BooruDotNet.Downloader.ViewModels
             var batchSize = Settings.Default.BatchSize;
             var options = new PostDownloaderOptions(
                 batchSize,
+                Settings.Default.OverwriteExistingFiles,
                 Settings.Default.IgnoreArchiveFiles);
 
             var downloader = App.Downloaders[Settings.Default.FileNamingStyle];

@@ -74,6 +74,8 @@
                         Height="Auto" />
                     <RowDefinition
                         Height="Auto" />
+                    <RowDefinition
+                        Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -130,6 +132,18 @@
                     <TextBlock
                         Style="{StaticResource Text14px}"
                         Text="Prefer animated media over archive files" />
+                </CheckBox>
+
+                <CheckBox
+                    x:Name="OverwriteExistingFilesCheckBox"
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="{StaticResource ControlMargin}">
+
+                    <TextBlock
+                        Style="{StaticResource Text14px}"
+                        Text="Overwrite existing files" />
                 </CheckBox>
             </Grid>
         </GroupBox>

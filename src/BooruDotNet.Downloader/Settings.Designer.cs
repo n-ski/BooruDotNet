@@ -82,5 +82,17 @@ namespace BooruDotNet.Downloader {
                 this["PlaySoundWhenComplete"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool OverwriteExistingFiles {
+            get {
+                return ((bool)(this["OverwriteExistingFiles"]));
+            }
+            set {
+                this["OverwriteExistingFiles"] = value;
+            }
+        }
     }
 }
