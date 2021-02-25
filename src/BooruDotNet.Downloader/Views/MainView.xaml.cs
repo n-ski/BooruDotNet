@@ -212,9 +212,12 @@ namespace BooruDotNet.Downloader.Views
                         Owner = this,
                     };
 
-                    settingsView.ShowDialog();
+                    return Observable.Start(() =>
+                    {
+                        settingsView.ShowDialog();
 
-                    interaction.SetOutput(Unit.Default);
+                        interaction.SetOutput(Unit.Default);
+                    }, RxApp.MainThreadScheduler);
                 }).DisposeWith(d);
             });
         }
