@@ -7,10 +7,12 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using BooruDotNet.Tags;
 using BooruDownloader.Helpers;
 using BooruDownloader.ViewModels;
 using Humanizer;
 using ReactiveUI;
+using Validation;
 
 namespace BooruDownloader.Views
 {
@@ -19,8 +21,12 @@ namespace BooruDownloader.Views
     /// </summary>
     public partial class QueueItemView : ReactiveUserControl<QueueItemViewModel>
     {
-        public QueueItemView()
+        private readonly IBooruTagByName _tagExtractor;
+
+        public QueueItemView(IBooruTagByName tagExtractor)
         {
+            _tagExtractor = Requires.NotNull(tagExtractor, nameof(tagExtractor));
+
             InitializeComponent();
 
             this.WhenActivated(d =>
@@ -63,7 +69,7 @@ namespace BooruDownloader.Views
                             {
                                 Owner = Window.GetWindow(this),
                                 Tag = postUri,
-                                ViewModel = new PostViewModel(ViewModel.Post),
+                                ViewModel = new PostViewModel(ViewModel.Post, _tagExtractor),
                             };
 
                             postView.Show();

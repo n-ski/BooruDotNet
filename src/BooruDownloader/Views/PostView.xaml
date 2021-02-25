@@ -10,10 +10,10 @@
     xmlns:v="clr-namespace:BooruDownloader.Views"
     xmlns:vm="clr-namespace:BooruDownloader.ViewModels"
     Title="Post Preview"
-    Width="600"
+    Width="820"
     Height="630"
-    MinWidth="350"
-    MinHeight="350"
+    MinWidth="500"
+    MinHeight="400"
     fluentui:FabricExtra.CompactMode="True"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterOwner"
@@ -28,14 +28,42 @@
                 Height="Auto" />
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="220" />
+            <ColumnDefinition
+                Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+            Margin="{StaticResource ControlMargin}">
+
+            <ItemsControl
+                x:Name="TagsItemsControl">
+
+                <ItemsControl.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <VirtualizingStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
         <v:MediaView
             x:Name="MediaPreview"
             Grid.Row="0"
+            Grid.Column="1"
             Margin="{StaticResource ControlMargin}" />
 
         <Button
             x:Name="CloseButton"
             Grid.Row="1"
+            Grid.Column="1"
             MinWidth="100"
             Margin="{StaticResource ControlMargin}"
             HorizontalAlignment="Center"

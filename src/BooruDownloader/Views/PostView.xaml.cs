@@ -28,6 +28,9 @@ namespace BooruDownloader.Views
                     .Subscribe()
                     .DisposeWith(d);
 
+                this.OneWayBind(ViewModel, vm => vm.Tags, v => v.TagsItemsControl.ItemsSource)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.MediaPreview.ViewModel.Uri)
                     .DisposeWith(d);
 
@@ -48,16 +51,18 @@ namespace BooruDownloader.Views
         private void CalculateWindowAspectRatio(int width, int height)
         {
             const int largerSide = 600;
+            const int sidePanelWidth = 220;
+
             double ratio = (double)width / height;
 
             if (ratio > 1)
             {
-                Width = largerSide;
+                Width = sidePanelWidth + largerSide;
                 Height = Convert.ToInt32(largerSide / ratio);
             }
             else
             {
-                Width = Convert.ToInt32(largerSide * ratio);
+                Width = sidePanelWidth + Convert.ToInt32(largerSide * ratio);
                 Height = largerSide;
             }
         }

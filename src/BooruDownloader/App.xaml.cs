@@ -23,14 +23,6 @@ namespace BooruDownloader
     {
         static App()
         {
-            // Register classes manually because generic reactive window is defined in this assembly.
-            Locator.CurrentMutable.Register(() => new MainView(), typeof(IViewFor<MainViewModel>));
-            Locator.CurrentMutable.Register(() => new LinkInputView(), typeof(IViewFor<LinkInputViewModel>));
-            Locator.CurrentMutable.Register(() => new QueueItemView(), typeof(IViewFor<QueueItemViewModel>));
-            Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
-            Locator.CurrentMutable.Register(() => new PostView(), typeof(IViewFor<PostViewModel>));
-            Locator.CurrentMutable.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
-
             var httpClient = new HttpClient(new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
@@ -50,6 +42,15 @@ namespace BooruDownloader
                 [FileNamingStyle.DanbooruStrict] = new PostDownloader(httpClient, new DanbooruNamer(tagCache)),
                 [FileNamingStyle.DanbooruFancy] = new PostDownloader(httpClient, new DanbooruFancyNamer(tagCache)),
             };
+
+            // Register classes manually because generic reactive window is defined in this assembly.
+            Locator.CurrentMutable.Register(() => new MainView(), typeof(IViewFor<MainViewModel>));
+            Locator.CurrentMutable.Register(() => new LinkInputView(), typeof(IViewFor<LinkInputViewModel>));
+            Locator.CurrentMutable.Register(() => new QueueItemView(tagCache), typeof(IViewFor<QueueItemViewModel>));
+            Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
+            Locator.CurrentMutable.Register(() => new PostView(), typeof(IViewFor<PostViewModel>));
+            Locator.CurrentMutable.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
+            Locator.CurrentMutable.Register(() => new TagView(), typeof(IViewFor<TagViewModel>));
         }
 
         internal static IReadOnlyDictionary<FileNamingStyle, DownloaderBase<IPost>> Downloaders { get; }
