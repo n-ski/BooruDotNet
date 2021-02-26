@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using BooruDotNet.Downloader.Helpers;
 using BooruDotNet.Downloader.ViewModels;
 using Humanizer;
@@ -58,6 +59,13 @@ namespace BooruDotNet.Downloader.Views
                     .Events().SelectionChanged
                     .Select(_ => QueuedItemsListBox.SelectedItems.Cast<QueueItemViewModel>())
                     .BindTo(this, v => v.ViewModel.SelectedItems)
+                    .DisposeWith(d);
+
+                QueuedItemsListBox
+                    .Events().KeyDown
+                    .Where(e => e.Key == Key.Delete)
+                    .Select(_ => Unit.Default)
+                    .InvokeCommand(this, v => v.ViewModel.RemoveSelection)
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.IsAddingPosts, v => v.AddButton.IsEnabled, isBusy => !isBusy)

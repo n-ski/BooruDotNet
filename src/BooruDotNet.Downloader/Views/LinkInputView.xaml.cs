@@ -26,6 +26,13 @@ namespace BooruDotNet.Downloader.Views
                 this.Bind(ViewModel, vm => vm.InputText, v => v.InputTextBox.Text)
                     .DisposeWith(d);
 
+                InputTextBox
+                    .Events().KeyDown
+                    .Where(e => ViewModel.IsValid && e.Key == Key.Enter && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+                    .Do(_ => DialogResult = true)
+                    .Subscribe()
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.IsValid, v => v.OkButton.IsEnabled)
                     .DisposeWith(d);
 

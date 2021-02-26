@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using BooruDotNet.Downloader.ViewModels;
 using ReactiveUI;
 
@@ -27,6 +29,12 @@ namespace BooruDotNet.Downloader.Views
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.MediaPreview.ViewModel.Uri)
+                    .DisposeWith(d);
+
+                this.Events().KeyDown
+                    .Where(e => e.Key == Key.Escape)
+                    .Do(_ => Close())
+                    .Subscribe()
                     .DisposeWith(d);
 
                 CloseButton
