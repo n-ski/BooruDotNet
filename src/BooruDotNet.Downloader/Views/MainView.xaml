@@ -107,8 +107,7 @@
 
                             <MenuItem
                                 x:Name="AddFromUrlsMenuItem"
-                                Header="From URLs&#x2026;"
-                                IsEnabled="False" />
+                                Header="From URLs&#x2026;" />
 
                             <MenuItem
                                 x:Name="AddFromFileMenuItem"

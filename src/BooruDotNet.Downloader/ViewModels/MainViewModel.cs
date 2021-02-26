@@ -35,6 +35,12 @@ namespace BooruDotNet.Downloader.ViewModels
             _queuedItems = new ObservableCollectionExtended<QueueItemViewModel>();
             QueuedItems = new ReadOnlyObservableCollection<QueueItemViewModel>(_queuedItems);
 
+            AddFromUrls = ReactiveCommand.CreateFromObservable(
+                () => Observable.StartAsync(AddFromUrlsImpl).TakeUntil(CancelAdd));
+
+            AddFromUrls.ThrownExceptions.Subscribe(
+                async ex => await Interactions.ShowErrorMessage.Handle(ex));
+
             AddFromFile = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(AddFromFileImpl).TakeUntil(CancelAdd));
 
@@ -49,7 +55,8 @@ namespace BooruDotNet.Downloader.ViewModels
                 _queuedItems.Clear,
                 this.WhenAnyValue(x => x._queuedItems.Count, count => count > 0));
 
-            _isAddingPosts = AddFromFile.IsExecuting.ToProperty(this, x => x.IsAddingPosts);
+            _isAddingPosts = Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
+                .ToProperty(this, x => x.IsAddingPosts);
 
             CancelAdd = ReactiveCommand.Create(
                 ReactiveHelper.DoNothing,
@@ -75,6 +82,8 @@ namespace BooruDotNet.Downloader.ViewModels
 
             DownloadPosts.ThrownExceptions.Subscribe(
                 async ex => await Interactions.ShowErrorMessage.Handle(ex));
+
+            OpenUrlInputDialog = new Interaction<Unit, IEnumerable<string>>();
 
             OpenSettingsInteraction = new Interaction<Unit, Unit>();
 
@@ -108,7 +117,11 @@ namespace BooruDotNet.Downloader.ViewModels
 
         public bool IsBusy => _isBusy.Value;
 
+        public Interaction<Unit, IEnumerable<string>> OpenUrlInputDialog { get; }
+
         public Interaction<Unit, Unit> OpenSettingsInteraction { get; }
+
+        public ReactiveCommand<Unit, Unit> AddFromUrls { get; }
 
         public ReactiveCommand<Unit, Unit> AddFromFile { get; }
 
@@ -123,6 +136,19 @@ namespace BooruDotNet.Downloader.ViewModels
         public ReactiveCommand<Unit, Unit> CancelDownload { get; }
 
         public ReactiveCommand<Unit, Unit> OpenSettingsCommand { get; }
+
+        private async Task AddFromUrlsImpl(CancellationToken cancellationToken)
+        {
+            var links = await OpenUrlInputDialog.Handle(Unit.Default);
+
+            // Dialog was closed or no links specified.
+            if (links?.Any() != true)
+            {
+                return;
+            }
+
+            await ResolveLinksAsync(links, cancellationToken);
+        }
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)
         {

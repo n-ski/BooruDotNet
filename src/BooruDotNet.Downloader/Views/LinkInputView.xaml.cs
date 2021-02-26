@@ -1,10 +1,11 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using BooruDotNet.Downloader.ViewModels;
 using ReactiveUI;
-using System;
-using BooruDotNet.Downloader.Helpers;
 
 namespace BooruDotNet.Downloader.Views
 {
@@ -18,12 +19,14 @@ namespace BooruDotNet.Downloader.Views
             InitializeComponent();
             ViewModel = new LinkInputViewModel();
 
+            InputTextBox.Focus();
+
             this.WhenActivated(d =>
             {
                 this.Bind(ViewModel, vm => vm.InputText, v => v.InputTextBox.Text)
                     .DisposeWith(d);
 
-                this.BindCommand(ViewModel, vm => vm.Ok, v => v.OkButton)
+                this.OneWayBind(ViewModel, vm => vm.IsValid, v => v.OkButton.IsEnabled)
                     .DisposeWith(d);
 
                 OkButton

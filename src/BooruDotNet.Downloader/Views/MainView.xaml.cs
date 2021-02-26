@@ -63,6 +63,29 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.IsAddingPosts, v => v.AddButton.IsEnabled, isBusy => !isBusy)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.AddFromUrls, v => v.AddFromUrlsMenuItem)
+                    .DisposeWith(d);
+
+                ViewModel.OpenUrlInputDialog.RegisterHandler(interaction =>
+                {
+                    var dialog = new LinkInputView
+                    {
+                        Owner = this
+                    };
+
+                    return Observable.Start(() =>
+                    {
+                        if (dialog.ShowDialog() == true)
+                        {
+                            interaction.SetOutput(dialog.ViewModel.Links);
+                        }
+                        else
+                        {
+                            interaction.SetOutput(null);
+                        }
+                    }, RxApp.MainThreadScheduler);
+                }).DisposeWith(d);
+
                 this.BindCommand(ViewModel, vm => vm.AddFromFile, v => v.AddFromFileMenuItem)
                     .DisposeWith(d);
 
