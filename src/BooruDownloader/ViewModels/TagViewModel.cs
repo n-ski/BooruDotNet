@@ -1,25 +1,44 @@
-﻿using BooruDotNet;
+﻿using System.Reactive.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using BooruDotNet.Tags;
 using ReactiveUI;
 using Validation;
 
 namespace BooruDownloader.ViewModels
 {
-    public class TagViewModel : ReactiveObject, ITag
+    public class TagViewModel : ReactiveObject
     {
-        private readonly ITag _tag;
+        private readonly ObservableAsPropertyHelper<ITag> _tag;
+        private readonly IBooruTagByName _tagExtractor;
 
-        public TagViewModel(ITag tag)
+        public TagViewModel(string tagName, IBooruTagByName tagExtractor)
         {
-            _tag = Requires.NotNull(tag, nameof(tag));
+            Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
+
+            Name = tagName;
+            _tagExtractor = Requires.NotNull(tagExtractor, nameof(tagExtractor));
+
+            _tag = Observable.StartAsync(GetTagInfo, RxApp.TaskpoolScheduler)
+                .Where(tag => tag != null)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .ToProperty(this, x => x.Tag);
         }
 
-        public string Name => _tag.Name;
+        public string Name { get; }
 
-        public TagKind Kind => _tag.Kind;
+        public ITag Tag => _tag.Value;
 
-        public int ID => _tag.ID;
-
-        public int Count => _tag.Count;
+        private async Task<ITag> GetTagInfo(CancellationToken cancellationToken)
+        {
+            try
+            {
+                return await _tagExtractor.GetTagAsync(Name, cancellationToken);
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

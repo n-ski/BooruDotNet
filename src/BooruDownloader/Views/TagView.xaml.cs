@@ -25,10 +25,16 @@ namespace BooruDownloader.Views
                 this.OneWayBind(ViewModel, vm => vm.Name, v => v.TagNameTextBlock.ToolTip)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.Kind, v => v.TagNameTextBlock.Foreground, TagKindToBrush)
+                this.OneWayBind(ViewModel,
+                    vm => vm.Tag,
+                    v => v.TagNameTextBlock.Foreground,
+                    tag => TagKindToBrush(tag?.Kind ?? TagKind.General))
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.Count, v => v.TagCountTextBlock.Text, count => count.ToMetric(decimals: 2))
+                this.OneWayBind(ViewModel,
+                    vm => vm.Tag,
+                    v => v.TagCountTextBlock.Text,
+                    tag => tag?.Count.ToMetric(decimals: 2).ToLowerInvariant() ?? string.Empty)
                     .DisposeWith(d);
             });
         }
