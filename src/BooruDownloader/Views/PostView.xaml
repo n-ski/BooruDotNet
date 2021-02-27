@@ -110,16 +110,6 @@
                 Style="{StaticResource FabricButtonStyle}" />
         </Grid>
 
-        <Button
-            x:Name="CloseButton"
-            DockPanel.Dock="Bottom"
-            MinWidth="100"
-            Margin="{StaticResource ControlMargin}"
-            HorizontalAlignment="Center"
-            Content="Close"
-            Effect="{StaticResource Depth4}"
-            Style="{StaticResource FabricPrimaryButtonStyle}" />
-
         <v:MediaView
             x:Name="MediaPreview"
             Margin="{StaticResource ControlMargin}" />

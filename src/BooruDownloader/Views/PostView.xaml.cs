@@ -67,12 +67,6 @@ namespace BooruDownloader.Views
                     .Do(_ => Close())
                     .Subscribe()
                     .DisposeWith(d);
-
-                CloseButton
-                    .Events().Click
-                    .Do(_ => Close())
-                    .Subscribe()
-                    .DisposeWith(d);
             });
         }
 
