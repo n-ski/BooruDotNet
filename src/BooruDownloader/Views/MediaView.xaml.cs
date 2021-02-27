@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using BooruDownloader.Helpers;
+using BooruDotNet.Helpers.WPF;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 
@@ -26,9 +26,9 @@ namespace BooruDownloader.Views
                 this.OneWayBind(ViewModel, vm => vm.IsAnimatedMedia, v => v.MediaAnimated.Visibility)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, 
+                this.OneWayBind(ViewModel,
                     vm => vm.IsAnimatedMedia,
-                    v => v.MediaAnimated.Source, 
+                    v => v.MediaAnimated.Source,
                     isAnimated => isAnimated ? ViewModel.Uri : null)
                     .DisposeWith(d);
 
@@ -65,7 +65,5 @@ namespace BooruDownloader.Views
                 #endregion
             });
         }
-
-        private static bool IsTrue(bool b) => b;
     }
 }

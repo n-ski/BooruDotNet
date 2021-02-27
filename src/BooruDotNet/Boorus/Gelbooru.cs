@@ -35,7 +35,7 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(hash, nameof(hash));
 
-            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostHash_Format, hash);
+            Uri uri = UriHelper.CreateFormat(RequestUris.GelbooruPostHash_Format, hash);
 
             // Gelbooru doesn't respond with JSON directly, but it does
             // redirect us to the actual post.
@@ -64,7 +64,7 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruTagName_Format, tagName);
+            Uri uri = UriHelper.CreateFormat(RequestUris.GelbooruTagName_Format, tagName);
 
             GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(
                 uri,
@@ -80,7 +80,7 @@ namespace BooruDotNet.Boorus
         // Exception doesn't need to be handled if this method was called by GetPostAsync(string)
         private async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken, bool handleJsonException)
         {
-            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostId_Format, id);
+            Uri uri = UriHelper.CreateFormat(RequestUris.GelbooruPostId_Format, id);
 
             GelbooruPost[] posts;
 

@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BooruDotNet.Caching\BooruDotNet.Caching.csproj" />
     <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Helpers.WPF\BooruDotNet.Helpers.WPF.csproj" />
     <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
   </ItemGroup>
 

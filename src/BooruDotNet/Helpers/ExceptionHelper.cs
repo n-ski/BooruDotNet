@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BooruDotNet.Resources;
 using Validation;
 
-namespace BooruDownloader.Helpers
+namespace BooruDotNet.Helpers
 {
     internal static class ExceptionHelper
     {
@@ -12,7 +13,7 @@ namespace BooruDownloader.Helpers
         {
             Assumes.NotNull(exception);
 
-            for (var ex = exception; ex is null == false; ex = ex.InnerException)
+            for (Exception? ex = exception; ex is null == false; ex = ex.InnerException)
             {
                 yield return ex;
             }
@@ -22,10 +23,10 @@ namespace BooruDownloader.Helpers
         {
             Requires.NotNull(exception, nameof(exception));
 
-            var exceptions = Unwrap(exception).ToArray();
+            Exception[] exceptions = Unwrap(exception).ToArray();
 
-            var messageBuilder = new StringBuilder()
-                .AppendLine("An error has occured:")
+            StringBuilder messageBuilder = new StringBuilder()
+                .AppendLine(ErrorMessages.ExceptionStackHeader)
                 .Append("> ")
                 .AppendLine(exceptions[0].Message);
 

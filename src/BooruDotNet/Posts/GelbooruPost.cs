@@ -17,7 +17,7 @@ namespace BooruDotNet.Posts
 
         public GelbooruPost()
         {
-            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelpers.CreateFormat(PostUris.Gelbooru_Format, ID) : null);
+            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelper.CreateFormat(PostUris.Gelbooru_Format, ID) : null);
             _sampleImageUriLazy = new Lazy<Uri?>(() =>
             {
                 if (Sample == 1)

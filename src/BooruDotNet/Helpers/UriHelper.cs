@@ -2,7 +2,7 @@
 
 namespace BooruDotNet.Helpers
 {
-    internal static class UriHelpers
+    internal static class UriHelper
     {
         internal static Uri CreateFormat(string format, params object?[] values)
         {

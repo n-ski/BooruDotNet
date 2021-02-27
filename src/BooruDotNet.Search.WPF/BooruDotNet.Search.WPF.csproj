@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Helpers.WPF\BooruDotNet.Helpers.WPF.csproj" />
     <ProjectReference Include="..\BooruDotNet.Search\BooruDotNet.Search.csproj" />
   </ItemGroup>
 

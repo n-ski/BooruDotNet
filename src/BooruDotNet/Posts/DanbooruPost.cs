@@ -15,7 +15,7 @@ namespace BooruDotNet.Posts
 
         public DanbooruPost()
         {
-            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelpers.CreateFormat(PostUris.Danbooru_Format, ID) : null);
+            _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelper.CreateFormat(PostUris.Danbooru_Format, ID) : null);
         }
 
         #region IPost implementation

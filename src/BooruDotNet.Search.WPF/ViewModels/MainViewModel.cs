@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using BooruDotNet.Helpers;
 using BooruDotNet.Search.WPF.Extensions;
 using BooruDotNet.Search.WPF.Helpers;
 using BooruDotNet.Search.WPF.Interactions;
@@ -52,7 +53,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
             SetUploadMethod(UploadMethod.Uri);
 
             SearchCommand = ReactiveCommand.CreateFromObservable(
-                () => Observable.StartAsync(LoadResultsAsync).TakeUntil(CancelSearchCommand),
+                () => Observable.StartAsync(this.LoadResultsAsync).TakeUntil(CancelSearchCommand),
                 this.WhenAnyValue(
                     x => x.SelectedUploadMethod,
                     x => x._uriUploadViewModel.ImageUri,
@@ -61,7 +62,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                     {
                         return model?.Method switch
                         {
-                            UploadMethod.Uri => UriHelper.IsValid(uri),
+                            UploadMethod.Uri => Helpers.UriHelper.IsValid(uri),
                             UploadMethod.File => fileInfo?.Exists ?? false,
                             _ => false,
                         };
@@ -71,7 +72,7 @@ namespace BooruDotNet.Search.WPF.ViewModels
                 async ex => await MessageInteractions.Exception.Handle(ex));
 
             CancelSearchCommand = ReactiveCommand.Create(
-                CommandHelper.DoNothing,
+                MethodHelper.DoNothing,
                 SearchCommand.IsExecuting);
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);

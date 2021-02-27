@@ -61,6 +61,15 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error has occured:.
+        /// </summary>
+        internal static string ExceptionStackHeader {
+            get {
+                return ResourceManager.GetString("ExceptionStackHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid post type. Expected: &apos;{0}&apos;, actual: &apos;{1}&apos;..
         /// </summary>
         internal static string PostConverterInvalidTypeFormat {

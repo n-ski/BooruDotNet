@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BooruDownloader.Helpers
+namespace BooruDotNet.Helpers.WPF
 {
     internal static class MessageHelper
     {

@@ -8,3 +8,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("BooruDotNet.Search")]
 [assembly: InternalsVisibleTo("BooruDotNet.Tests.Shared")]
 [assembly: InternalsVisibleTo("BooruDownloader")]
+[assembly: InternalsVisibleTo("ImageSearch")]

@@ -20,7 +20,7 @@ namespace BooruDotNet.Boorus
 
         public async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
-            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostId_Format, id);
+            Uri uri = UriHelper.CreateFormat(RequestUris.DanbooruPostId_Format, id);
 
             using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
                 .ConfigureAwait(false);
@@ -36,7 +36,7 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(hash, nameof(hash));
 
-            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
+            Uri uri = UriHelper.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
             using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
                 .ConfigureAwait(false);
@@ -52,7 +52,7 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruTagName_Format, tagName);
+            Uri uri = UriHelper.CreateFormat(RequestUris.DanbooruTagName_Format, tagName);
 
             DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken)
                 .ConfigureAwait(false);
