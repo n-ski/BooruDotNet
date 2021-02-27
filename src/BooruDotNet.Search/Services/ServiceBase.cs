@@ -29,9 +29,11 @@ namespace BooruDotNet.Search.Services
         protected async Task<IEnumerable<IResult>> UploadAndDeserializeAsync(
             HttpContent content, CancellationToken cancellationToken)
         {
-            using Stream responseStream = await UploadContentAsync(content, cancellationToken);
+            using Stream responseStream = await UploadContentAsync(content, cancellationToken)
+                .ConfigureAwait(false);
 
-            return await DeserializeResponseAsync(responseStream, cancellationToken);
+            return await DeserializeResponseAsync(responseStream, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         protected virtual async Task<Stream> UploadContentAsync(HttpContent content, CancellationToken cancellationToken)
@@ -41,9 +43,10 @@ namespace BooruDotNet.Search.Services
                 Content = content,
             };
 
-            HttpResponseMessage response = await GetResponseAsync(message, cancellationToken);
+            HttpResponseMessage response = await GetResponseAsync(message, cancellationToken)
+                .ConfigureAwait(false);
 
-            return await response.Content.ReadAsStreamAsync();
+            return await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
         }
 
         protected abstract Task<IEnumerable<IResult>> DeserializeResponseAsync(

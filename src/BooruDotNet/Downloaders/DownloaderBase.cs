@@ -42,16 +42,16 @@ namespace BooruDotNet.Downloaders
             string tempFilePath = GetRandomTempFilePath();
             Uri downloadUri = GetDownloadUri(item);
 
-            using (HttpResponseMessage response = await HttpClient.GetAsync(
-                downloadUri,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken))
-            {
-                response.EnsureSuccessStatusCode();
+                using (HttpResponseMessage response = await HttpClient.GetAsync(
+                    downloadUri,
+                    HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken).ConfigureAwait(false))
+                {
+                    response.EnsureSuccessStatusCode();
 
-                using Stream tempFileStream = File.Create(tempFilePath);
-                await response.Content.CopyToAsync(tempFileStream);
-            }
+                    using Stream tempFileStream = File.Create(tempFilePath);
+                    await response.Content.CopyToAsync(tempFileStream).ConfigureAwait(false);
+                }
 
             string targetFilePath = Path.Combine(
                 targetDirectory,
@@ -82,9 +82,9 @@ namespace BooruDotNet.Downloaders
 
                 transformBlock.Complete();
 
-                while (await transformBlock.OutputAvailableAsync(cancellationToken))
+                while (await transformBlock.OutputAvailableAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    yield return await transformBlock.ReceiveAsync(cancellationToken);
+                    yield return await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
             // Fast path.
@@ -92,7 +92,7 @@ namespace BooruDotNet.Downloaders
             {
                 foreach (T item in items)
                 {
-                    yield return await DownloadAsync(item, targetDirectory, cancellationToken);
+                    yield return await DownloadAsync(item, targetDirectory, cancellationToken).ConfigureAwait(false);
                 }
             }
         }

@@ -21,12 +21,14 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostId_Format, id);
 
-            HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
+                .ConfigureAwait(false);
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
@@ -35,12 +37,14 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
-            HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
+                .ConfigureAwait(false);
 
             Error.If<InvalidPostHashException>(response.StatusCode == HttpStatusCode.NotFound, hash);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
@@ -49,7 +53,8 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruTagName_Format, tagName);
 
-            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken);
+            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken)
+                .ConfigureAwait(false);
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 

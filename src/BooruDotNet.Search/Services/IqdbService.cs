@@ -42,7 +42,7 @@ namespace BooruDotNet.Search.Services
                 { new StringContent(uri.AbsoluteUri), "url" }
             };
 
-            return await UploadAndDeserializeAsync(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
@@ -54,7 +54,7 @@ namespace BooruDotNet.Search.Services
                 { new StreamContent(fileStream), "file", "file" }
             };
 
-            return await UploadAndDeserializeAsync(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
         protected override Task<IEnumerable<IResult>> DeserializeResponseAsync(

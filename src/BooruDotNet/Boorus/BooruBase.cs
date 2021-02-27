@@ -29,7 +29,7 @@ namespace BooruDotNet.Boorus
             HttpResponseMessage response = await HttpClient.SendAsync(
                 request,
                 HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken);
+                cancellationToken).ConfigureAwait(false);
 
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
@@ -40,22 +40,27 @@ namespace BooruDotNet.Boorus
             HttpResponseMessage response = await HttpClient.GetAsync(
                 requestUri,
                 HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken);
+                cancellationToken).ConfigureAwait(false);
 
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
 
         protected async static Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
-            HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken);
+            using HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken)
+                .ConfigureAwait(false);
 
-            return await DeserializeAsync<T>(response, cancellationToken);
+            return await DeserializeAsync<T>(response, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         protected async static Task<T> DeserializeAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
         {
-            using Stream jsonStream = await response.Content.ReadAsStreamAsync();
-            return await JsonSerializer.DeserializeAsync<T>(jsonStream, cancellationToken: cancellationToken);
+            using Stream jsonStream = await response.Content.ReadAsStreamAsync()
+                .ConfigureAwait(false);
+
+            return await JsonSerializer.DeserializeAsync<T>(jsonStream, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 }

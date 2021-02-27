@@ -29,7 +29,7 @@ namespace BooruDotNet.Search.Services
                 ["url"] = uri.AbsoluteUri,
             });
 
-            return await UploadAndDeserializeAsync(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<IEnumerable<IResult>> SearchByAsync(
@@ -42,7 +42,7 @@ namespace BooruDotNet.Search.Services
                 { new StreamContent(fileStream), "search[file]", Path.GetFileName(fileStream.Name) }
             };
 
-            return await UploadAndDeserializeAsync(content, cancellationToken);
+            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
         protected override async Task<IEnumerable<IResult>> DeserializeResponseAsync(
@@ -50,7 +50,7 @@ namespace BooruDotNet.Search.Services
         {
             return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(
                 responseStream,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }
