@@ -33,6 +33,9 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.Post.Uri, v => v.SourceTextBlock.Text, StringifySource)
                     .DisposeWith(d);
 
+                this.OneWayBind(ViewModel, vm => vm.Post.Uri, v => v.SourceTextBlock.ToolTip)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.Post.FileSize, v => v.FileSizeTextBlock.Text, StringifyFileSize)
                     .DisposeWith(d);
 
@@ -73,7 +76,7 @@ namespace BooruDotNet.Downloader.Views
 
         private string StringifyId(int? id)
         {
-            return $"Post ID: {(id.HasValue ? id.Value.ToString() : "unknown")}";
+            return $"ID: {(id.HasValue ? id.Value.ToString() : "unknown")}";
         }
 
         private static string StringifySource(Uri uri)
@@ -83,7 +86,7 @@ namespace BooruDotNet.Downloader.Views
 
         private static string StringifyFileSize(long? size)
         {
-            return $"File size: {(size.HasValue ? size.Value.Bytes().Humanize("0.00") : "unknown")}";
+            return $"Size: {(size.HasValue ? size.Value.Bytes().Humanize("0.00") : "unknown")}";
         }
     }
 }

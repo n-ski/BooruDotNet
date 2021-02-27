@@ -155,7 +155,18 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="{StaticResource ControlMargin}"
-                SelectionMode="Extended" />
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                SelectionMode="Extended">
+
+                <ListBox.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <WrapPanel
+                            HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
         </Grid>
     </xctk:BusyIndicator>
 </root:ReactiveFabricWindow>
