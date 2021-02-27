@@ -12,6 +12,8 @@
     Title="Booru Downloader"
     Width="800"
     Height="450"
+    MinWidth="750"
+    MinHeight="320"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
