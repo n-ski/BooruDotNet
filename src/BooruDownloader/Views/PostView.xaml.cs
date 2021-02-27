@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDownloader.ViewModels;
+using Humanizer;
 using ReactiveUI;
 
 namespace BooruDownloader.Views
@@ -32,6 +33,33 @@ namespace BooruDownloader.Views
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.Post.SampleImageUri, v => v.MediaPreview.ViewModel.Uri)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Post.ID,
+                    v => v.PostIdTextBlock.Text,
+                    id => $"ID: {id}")
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Post.CreationDate,
+                    v => v.PostDateTextBlock.Text,
+                    date => $"Date: {date.Humanize(utcDate: false)}")
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Post.CreationDate,
+                    v => v.PostDateTextBlock.ToolTip,
+                    date => date.ToString())
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel,
+                    vm => vm.Post.FileSize,
+                    v => v.PostSizeTextBlock.Text,
+                    size => $"Size: {(size.HasValue ? size.Value.Bytes().Humanize("0.00") : "unknown")}")
+                    .DisposeWith(d);
+
+                this.BindCommand(ViewModel, vm => vm.OpenInBrowser, v => v.OpenInBrowserButton)
                     .DisposeWith(d);
 
                 this.Events().KeyDown

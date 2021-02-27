@@ -19,56 +19,109 @@
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
 
-    <Grid>
+    <Window.Resources>
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="1*" />
-            <RowDefinition
-                Height="Auto" />
-        </Grid.RowDefinitions>
+        <Style
+            x:Key="HeaderText"
+            TargetType="TextBlock">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="220" />
-            <ColumnDefinition
-                Width="1*" />
-        </Grid.ColumnDefinitions>
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="16" />
+        </Style>
+    </Window.Resources>
 
-        <ScrollViewer
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Grid.Column="0"
-            Margin="{StaticResource ControlMargin}">
+    <DockPanel>
 
-            <ItemsControl
-                x:Name="TagsItemsControl">
+        <Grid
+            DockPanel.Dock="Left"
+            Width="220">
 
-                <ItemsControl.ItemsPanel>
+            <Grid.RowDefinitions>
 
-                    <ItemsPanelTemplate>
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="1*" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
 
-                        <VirtualizingStackPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+            <TextBlock
+                Grid.Row="0"
+                Margin="{StaticResource ControlMargin}"
+                Style="{StaticResource HeaderText}"
+                Text="Tags" />
 
-        <v:MediaView
-            x:Name="MediaPreview"
-            Grid.Row="0"
-            Grid.Column="1"
-            Margin="{StaticResource ControlMargin}" />
+            <ScrollViewer
+                Grid.Row="1"
+                Margin="{StaticResource ControlMargin}">
+
+                <ItemsControl
+                    x:Name="TagsItemsControl">
+
+                    <ItemsControl.ItemsPanel>
+
+                        <ItemsPanelTemplate>
+
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <TextBlock
+                Grid.Row="3"
+                Margin="{StaticResource ControlMargin}"
+                Style="{StaticResource HeaderText}"
+                Text="Information" />
+
+            <StackPanel
+                Grid.Row="4"
+                Margin="{StaticResource ControlMargin}">
+
+                <TextBlock
+                    x:Name="PostIdTextBlock"
+                    FontSize="13"
+                    d:Text="ID: 123456789" />
+
+                <TextBlock
+                    x:Name="PostDateTextBlock"
+                    FontSize="13"
+                    d:Text="Date: 1000 years ago" />
+
+                <TextBlock
+                    x:Name="PostSizeTextBlock"
+                    FontSize="13"
+                    d:Text="Size: 123456 MB" />
+            </StackPanel>
+
+            <Button
+                x:Name="OpenInBrowserButton"
+                Grid.Row="5"
+                Margin="{StaticResource ControlMargin}"
+                Content="Open in Browser"
+                Effect="{StaticResource Depth4}"
+                Style="{StaticResource FabricButtonStyle}" />
+        </Grid>
 
         <Button
             x:Name="CloseButton"
-            Grid.Row="1"
-            Grid.Column="1"
+            DockPanel.Dock="Bottom"
             MinWidth="100"
             Margin="{StaticResource ControlMargin}"
             HorizontalAlignment="Center"
             Content="Close"
             Effect="{StaticResource Depth4}"
             Style="{StaticResource FabricPrimaryButtonStyle}" />
-    </Grid>
+
+        <v:MediaView
+            x:Name="MediaPreview"
+            Margin="{StaticResource ControlMargin}" />
+    </DockPanel>
 </root:ReactiveFabricWindow>

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
@@ -19,10 +21,25 @@ namespace BooruDownloader.ViewModels
 
             _tags = Observable.Start(() => Post.Tags.Select(tag => new TagViewModel(tag, tagExtractor)))
                 .ToProperty(this, x => x.Tags);
+
+            OpenInBrowser = ReactiveCommand.Create(() =>
+            {
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = Post.Uri.AbsoluteUri,
+                    UseShellExecute = true,
+                };
+
+                using (Process.Start(startInfo))
+                {
+                }
+            });
         }
 
         public IPost Post { get; }
 
         public IEnumerable<TagViewModel> Tags => _tags.Value;
+
+        public ReactiveCommand<Unit, Unit> OpenInBrowser { get; }
     }
 }
