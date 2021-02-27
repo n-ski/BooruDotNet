@@ -4,6 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BooruDotNet.Downloader.Helpers;
@@ -39,9 +40,8 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.Post.FileSize, v => v.FileSizeTextBlock.Text, StringifyFileSize)
                     .DisposeWith(d);
 
-                PreviewImage
-                    .Events().MouseLeftButtonDown
-                    .Where(e => e.ClickCount == 2)
+                this.Events().MouseDoubleClick
+                    .Where(e => e.ChangedButton == MouseButton.Left)
                     .Do(_ =>
                     {
                         var windows = Application.Current.Windows.OfType<PostView>();
