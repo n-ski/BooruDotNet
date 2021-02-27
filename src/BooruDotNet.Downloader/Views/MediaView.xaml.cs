@@ -26,10 +26,10 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.IsAnimatedMedia, v => v.MediaAnimated.Visibility)
                     .DisposeWith(d);
 
-                this.WhenAnyValue(x => x.ViewModel.IsAnimatedMedia)
-                    .Where(IsTrue)
-                    .Select(_ => ViewModel.Uri)
-                    .BindTo(this, x => x.MediaAnimated.Source)
+                this.OneWayBind(ViewModel, 
+                    vm => vm.IsAnimatedMedia,
+                    v => v.MediaAnimated.Source, 
+                    isAnimated => isAnimated ? ViewModel.Uri : null)
                     .DisposeWith(d);
 
                 // Loop animation.
@@ -56,10 +56,10 @@ namespace BooruDotNet.Downloader.Views
                 this.OneWayBind(ViewModel, vm => vm.IsStaticImage, v => v.ImageStatic.Visibility)
                     .DisposeWith(d);
 
-                this.WhenAnyValue(x => x.ViewModel.IsStaticImage)
-                    .Where(IsTrue)
-                    .Select(_ => ImageHelper.CreateImageFromUri(ViewModel.Uri))
-                    .BindTo(this, x => x.ImageStatic.Source)
+                this.OneWayBind(ViewModel,
+                    vm => vm.IsStaticImage,
+                    v => v.ImageStatic.Source,
+                    isStatic => isStatic ? ImageHelper.CreateImageFromUri(ViewModel.Uri) : null)
                     .DisposeWith(d);
 
                 #endregion
