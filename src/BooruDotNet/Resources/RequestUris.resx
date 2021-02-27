@@ -124,7 +124,7 @@
     <value>https://danbooru.donmai.us/posts/{0}.json</value>
   </data>
   <data name="DanbooruTagName_Format" xml:space="preserve">
-    <value>https://danbooru.donmai.us/tags.json?search[name]={0}</value>
+    <value>https://danbooru.donmai.us/tags.json?search[name_or_alias_matches]={0}</value>
   </data>
   <data name="GelbooruPostHash_Format" xml:space="preserve">
     <value>http://gelbooru.com/index.php?page=post&amp;s=list&amp;md5={0}</value>

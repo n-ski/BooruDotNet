@@ -79,7 +79,7 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://danbooru.donmai.us/tags.json?search[name]={0}.
+        ///   Looks up a localized string similar to https://danbooru.donmai.us/tags.json?search[name_or_alias_matches]={0}.
         /// </summary>
         internal static string DanbooruTagName_Format {
             get {
