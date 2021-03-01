@@ -11,6 +11,7 @@
     <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Images\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
