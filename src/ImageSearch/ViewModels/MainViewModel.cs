@@ -117,15 +117,23 @@ namespace ImageSearch.ViewModels
 
             #endregion
 
-            ImageInteractions.SearchForSimilar.RegisterHandler(interaction =>
+            ImageInteractions.SearchWithUri.RegisterHandler(interaction =>
             {
                 SetUploadMethod(UploadMethod.Uri);
                 _uriUploadViewModel.ImageUri = interaction.Input;
 
-                // TODO: the subscription produced here needs to be disposed.
                 Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
 
-                // Handle the interaction.
+                interaction.SetOutput(Unit.Default);
+            });
+
+            ImageInteractions.SearchWithFile.RegisterHandler(interaction =>
+            {
+                SetUploadMethod(UploadMethod.File);
+                _fileUploadViewModel.FileInfo = interaction.Input;
+
+                Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
+
                 interaction.SetOutput(Unit.Default);
             });
         }
@@ -179,7 +187,6 @@ namespace ImageSearch.ViewModels
 
                 if (_searchImmeaditelyAfterDrop)
                 {
-                    // TODO: the subscription produced here needs to be disposed.
                     Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
                 }
             }

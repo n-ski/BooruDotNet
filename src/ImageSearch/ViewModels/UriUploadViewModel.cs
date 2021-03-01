@@ -12,7 +12,7 @@ namespace ImageSearch.ViewModels
         public UriUploadViewModel()
         {
             SearchCommand = ReactiveCommand.CreateFromObservable(
-                () => ImageInteractions.SearchForSimilar.Handle(ImageUri));
+                () => ImageInteractions.SearchWithUri.Handle(ImageUri));
 
             // Swallow the exception. MainViewModel handles the interaction by executing
             // SearchCommand which also handles exceptions, so interacting with an exception

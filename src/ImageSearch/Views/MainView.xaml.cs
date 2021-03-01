@@ -104,6 +104,46 @@ namespace ImageSearch.Views
                     v => v.SearchBusyIndicator.IsBusy)
                     .DisposeWith(d);
 
+                this.Events().KeyDown
+                    .Where(e => e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.V)
+                    .Subscribe(_ =>
+                    {
+                        if (Clipboard.ContainsImage())
+                        {
+                            var image = Clipboard.GetImage();
+                            var fileInfo = FileHelper.SaveTempImage(image);
+
+                            ImageInteractions.SearchWithFile.Handle(fileInfo).Subscribe();
+                        }
+                        else if (Clipboard.ContainsFileDropList())
+                        {
+                            var files = Clipboard.GetFileDropList();
+                            var filePath = files.Count > 0 ? files[0] : null;
+                            
+                            if (FileHelper.IsFileValid(filePath))
+                            {
+                                var fileInfo = new FileInfo(files[0]);
+
+                                if (fileInfo.Exists)
+                                {
+                                    ImageInteractions.SearchWithFile.Handle(fileInfo).Subscribe();
+                                }
+                            }
+                        }
+                        else if (Clipboard.ContainsText())
+                        {
+                            var text = Clipboard.GetText();
+
+                            if (text.StartsWith(Uri.UriSchemeHttp) || text.StartsWith(Uri.UriSchemeHttps))
+                            {
+                                var uri = new Uri(text);
+
+                                ImageInteractions.SearchWithUri.Handle(uri).Subscribe();
+                            }
+                        }
+                    })
+                    .DisposeWith(d);
+
                 #region Search services ComboBox
 
                 this.OneWayBind(
