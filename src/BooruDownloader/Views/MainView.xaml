@@ -1,0 +1,174 @@
+﻿<root:ReactiveFabricWindow
+    x:Class="BooruDownloader.Views.MainView"
+    x:TypeArguments="vm:MainViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fluentui="clr-namespace:FluentUI;assembly=FluentUI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:root="clr-namespace:BooruDownloader"
+    xmlns:vm="clr-namespace:BooruDownloader.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="Booru Downloader"
+    Width="800"
+    Height="450"
+    MinWidth="750"
+    MinHeight="320"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Window.Resources>
+
+        <StackPanel
+            x:Key="AddPostsBusyContent">
+
+            <TextBlock
+                Name="AddedItemsProgressLabel"
+                Margin="{StaticResource ControlMargin}"
+                Style="{StaticResource Text14px}"
+                TextAlignment="Center" />
+
+            <ProgressBar
+                Name="AddedItemsProgressBar"
+                Margin="{StaticResource ControlMargin}"
+                Minimum="0" />
+
+            <Button
+                Name="CancelAddButton"
+                Margin="{StaticResource ControlMargin}"
+                Content="Cancel"
+                Effect="{StaticResource Depth4}"
+                Style="{StaticResource FabricButtonStyle}" />
+        </StackPanel>
+
+        <StackPanel
+            x:Key="DownloadBusyContent">
+
+            <TextBlock
+                Name="DownloadedFilesProgressLabel"
+                Margin="{StaticResource ControlMargin}"
+                Style="{StaticResource Text14px}"
+                TextAlignment="Center" />
+
+            <ProgressBar
+                Name="DownloadedFilesProgressBar"
+                Margin="{StaticResource ControlMargin}"
+                Minimum="0" />
+
+            <Button
+                Name="CancelDownloadButton"
+                Margin="{StaticResource ControlMargin}"
+                Content="Cancel"
+                Effect="{StaticResource Depth4}"
+                Style="{StaticResource FabricButtonStyle}" />
+        </StackPanel>
+    </Window.Resources>
+
+    <xctk:BusyIndicator
+        x:Name="BusyIndicator">
+
+        <xctk:BusyIndicator.ProgressBarStyle>
+
+            <Style
+                TargetType="ProgressBar">
+
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Style>
+        </xctk:BusyIndicator.ProgressBarStyle>
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="auto" />
+                <RowDefinition
+                    Height="1*" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <DockPanel
+                Grid.Row="0"
+                LastChildFill="False">
+
+                <fluentui:FabricSplitButton
+                    x:Name="AddButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Add"
+                    Effect="{StaticResource Depth4}"
+                    ShowSplit="False">
+
+                    <fluentui:FabricSplitButton.Menu>
+
+                        <ContextMenu>
+
+                            <MenuItem
+                                x:Name="AddFromUrlsMenuItem"
+                                Header="From URLs&#x2026;" />
+
+                            <MenuItem
+                                x:Name="AddFromFileMenuItem"
+                                Header="From file&#x2026;" />
+                        </ContextMenu>
+                    </fluentui:FabricSplitButton.Menu>
+                </fluentui:FabricSplitButton>
+
+                <Button
+                    x:Name="RemoveSelectionButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Remove"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
+
+                <Button
+                    x:Name="ClearQueueButton"
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Clear Queue"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
+
+                <Button
+                    x:Name="DownloadButton"
+                    DockPanel.Dock="Right"
+                    MinWidth="200"
+                    Margin="{StaticResource ControlMargin}"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricPrimaryButtonStyle}"
+                    d:Content="Download 100000 files" />
+
+                <Button
+                    x:Name="SettingsButton"
+                    DockPanel.Dock="Right"
+                    Margin="{StaticResource ControlMargin}"
+                    Content="Settings&#x2026;"
+                    Effect="{StaticResource Depth4}"
+                    Style="{StaticResource FabricButtonStyle}" />
+            </DockPanel>
+
+            <ListBox
+                x:Name="QueuedItemsListBox"
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="{StaticResource ControlMargin}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                SelectionMode="Extended">
+
+                <ListBox.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <WrapPanel
+                            HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </xctk:BusyIndicator>
+</root:ReactiveFabricWindow>
