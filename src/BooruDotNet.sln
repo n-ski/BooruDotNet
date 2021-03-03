@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{EBCE795C-4FAE-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDownloader", "BooruDownloader\BooruDownloader.csproj", "{DED5705E-5CD3-41F4-B40A-596810C5BD7C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooruDotNet.Downloaders", "BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj", "{893360CE-2CCF-4518-A3C7-70A1F5250650}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{DED5705E-5CD3-41F4-B40A-596810C5BD7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DED5705E-5CD3-41F4-B40A-596810C5BD7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DED5705E-5CD3-41F4-B40A-596810C5BD7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{893360CE-2CCF-4518-A3C7-70A1F5250650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{893360CE-2CCF-4518-A3C7-70A1F5250650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{893360CE-2CCF-4518-A3C7-70A1F5250650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{893360CE-2CCF-4518-A3C7-70A1F5250650}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{13340D06-1C45-448F-A66A-78E886EF6ACF} = {D1D48B17-D58C-46C0-A706-6A31E562840D}
 		{ED56482B-5BCC-48FE-BD6E-274BC25225C4} = {D1D48B17-D58C-46C0-A706-6A31E562840D}
 		{DED5705E-5CD3-41F4-B40A-596810C5BD7C} = {EBCE795C-4FAE-4098-9354-6155BB35A49F}
+		{893360CE-2CCF-4518-A3C7-70A1F5250650} = {D1D48B17-D58C-46C0-A706-6A31E562840D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37EE282A-EDA5-44CA-A880-D6986D77081C}

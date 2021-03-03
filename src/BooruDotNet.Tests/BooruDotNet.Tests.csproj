@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
     <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
     <ProjectReference Include="..\BooruDotNet.Search\BooruDotNet.Search.csproj" />
-    <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
