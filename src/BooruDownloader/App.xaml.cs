@@ -2,7 +2,7 @@
 using System.Windows;
 using BooruDotNet;
 using BooruDotNet.Boorus;
-using BooruDotNet.Caches;
+using BooruDotNet.Caching;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Links;
 using BooruDotNet.Namers;

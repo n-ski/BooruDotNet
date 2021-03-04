@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BooruDotNet.Posts;
 using Easy.Common;
 
-namespace BooruDotNet.Caches
+namespace BooruDotNet.Caching
 {
     public class PostCache : AsyncCacheBase<int, IPost>, IBooruPostById
     {

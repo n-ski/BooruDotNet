@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Easy.Common;
 
-namespace BooruDotNet.Caches
+namespace BooruDotNet.Caching
 {
     // TODO: add cache flushing after a period of time.
     public abstract class AsyncCacheBase<TKey, TValue> where TKey : notnull

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using BooruDotNet.Boorus;
-using BooruDotNet.Caches;
+using BooruDotNet.Caching;
 using BooruDotNet.Links;
 
 namespace BooruDotNet.Tests.Helpers

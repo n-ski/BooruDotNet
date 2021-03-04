@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BooruDotNet.Boorus;
-using BooruDotNet.Caches;
+using BooruDotNet.Caching;
 using BooruDotNet.Namers;
 using BooruDotNet.Tests.Helpers;
 using NUnit.Framework;

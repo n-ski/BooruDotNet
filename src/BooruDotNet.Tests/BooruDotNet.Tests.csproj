@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Caching\BooruDotNet.Caching.csproj" />
     <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
     <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
     <ProjectReference Include="..\BooruDotNet.Search\BooruDotNet.Search.csproj" />

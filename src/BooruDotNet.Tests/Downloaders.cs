@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
-using BooruDotNet.Caches;
+using BooruDotNet.Caching;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Namers;
 using BooruDotNet.Tests.Helpers;

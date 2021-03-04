@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using BooruDotNet.Tags;
 using Easy.Common;
 
-namespace BooruDotNet.Caches
+namespace BooruDotNet.Caching
 {
     public class TagCache : AsyncCacheBase<string, ITag>, IBooruTagByName
     {
