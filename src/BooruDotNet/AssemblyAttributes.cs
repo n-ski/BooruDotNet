@@ -6,5 +6,5 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("BooruDotNet.Links")]
 [assembly: InternalsVisibleTo("BooruDotNet.Namers")]
 [assembly: InternalsVisibleTo("BooruDotNet.Search")]
-[assembly: InternalsVisibleTo("BooruDotNet.Tests")]
+[assembly: InternalsVisibleTo("BooruDotNet.Tests.Shared")]
 [assembly: InternalsVisibleTo("BooruDownloader")]

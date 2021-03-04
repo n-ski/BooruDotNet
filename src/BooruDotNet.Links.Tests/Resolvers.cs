@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Links;
-using BooruDotNet.Tests.Helpers;
+using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
 
-namespace BooruDotNet.Tests
+namespace BooruDotNet.Links.Tests
 {
     public class Resolvers
     {
         static Resolvers()
         {
-            BooruHelpers.RegisterResolvers();
+            LinkResolver.RegisterResolver(new DanbooruResolver(BooruDotNet.Tests.Shared.Boorus.Danbooru));
+            LinkResolver.RegisterResolver(new GelbooruResolver(BooruDotNet.Tests.Shared.Boorus.Gelbooru));
         }
 
         [Test, Order(0)]
@@ -21,7 +21,7 @@ namespace BooruDotNet.Tests
         public void ResolveHash_Cancellation(string url)
         {
             using var tokenSource = new CancellationTokenSource();
-            tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+            tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
 
             Assert.ThrowsAsync<TaskCanceledException>(() => LinkResolver.ResolveAsync(new Uri(url), tokenSource.Token));
         }

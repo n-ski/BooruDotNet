@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Results;
 using BooruDotNet.Search.Services;
-using BooruDotNet.Tests.Helpers;
+using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
 
-namespace BooruDotNet.Tests
+namespace BooruDotNet.Search.Tests
 {
     public class Search
     {
@@ -23,7 +23,7 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByUri_Success(Type serviceType)
             {
-                var service = BooruHelpers.Create<ISearchByUri>(serviceType);
+                var service = BooruHelper.Create<ISearchByUri>(serviceType);
 
                 var results = await service.SearchByAsync(_testUri);
                 var firstResult = results.First();
@@ -36,10 +36,10 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByUri_Cancellation(Type serviceType)
             {
-                var service = BooruHelpers.Create<ISearchByUri>(serviceType);
+                var service = BooruHelper.Create<ISearchByUri>(serviceType);
 
                 using var tokenSource = new CancellationTokenSource();
-                tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+                tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
 
                 Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchByAsync(_testUri, tokenSource.Token));
             }
@@ -54,7 +54,7 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByFile_Success(Type serviceType)
             {
-                var service = BooruHelpers.Create<ISearchByFile>(serviceType);
+                var service = BooruHelper.Create<ISearchByFile>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
                 var results = await service.SearchByAsync(file);
@@ -68,11 +68,11 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByFile_Cancellation(Type serviceType)
             {
-                var service = BooruHelpers.Create<ISearchByFile>(serviceType);
+                var service = BooruHelper.Create<ISearchByFile>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
                 using var tokenSource = new CancellationTokenSource();
-                tokenSource.CancelAfter(BooruHelpers.TaskCancellationDelay);
+                tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
 
                 Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchByAsync(file, tokenSource.Token));
             }

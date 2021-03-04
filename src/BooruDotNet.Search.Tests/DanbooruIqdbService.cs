@@ -1,10 +1,10 @@
 ﻿using BooruDotNet.Search.Services;
 
-namespace BooruDotNet.Tests.Helpers
+namespace BooruDotNet.Search.Tests
 {
     internal sealed class DanbooruIqdbService : IqdbService
     {
-        public DanbooruIqdbService() : base("danbooru")
+        internal DanbooruIqdbService() : base("danbooru")
         {
         }
     }
