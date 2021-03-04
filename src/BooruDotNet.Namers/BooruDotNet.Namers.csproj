@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BooruDotNet.Namers\BooruDotNet.Namers.csproj" />
+    <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 
 </Project>
