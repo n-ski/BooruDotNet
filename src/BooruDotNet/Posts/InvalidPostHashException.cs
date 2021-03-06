@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net.Http;
 using BooruDotNet.Resources;
 
 namespace BooruDotNet.Posts
 {
-    public class InvalidPostHashException : HttpRequestException
+    public class InvalidPostHashException : ApiException
     {
         public InvalidPostHashException(string hash)
             : base(string.Format(ErrorMessages.PostInvalidHashFormat, hash))

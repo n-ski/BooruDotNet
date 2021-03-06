@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Net.Http;
 using BooruDotNet.Resources;
 
 namespace BooruDotNet.Tags
 {
 
     [Serializable]
-    public class InvalidTagNameException : HttpRequestException
+    public class InvalidTagNameException : ApiException
     {
         public InvalidTagNameException(string tagName)
             : base(string.Format(ErrorMessages.TagInvalidNameFormat, tagName))

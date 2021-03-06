@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Net.Http;
 using BooruDotNet.Resources;
 
 namespace BooruDotNet.Posts
 {
-    public class InvalidPostIdException : HttpRequestException
+    public class InvalidPostIdException : ApiException
     {
         public InvalidPostIdException(int postId)
             : base(string.Format(ErrorMessages.PostInvalidIdFormat, postId))
