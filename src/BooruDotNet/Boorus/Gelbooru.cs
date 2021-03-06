@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,16 +19,9 @@ namespace BooruDotNet.Boorus
         {
         }
 
-        public async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
+        public Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
-            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostId_Format, id);
-
-            GelbooruPost[] posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken)
-                .ConfigureAwait(false);
-
-            Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
-
-            return posts[0];
+            return GetPostAsync(id, cancellationToken, true);
         }
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
@@ -49,8 +43,14 @@ namespace BooruDotNet.Boorus
 
             Error.IfNot<InvalidPostHashException>(int.TryParse(id, out int postId), hash);
 
-            return await GetPostAsync(postId, cancellationToken)
-                .ConfigureAwait(false);
+            try
+            {
+                return await GetPostAsync(postId, cancellationToken, false).ConfigureAwait(false);
+            }
+            catch (JsonException)
+            {
+                throw new InvalidPostHashException(hash);
+            }
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
@@ -65,6 +65,29 @@ namespace BooruDotNet.Boorus
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 
             return tags[0];
+        }
+
+        // Special method that can handle thrown JsonException.
+        // Exception doesn't need to be handled if this method was called by GetPostAsync(string)
+        private async Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken, bool handleJsonException)
+        {
+            Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruPostId_Format, id);
+
+            GelbooruPost[] posts;
+
+            try
+            {
+                posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (JsonException) when (handleJsonException)
+            {
+                throw new InvalidPostIdException(id);
+            }
+
+            Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
+
+            return posts[0];
         }
     }
 }

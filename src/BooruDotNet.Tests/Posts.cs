@@ -75,10 +75,11 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
-        public void GetByHash_Fail(Type booruType)
+        [TestCase(typeof(Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
+        public void GetByHash_Fail(Type booruType, string hash = null)
         {
             var booru = BooruHelper.Create<IBooruPostByHash>(booruType);
-            var hash = new string('0', 32);
+            hash ??= new string('0', 32);
 
             Assert.ThrowsAsync<InvalidPostHashException>(() => booru.GetPostAsync(hash));
         }
