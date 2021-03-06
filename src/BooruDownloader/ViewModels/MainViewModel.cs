@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using BooruDotNet;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Links;
+using BooruDotNet.Posts;
 using BooruDownloader.Helpers;
 using DynamicData;
 using DynamicData.Binding;
@@ -192,7 +193,17 @@ namespace BooruDownloader.ViewModels
 
             foreach (Uri uri in urisToResolve)
             {
-                var post = await LinkResolver.ResolveAsync(uri, cancellationToken);
+                IPost post;
+
+                try
+                {
+                    post = await LinkResolver.ResolveAsync(uri, cancellationToken);
+                }
+                catch (ApiException)
+                {
+                    ++unresolvedPostCount;
+                    continue;
+                }
 
                 // Skip if couldn't resolve the link or if the file is private/hidden.
                 if (post?.FileUri is null)
