@@ -33,6 +33,7 @@ namespace ImageSearch.ViewModels
         private readonly ObservableAsPropertyHelper<bool> _isSearching;
         // TODO: turn this into a setting.
         private const bool _searchImmeaditelyAfterDrop = true;
+        private const bool _searchImmeaditelyAfterPaste = true;
 
         public MainViewModel()
         {
@@ -120,20 +121,14 @@ namespace ImageSearch.ViewModels
 
             ImageInteractions.SearchWithUri.RegisterHandler(interaction =>
             {
-                SetUploadMethod(UploadMethod.Uri);
-                _uriUploadViewModel.ImageUri = interaction.Input;
-
-                Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
+                SearchWithUri(interaction.Input, _searchImmeaditelyAfterPaste);
 
                 interaction.SetOutput(Unit.Default);
             });
 
             ImageInteractions.SearchWithFile.RegisterHandler(interaction =>
             {
-                SetUploadMethod(UploadMethod.File);
-                _fileUploadViewModel.FileInfo = interaction.Input;
-
-                Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
+                SearchWithFile(interaction.Input, _searchImmeaditelyAfterPaste);
 
                 interaction.SetOutput(Unit.Default);
             });
@@ -167,8 +162,8 @@ namespace ImageSearch.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
-                && files.Any(FileHelper.IsFileValid))
+            if ((dropInfo.TryGetDroppedFiles(out IEnumerable<string> files) && files.Any(FileHelper.IsFileValid))
+                || (dropInfo.TryGetDroppedText(out string text) && Uri.IsWellFormedUriString(text, UriKind.Absolute)))
             {
                 dropInfo.Effects = DragDropEffects.Copy;
             }
@@ -183,13 +178,12 @@ namespace ImageSearch.ViewModels
             if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
                 && files.FirstOrDefault(FileHelper.IsFileValid) is string path)
             {
-                SetUploadMethod(UploadMethod.File);
-                _fileUploadViewModel.FileInfo = new FileInfo(path);
-
-                if (_searchImmeaditelyAfterDrop)
-                {
-                    Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
-                }
+                SearchWithFile(new FileInfo(path), _searchImmeaditelyAfterDrop);
+            }
+            else if (dropInfo.TryGetDroppedText(out string text)
+                && Uri.TryCreate(text, UriKind.Absolute, out Uri uri))
+            {
+                SearchWithUri(uri, _searchImmeaditelyAfterDrop);
             }
         }
 
@@ -219,9 +213,34 @@ namespace ImageSearch.ViewModels
             return results.Select(result => new ResultViewModel(result));
         }
 
+        private void SearchWithFile(FileInfo file, bool execute)
+        {
+            SetUploadMethod(UploadMethod.File);
+            _fileUploadViewModel.FileInfo = file;
+
+            if (execute)
+            {
+                ExecuteSearch();
+            }
+        }
+
+        private void SearchWithUri(Uri uri, bool execute)
+        {
+            SetUploadMethod(UploadMethod.Uri);
+            _uriUploadViewModel.ImageUri = uri;
+
+            if (execute)
+            {
+                ExecuteSearch();
+            }
+        }
+
         private void SetUploadMethod(UploadMethod uploadMethod)
         {
             SelectedUploadMethod = UploadMethods.First(x => x.Method == uploadMethod);
         }
+
+        // Invoke the command like this to avoid application crash in the exception interaction handler.
+        private IDisposable ExecuteSearch() => Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
     }
 }

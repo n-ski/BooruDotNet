@@ -7,9 +7,9 @@ namespace ImageSearch.Extensions
 {
     internal static class DropInfoExtensions
     {
-        public static bool TryGetDroppedFiles(this IDropInfo dropInfo, out IEnumerable<string> files)
+        internal static bool TryGetDroppedFiles(this IDropInfo dropInfo, out IEnumerable<string> files)
         {
-            if (dropInfo.Data is DataObject data)
+            if (dropInfo.Data is DataObject data && data.ContainsFileDropList())
             {
                 files = data.GetFileDropList().Cast<string>();
                 return true;
@@ -17,6 +17,20 @@ namespace ImageSearch.Extensions
             else
             {
                 files = null;
+                return false;
+            }
+        }
+
+        internal static bool TryGetDroppedText(this IDropInfo dropInfo, out string text)
+        {
+            if (dropInfo.Data is DataObject data && data.ContainsText())
+            {
+                text = data.GetText();
+                return true;
+            }
+            else
+            {
+                text = null;
                 return false;
             }
         }
