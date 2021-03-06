@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BooruDotNet.Helpers;
+using BooruDotNet.Search.Results;
 using GongSolutions.Wpf.DragDrop;
 using ImageSearch.Extensions;
 using ImageSearch.Helpers;
@@ -53,7 +54,7 @@ namespace ImageSearch.ViewModels
             SetUploadMethod(UploadMethod.Uri);
 
             SearchCommand = ReactiveCommand.CreateFromObservable(
-                () => Observable.StartAsync(this.LoadResultsAsync).TakeUntil(CancelSearchCommand),
+                () => Observable.StartAsync(SearchCommandImpl).TakeUntil(CancelSearchCommand),
                 this.WhenAnyValue(
                     x => x.SelectedUploadMethod,
                     x => x._uriUploadViewModel.ImageUri,
@@ -194,30 +195,28 @@ namespace ImageSearch.ViewModels
 
         #endregion
 
-        private async Task<IEnumerable<ResultViewModel>> LoadResultsAsync(CancellationToken cancellationToken)
+        private async Task<IEnumerable<ResultViewModel>> SearchCommandImpl(CancellationToken cancellationToken)
         {
-            // Task.Run(...) fixes the command blocking the UI.
-            var task = Task
-                .Run(async () =>
-                {
-                    switch (SelectedUploadMethod.Method)
+            IEnumerable<IResult> results;
+
+            switch (SelectedUploadMethod.Method)
+            {
+                case UploadMethod.Uri:
+                    results = await SelectedService.SearchByAsync(_uriUploadViewModel.ImageUri, cancellationToken);
+                    break;
+
+                case UploadMethod.File:
+                    using (var fileStream = _fileUploadViewModel.FileInfo.OpenRead())
                     {
-                        case UploadMethod.Uri:
-                            return await SelectedService.SearchByAsync(_uriUploadViewModel.ImageUri, cancellationToken);
-
-                        case UploadMethod.File:
-                            using (var fileStream = _fileUploadViewModel.FileInfo.OpenRead())
-                            {
-                                return await SelectedService.SearchByAsync(fileStream, cancellationToken);
-                            }
-
-                        default:
-                            throw new InvalidOperationException();
+                        results = await SelectedService.SearchByAsync(fileStream, cancellationToken);
                     }
-                }, cancellationToken)
-                .ConfigureAwait(false);
-            var results = await task;
-            return results.Select(r => new ResultViewModel(r));
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            return results.Select(result => new ResultViewModel(result));
         }
 
         private void SetUploadMethod(UploadMethod uploadMethod)
