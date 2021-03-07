@@ -78,12 +78,35 @@ namespace BooruDotNet.Downloaders
             Ensure.Exists(new DirectoryInfo(targetDirectory));
             Ensure.That(items.Any(), "There is no items to download.");
 
+            Func<T, Task<FileInfo?>> downloadItemAsync;
+
+            if (Options.IgnoreErrors)
+            {
+                downloadItemAsync = async item =>
+                {
+                    try
+                    {
+                        return await DownloadAsync(item, targetDirectory, cancellationToken).ConfigureAwait(false);
+                    }
+                    // Ignore all errors except task cancellation. Use "when" clause to
+                    // match both TaskCanceled and OperationCanceled exceptions.
+                    catch (Exception ex) when (ex is OperationCanceledException == false)
+                    {
+                        return null;
+                    }
+                };
+            }
+            else
+            {
+                downloadItemAsync = item => DownloadAsync(item, targetDirectory, cancellationToken)!;
+            }
+
             int batchSize = Options.BatchSize;
 
             if (batchSize > 1)
             {
-                var transformBlock = new TransformBlock<T, FileInfo>(
-                    item => DownloadAsync(item, targetDirectory, cancellationToken),
+                var transformBlock = new TransformBlock<T, FileInfo?>(
+                    downloadItemAsync,
                     new ExecutionDataflowBlockOptions { CancellationToken = cancellationToken, MaxDegreeOfParallelism = batchSize });
 
                 foreach (T item in items)
@@ -95,14 +118,24 @@ namespace BooruDotNet.Downloaders
 
                 while (await transformBlock.OutputAvailableAsync(cancellationToken).ConfigureAwait(false))
                 {
-                    yield return await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+                    FileInfo? file = await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+
+                    if (file is null == false)
+                    {
+                        yield return file;
+                    }
                 }
             }
             else
             {
                 foreach (T item in items)
                 {
-                    yield return await DownloadAsync(item, targetDirectory, cancellationToken).ConfigureAwait(false);
+                    FileInfo? file = await downloadItemAsync(item).ConfigureAwait(false);
+
+                    if (file is null == false)
+                    {
+                        yield return file;
+                    }
                 }
             }
         }

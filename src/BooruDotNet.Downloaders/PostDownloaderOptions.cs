@@ -2,8 +2,9 @@
 {
     public class PostDownloaderOptions : DownloaderOptions
     {
-        public PostDownloaderOptions(int batchSize = 1, bool overwriteExisting = true, bool ignoreArchiveFiles = false)
-            : base(batchSize, overwriteExisting)
+        public PostDownloaderOptions(int batchSize = 1, bool overwriteExisting = true,
+            bool ignoreErrors = false, bool ignoreArchiveFiles = false)
+            : base(batchSize, overwriteExisting, ignoreErrors)
         {
             IgnoreArchiveFiles = ignoreArchiveFiles;
         }
