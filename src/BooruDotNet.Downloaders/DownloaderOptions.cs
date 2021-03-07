@@ -4,17 +4,21 @@ namespace BooruDotNet.Downloaders
 {
     public class DownloaderOptions
     {
-        public DownloaderOptions(int batchSize = 1, bool overwriteExisting = true, bool ignoreErrors = false)
+        private int _batchSize;
+
+        public DownloaderOptions()
         {
-            BatchSize = Math.Max(1, batchSize);
-            OverwriteExisting = overwriteExisting;
-            IgnoreErrors = ignoreErrors;
+            BatchSize = 1;
         }
 
-        public int BatchSize { get; }
+        public int BatchSize
+        {
+            get { return _batchSize; }
+            set { _batchSize = Math.Max(1, value); }
+        }
 
-        public bool OverwriteExisting { get; set; }
+        public bool OverwriteExisting { get; set; } = true;
 
-        public bool IgnoreErrors { get; set; }
+        public bool IgnoreErrors { get; set; } = false;
     }
 }

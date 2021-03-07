@@ -295,10 +295,12 @@ namespace BooruDownloader.ViewModels
             }
 
             var batchSize = settings.BatchSize;
-            var options = new PostDownloaderOptions(
-                batchSize,
-                settings.OverwriteExistingFiles,
-                settings.IgnoreArchiveFiles);
+            var options = new PostDownloaderOptions
+            {
+                BatchSize = batchSize,
+                OverwriteExisting = settings.OverwriteExistingFiles,
+                IgnoreArchiveFiles = settings.IgnoreArchiveFiles,
+            };
 
             var downloader = App.Downloaders[settings.FileNamingStyle];
             downloader.Options = options;
