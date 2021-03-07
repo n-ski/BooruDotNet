@@ -11,6 +11,7 @@ namespace BooruDownloader.ViewModels
     public class SettingsViewModel : ReactiveObject
     {
         private int _batchSize;
+        private bool _ignoreDownloadErrors;
         private FileNamingStyle _fileNamingStyle;
         private bool _ignoreArchiveFiles;
         private bool _notifyAboutSkippedPosts;
@@ -43,6 +44,12 @@ namespace BooruDownloader.ViewModels
         {
             get => _batchSize;
             set => this.RaiseAndSetIfChanged(ref _batchSize, Math.Max(1, value));
+        }
+
+        public bool IgnoreDownloadErrors
+        {
+            get => _ignoreDownloadErrors;
+            set => this.RaiseAndSetIfChanged(ref _ignoreDownloadErrors, value);
         }
 
         public FileNamingStyle FileNamingStyle
@@ -98,6 +105,7 @@ namespace BooruDownloader.ViewModels
             var settings = Settings.Default;
 
             BatchSize = settings.BatchSize;
+            IgnoreDownloadErrors = settings.IgnoreDownloadErrors;
             FileNamingStyle = settings.FileNamingStyle;
             IgnoreArchiveFiles = settings.IgnoreArchiveFiles;
             NotifyAboutSkippedPosts = settings.NotifyAboutSkippedPosts;
@@ -114,6 +122,7 @@ namespace BooruDownloader.ViewModels
             var settings = Settings.Default;
 
             settings.BatchSize = BatchSize;
+            settings.IgnoreDownloadErrors = IgnoreDownloadErrors;
             settings.FileNamingStyle = FileNamingStyle;
             settings.IgnoreArchiveFiles = IgnoreArchiveFiles;
             settings.NotifyAboutSkippedPosts = NotifyAboutSkippedPosts;

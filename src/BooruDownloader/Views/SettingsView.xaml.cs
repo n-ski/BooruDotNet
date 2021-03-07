@@ -40,6 +40,9 @@ namespace BooruDownloader.Views
                 this.Bind(ViewModel, vm => vm.OverwriteExistingFiles, v => v.OverwriteExistingFilesCheckBox.IsChecked)
                     .DisposeWith(d);
 
+                this.Bind(ViewModel, vm => vm.IgnoreDownloadErrors, v => v.IgnoreDownloadErrorsCheckBox.IsChecked)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.DownloadLocation, v => v.DownloadLocationTextBox.Text)
                     .DisposeWith(d);
 

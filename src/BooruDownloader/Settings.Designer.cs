@@ -118,5 +118,17 @@ namespace BooruDownloader {
                 this["DownloadLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IgnoreDownloadErrors {
+            get {
+                return ((bool)(this["IgnoreDownloadErrors"]));
+            }
+            set {
+                this["IgnoreDownloadErrors"] = value;
+            }
+        }
     }
 }
