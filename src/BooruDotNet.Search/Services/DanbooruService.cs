@@ -14,8 +14,8 @@ namespace BooruDotNet.Search.Services
 {
     public class DanbooruService : ServiceBase, ISearchByUri, ISearchByFile
     {
-        public DanbooruService()
-            : base(HttpMethod.Get, new Uri(UploadUris.Danbooru))
+        public DanbooruService(HttpClient httpClient)
+            : base(httpClient, HttpMethod.Get, new Uri(UploadUris.Danbooru))
         {
         }
 

@@ -22,13 +22,13 @@ namespace BooruDotNet.Search.Services
             new Regex(@"^(\d+)% similarity$", RegexOptions.Compiled));
 
         // TODO: fix deserialization logic and then make public.
-        internal IqdbService()
-            : base(HttpMethod.Post, new Uri(UploadUris.Iqdb))
+        internal IqdbService(HttpClient httpClient)
+            : base(httpClient, HttpMethod.Post, new Uri(UploadUris.Iqdb))
         {
         }
 
-        public IqdbService(string prefix)
-            : base(HttpMethod.Post, CreateUri(prefix))
+        public IqdbService(HttpClient httpClient, string prefix)
+            : base(httpClient, HttpMethod.Post, CreateUri(prefix))
         {
         }
 

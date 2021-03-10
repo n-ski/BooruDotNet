@@ -13,7 +13,8 @@ namespace BooruDotNet.Boorus
 {
     public class Danbooru : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {
-        public Danbooru() : base()
+        public Danbooru(HttpClient httpClient)
+            : base(httpClient)
         {
         }
 

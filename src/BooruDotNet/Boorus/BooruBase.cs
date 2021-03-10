@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Easy.Common;
 
 namespace BooruDotNet.Boorus
 {
     public abstract class BooruBase
     {
-        private static HttpClient? _customHttpClient;
-
-        protected BooruBase()
+        protected BooruBase(HttpClient httpClient)
         {
+            HttpClient = Ensure.NotNull(httpClient, nameof(httpClient));
         }
 
-        [AllowNull]
-        public static HttpClient HttpClient
-        {
-            protected get => _customHttpClient ?? SingletonHttpClient.Instance;
-            set => _customHttpClient = value;
-        }
+        protected HttpClient HttpClient { get; }
 
-        protected async static Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request,
+        protected async Task<HttpResponseMessage> GetResponseAsync(HttpRequestMessage request,
             CancellationToken cancellationToken, bool ensureSuccess = true)
         {
             HttpResponseMessage response = await HttpClient.SendAsync(
@@ -34,7 +28,7 @@ namespace BooruDotNet.Boorus
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
 
-        protected async static Task<HttpResponseMessage> GetResponseAsync(Uri requestUri,
+        protected async Task<HttpResponseMessage> GetResponseAsync(Uri requestUri,
             CancellationToken cancellationToken, bool ensureSuccess = true)
         {
             HttpResponseMessage response = await HttpClient.GetAsync(
@@ -45,7 +39,7 @@ namespace BooruDotNet.Boorus
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
 
-        protected async static Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken)
+        protected async Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken)
         {
             using HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken)
                 .ConfigureAwait(false);

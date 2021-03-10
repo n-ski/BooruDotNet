@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Windows;
 using BooruDotNet;
 using BooruDotNet.Boorus;
@@ -29,13 +31,17 @@ namespace BooruDownloader
             Locator.CurrentMutable.Register(() => new PostView(), typeof(IViewFor<PostViewModel>));
             Locator.CurrentMutable.Register(() => new MediaView(), typeof(IViewFor<MediaViewModel>));
 
-            var danbooru = new Danbooru();
-            var gelbooru = new Gelbooru();
+            var httpClient = new HttpClient(new SocketsHttpHandler
+            {
+                AutomaticDecompression = DecompressionMethods.All,
+            });
+
+            var danbooru = new Danbooru(httpClient);
+            var gelbooru = new Gelbooru(httpClient);
 
             LinkResolver.RegisterResolver(new DanbooruResolver(danbooru));
             LinkResolver.RegisterResolver(new GelbooruResolver(gelbooru));
 
-            var httpClient = SingletonHttpClient.Instance;
             var tagCache = new TagCache(danbooru);
 
             Downloaders = new Dictionary<FileNamingStyle, DownloaderBase<IPost>>

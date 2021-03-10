@@ -15,7 +15,8 @@ namespace BooruDotNet.Boorus
 {
     public class Gelbooru : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {
-        public Gelbooru() : base()
+        public Gelbooru(HttpClient httpClient)
+            : base(httpClient)
         {
         }
 

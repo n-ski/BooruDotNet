@@ -13,7 +13,8 @@ namespace BooruDotNet.Search.Services
 {
     public abstract class ServiceBase : BooruBase
     {
-        protected ServiceBase(HttpMethod uploadMethod, Uri uploadUri)
+        protected ServiceBase(HttpClient httpClient, HttpMethod uploadMethod, Uri uploadUri)
+            : base(httpClient)
         {
             UploadMethod = Ensure.NotNull(uploadMethod, nameof(uploadMethod));
 
