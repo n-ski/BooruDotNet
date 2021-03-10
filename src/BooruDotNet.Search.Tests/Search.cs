@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Results;
 using BooruDotNet.Search.Services;
+using BooruDotNet.Search.Tests.Helpers;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
 
@@ -23,7 +24,7 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByUri_Success(Type serviceType)
             {
-                var service = BooruHelper.Create<ISearchByUri>(serviceType);
+                var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
 
                 var results = await service.SearchByAsync(_testUri);
                 var firstResult = results.First();
@@ -36,7 +37,7 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByUri_Cancellation(Type serviceType)
             {
-                var service = BooruHelper.Create<ISearchByUri>(serviceType);
+                var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
 
                 using var tokenSource = new CancellationTokenSource();
                 tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
@@ -54,7 +55,7 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByFile_Success(Type serviceType)
             {
-                var service = BooruHelper.Create<ISearchByFile>(serviceType);
+                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
                 var results = await service.SearchByAsync(file);
@@ -68,7 +69,7 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByFile_Cancellation(Type serviceType)
             {
-                var service = BooruHelper.Create<ISearchByFile>(serviceType);
+                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
                 using var tokenSource = new CancellationTokenSource();

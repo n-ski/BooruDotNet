@@ -29,7 +29,7 @@ namespace BooruDotNet.Tests
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
             // See TagsCache.cs.
-            var booru = BooruHelper.Create<IBooruTagByName>(booruType);
+            var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
 
             using var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);

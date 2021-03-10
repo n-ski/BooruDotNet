@@ -10,8 +10,8 @@ namespace BooruDotNet.Links.Tests
     {
         static Resolvers()
         {
-            LinkResolver.RegisterResolver(new DanbooruResolver(BooruDotNet.Tests.Shared.Boorus.Danbooru));
-            LinkResolver.RegisterResolver(new GelbooruResolver(BooruDotNet.Tests.Shared.Boorus.Gelbooru));
+            LinkResolver.RegisterResolver(new DanbooruResolver(BooruHelper.Danbooru));
+            LinkResolver.RegisterResolver(new GelbooruResolver(BooruHelper.Gelbooru));
         }
 
         [Test, Order(0)]

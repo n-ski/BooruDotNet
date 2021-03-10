@@ -38,7 +38,7 @@ namespace BooruDotNet.Namers.Tests
         [TestCase(4061119, "__original_drawn_by_i_takashi__590cb03c4efec8d13e3fb42c32c38efc")]
         [TestCase(4067797, "__kurata_mashiro_futaba_tsukushi_yashio_rui_kirigaya_touko_and_hiromachi_nanami_bang_dream_drawn_by_ayasaka__bd4750e801cc84fd2dc1d81ecfd4a3b0")]
         [TestCase(4090626, "__vrchat_drawn_by_kirisame_mia__c903eb2db92678bba106c96b7e71a923")]
-        [TestCase(4166623, "__paimon_and_lumine_genshin_impact_drawn_by_ichijiku_suisei__bbc70109203a07c913a2a0f8e418391e")]
+        [TestCase(4166623, "__lumine_and_paimon_genshin_impact_drawn_by_ichijiku_suisei__bbc70109203a07c913a2a0f8e418391e")]
         public async Task CreateDanbooruName_Success(int postId, string expectedName)
         {
             var post = await _postCache.GetPostAsync(postId);
@@ -61,7 +61,7 @@ namespace BooruDotNet.Namers.Tests
         [TestCase(4061119, "_original drawn by i.takashi - 590cb03c4efec8d13e3fb42c32c38efc")]
         [TestCase(4067797, "kurata mashiro, futaba tsukushi, yashio rui, kirigaya touko, and hiromachi nanami (bang dream!) drawn by ayasaka - bd4750e801cc84fd2dc1d81ecfd4a3b0")]
         [TestCase(4090626, "_vrchat drawn by kirisame_mia - c903eb2db92678bba106c96b7e71a923")]
-        [TestCase(4166623, "paimon and lumine (genshin impact) drawn by ichijiku_suisei - bbc70109203a07c913a2a0f8e418391e")]
+        [TestCase(4166623, "lumine and paimon (genshin impact) drawn by ichijiku_suisei - bbc70109203a07c913a2a0f8e418391e")]
         // TODO: case with multiple copyrights but no characters.
         // TODO: case with a character but no copyrights.
         public async Task CreateFancyName_Success(int postId, string expectedName)

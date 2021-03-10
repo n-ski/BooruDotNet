@@ -1,10 +1,12 @@
-﻿using BooruDotNet.Search.Services;
+﻿using System.Net.Http;
+using BooruDotNet.Search.Services;
 
 namespace BooruDotNet.Search.Tests
 {
-    internal sealed class DanbooruIqdbService : IqdbService
+    public sealed class DanbooruIqdbService : IqdbService
     {
-        internal DanbooruIqdbService() : base("danbooru")
+        public DanbooruIqdbService(HttpClient httpClient)
+            : base(httpClient, "danbooru")
         {
         }
     }

@@ -27,7 +27,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
         public async Task GetByHash_Success(Type booruType, string hash, int expectedId)
         {
-            var booru = BooruHelper.Create<IBooruPostByHash>(booruType);
+            var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
 
             var post = await booru.GetPostAsync(hash);
 
@@ -41,7 +41,7 @@ namespace BooruDotNet.Tests
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
             // See PostCache.cs.
-            var booru = BooruHelper.Create<IBooruPostById>(booruType);
+            var booru = BooruHelper.CreateBooru<IBooruPostById>(booruType);
 
             using var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
@@ -54,7 +54,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752")]
         public void GetByHash_Cancellation(Type booruType, string hash)
         {
-            var booru = BooruHelper.Create<IBooruPostByHash>(booruType);
+            var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
 
             using var tokenSource = new CancellationTokenSource();
             tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
@@ -78,7 +78,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
         public void GetByHash_Fail(Type booruType, string hash = null)
         {
-            var booru = BooruHelper.Create<IBooruPostByHash>(booruType);
+            var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
             hash ??= new string('0', 32);
 
             Assert.ThrowsAsync<InvalidPostHashException>(() => booru.GetPostAsync(hash));
