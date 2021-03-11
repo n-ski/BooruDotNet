@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Posts;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Links
 {
@@ -14,7 +14,7 @@ namespace BooruDotNet.Links
 
         public static void RegisterResolver(IResolver resolver)
         {
-            Ensure.NotNull(resolver, nameof(resolver));
+            Requires.NotNull(resolver, nameof(resolver));
 
             if (resolver is IIdResolver idResolver)
             {
@@ -31,7 +31,6 @@ namespace BooruDotNet.Links
         {
             // Validation is done by the resolvers.
             // Keep trying each resolver until one of them returns successfully.
-
             IPost? post;
 
             foreach (var idResolver in _idResolvers)

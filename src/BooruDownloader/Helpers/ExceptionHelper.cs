@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Easy.Common;
-using Easy.Common.Extensions;
+using Validation;
 
 namespace BooruDownloader.Helpers
 {
@@ -11,7 +10,7 @@ namespace BooruDownloader.Helpers
     {
         internal static IEnumerable<Exception> Unwrap(Exception exception)
         {
-            Ensure.NotNull(exception, nameof(exception));
+            Assumes.NotNull(exception);
 
             for (var ex = exception; ex is null == false; ex = ex.InnerException)
             {
@@ -21,7 +20,7 @@ namespace BooruDownloader.Helpers
 
         internal static string GetAllMessages(Exception exception)
         {
-            Ensure.NotNull(exception, nameof(exception));
+            Requires.NotNull(exception, nameof(exception));
 
             var exceptions = Unwrap(exception).ToArray();
 
@@ -33,7 +32,7 @@ namespace BooruDownloader.Helpers
             for (int i = 1; i < exceptions.Length; i++)
             {
                 messageBuilder
-                    .AppendMultiple('>', (uint)(i + 1))
+                    .Append(new string('>', i + 1))
                     .Append(' ')
                     .AppendLine(exceptions[i].Message);
             }

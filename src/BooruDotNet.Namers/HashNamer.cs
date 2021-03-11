@@ -1,5 +1,5 @@
 ﻿using BooruDotNet.Posts;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Namers
 {
@@ -7,7 +7,7 @@ namespace BooruDotNet.Namers
     {
         public string Name(IPost post)
         {
-            Ensure.NotNull(post, nameof(post));
+            Requires.NotNull(post, nameof(post));
 
             return post.Hash;
         }

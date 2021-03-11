@@ -1,6 +1,6 @@
 ﻿using BooruDotNet.Posts;
-using Easy.Common;
 using ReactiveUI;
+using Validation;
 
 namespace BooruDownloader.ViewModels
 {
@@ -10,7 +10,7 @@ namespace BooruDownloader.ViewModels
     {
         public PostViewModel(IPost post)
         {
-            Post = Ensure.NotNull(post, nameof(post));
+            Post = Requires.NotNull(post, nameof(post));
         }
 
         public IPost Post { get; }

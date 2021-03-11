@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using BooruDotNet.Extensions;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Downloaders
 {
@@ -21,7 +21,7 @@ namespace BooruDotNet.Downloaders
 
         protected DownloaderBase(HttpClient httpClient)
         {
-            HttpClient = Ensure.NotNull(httpClient, nameof(httpClient));
+            HttpClient = Requires.NotNull(httpClient, nameof(httpClient));
         }
 
         [AllowNull]
@@ -38,8 +38,8 @@ namespace BooruDotNet.Downloaders
         public virtual async Task<FileInfo> DownloadAsync(T item, string targetDirectory,
             CancellationToken cancellationToken = default)
         {
-            Ensure.Exists(new DirectoryInfo(targetDirectory));
-            Error.If<ArgumentNullException>(item is null, nameof(item));
+            Requires.NotNullAllowStructs(item, nameof(item));
+            Requires.Argument(Directory.Exists(targetDirectory), nameof(targetDirectory), "Directory does not exist.");
 
             string targetFilePath = Path.Combine(
                 targetDirectory,
@@ -75,8 +75,8 @@ namespace BooruDotNet.Downloaders
             IEnumerable<T> items, string targetDirectory,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            Ensure.Exists(new DirectoryInfo(targetDirectory));
-            Ensure.That(items.Any(), "There is no items to download.");
+            Requires.NotNullOrEmpty(items, nameof(items));
+            Requires.Argument(Directory.Exists(targetDirectory), nameof(targetDirectory), "Directory does not exist.");
 
             Func<T, Task<FileInfo?>> downloadItemAsync;
 
@@ -180,9 +180,11 @@ namespace BooruDotNet.Downloaders
         IAsyncEnumerable<FileInfo> IDownloader.DownloadAsync(IEnumerable items, string targetDirectory,
             CancellationToken cancellationToken)
         {
-            var typeItems = items.OfType<T>();
+            Requires.NotNull(items, nameof(items));
 
-            Ensure.That(typeItems.Any(), $"There is no objects of type '{typeof(T)}' to download.");
+            IEnumerable<T> typeItems = items.OfType<T>();
+
+            Requires.Argument(typeItems.Any(), nameof(items), $"There is no objects of type '{typeof(T)}' to download.");
 
             return DownloadAsync(typeItems, targetDirectory, cancellationToken);
         }

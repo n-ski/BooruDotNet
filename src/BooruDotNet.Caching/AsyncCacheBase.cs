@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Caching
 {
@@ -16,7 +16,7 @@ namespace BooruDotNet.Caching
         protected AsyncCacheBase(IEqualityComparer<TKey> equalityComparer)
         {
             Cache = new ConcurrentDictionary<TKey, Task<TValue>>(
-                Ensure.NotNull(equalityComparer, nameof(equalityComparer)));
+                Requires.NotNull(equalityComparer, nameof(equalityComparer)));
         }
 
         protected ConcurrentDictionary<TKey, Task<TValue>> Cache { get; }

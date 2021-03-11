@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
 using BooruDotNet.Resources;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Links
 {
@@ -16,15 +16,15 @@ namespace BooruDotNet.Links
 
         public DanbooruResolver(Danbooru danbooru)
         {
-            Danbooru = Ensure.NotNull(danbooru, nameof(danbooru));
+            Danbooru = Requires.NotNull(danbooru, nameof(danbooru));
         }
 
         protected Danbooru Danbooru { get; }
 
         public async Task<IPost?> ResolveFromIdLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
+            Requires.NotNull(uri, nameof(uri));
+            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
 
             Match match = _idRegexLazy.Value.Match(uri.AbsoluteUri);
 

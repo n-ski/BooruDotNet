@@ -7,7 +7,7 @@ using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Resources;
 using BooruDotNet.Tags;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Boorus
 {
@@ -34,7 +34,7 @@ namespace BooruDotNet.Boorus
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNullOrEmptyOrWhiteSpace(hash);
+            Requires.NotNullOrWhiteSpace(hash, nameof(hash));
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruPostHash_Format, hash);
 
@@ -50,7 +50,7 @@ namespace BooruDotNet.Boorus
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
+            Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.DanbooruTagName_Format, tagName);
 

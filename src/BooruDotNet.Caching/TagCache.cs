@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Tags;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Caching
 {
@@ -13,12 +13,12 @@ namespace BooruDotNet.Caching
         public TagCache(IBooruTagByName tagExtractor, StringComparer? tagNameComparer = null)
             : base(tagNameComparer ?? StringComparer.OrdinalIgnoreCase)
         {
-            _tagExtractor = Ensure.NotNull(tagExtractor, nameof(tagExtractor));
+            _tagExtractor = Requires.NotNull(tagExtractor, nameof(tagExtractor));
         }
 
         public Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNullOrEmptyOrWhiteSpace(tagName);
+            Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
             // Probably not a good idea to allow cancellation here, since it means we won't
             // be able to get this tag later, at least not until cache flushing is implemented.

@@ -1,6 +1,6 @@
 ﻿using System;
 using BooruDotNet.Extensions;
-using Easy.Common;
+using Validation;
 
 namespace BooruDownloader.Helpers
 {
@@ -8,7 +8,7 @@ namespace BooruDownloader.Helpers
     {
         internal static bool IsAnimatedMediaFile(Uri uri)
         {
-            Ensure.NotNull(uri, nameof(uri));
+            Assumes.NotNull(uri);
 
             switch (uri.GetExtension().ToLowerInvariant())
             {

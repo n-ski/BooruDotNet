@@ -3,7 +3,7 @@ using System.Net.Http;
 using BooruDotNet.Extensions;
 using BooruDotNet.Namers;
 using BooruDotNet.Posts;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Downloaders
 {
@@ -13,19 +13,19 @@ namespace BooruDotNet.Downloaders
 
         public PostDownloader(HttpClient httpClient, IPostNamer postNamer) : base(httpClient)
         {
-            _postNamer = Ensure.NotNull(postNamer, nameof(postNamer));
+            _postNamer = Requires.NotNull(postNamer, nameof(postNamer));
         }
 
         protected override Uri GetDownloadUri(IPost item)
         {
-            Ensure.NotNull(item, nameof(item));
+            Requires.NotNull(item, nameof(item));
 
             return GetFileOrSampleUri(item);
         }
 
         protected override string GetFileName(IPost item)
         {
-            Ensure.NotNull(item, nameof(item));
+            Requires.NotNull(item, nameof(item));
 
             Uri uri = GetFileOrSampleUri(item);
 
@@ -34,7 +34,7 @@ namespace BooruDotNet.Downloaders
 
         private Uri GetFileOrSampleUri(IPost post)
         {
-            Ensure.Not(post.FileUri is null, "File URI is null.");
+            Verify.Operation(post.FileUri is null == false, "File URI is null.");
 
             Uri uri = post.FileUri!;
 
@@ -49,7 +49,7 @@ namespace BooruDotNet.Downloaders
                     case ".7z":
                     case ".rar":
                     case ".zip":
-                        Ensure.Not(post.SampleImageUri is null, "Sample URI is null.");
+                        Verify.Operation(post.SampleImageUri is null == false, "Sample URI is null.");
                         uri = post.SampleImageUri!;
                         break;
                 }

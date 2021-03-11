@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using BooruDotNet.Extensions;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
-using Easy.Common;
-using Easy.Common.Extensions;
+using Validation;
 
 namespace BooruDotNet.Namers
 {
@@ -19,13 +19,13 @@ namespace BooruDotNet.Namers
         private static readonly DataflowLinkOptions _linkOptions = new DataflowLinkOptions { PropagateCompletion = true };
 
         protected TagNamerBase(IBooruTagByName tagExtractor)
-            : this(tag => Ensure.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync(tag))
+            : this(tag => Requires.NotNull(tagExtractor, nameof(tagExtractor)).GetTagAsync(tag))
         {
         }
 
         protected TagNamerBase(Func<string, Task<ITag>> tagExtractorFunc)
         {
-            _tagExtractorFunc = Ensure.NotNull(tagExtractorFunc, nameof(tagExtractorFunc));
+            _tagExtractorFunc = Requires.NotNull(tagExtractorFunc, nameof(tagExtractorFunc));
         }
 
         // Allow this many requests at once when retrieving tags.

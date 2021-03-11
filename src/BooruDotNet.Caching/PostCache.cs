@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Posts;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Caching
 {
@@ -11,7 +11,7 @@ namespace BooruDotNet.Caching
 
         public PostCache(IBooruPostById postExtractor)
         {
-            _postExtractor = Ensure.NotNull(postExtractor, nameof(postExtractor));
+            _postExtractor = Requires.NotNull(postExtractor, nameof(postExtractor));
         }
 
         public Task<IPost> GetPostAsync(int postId, CancellationToken cancellationToken = default)

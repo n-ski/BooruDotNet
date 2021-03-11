@@ -6,7 +6,7 @@ using System.Web;
 using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
 using BooruDotNet.Resources;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Links
 {
@@ -17,15 +17,15 @@ namespace BooruDotNet.Links
 
         public GelbooruResolver(Gelbooru gelbooru)
         {
-            Gelbooru = Ensure.NotNull(gelbooru, nameof(gelbooru));
+            Gelbooru = Requires.NotNull(gelbooru, nameof(gelbooru));
         }
 
         protected Gelbooru Gelbooru { get; }
 
         public async Task<IPost?> ResolveFromIdLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
+            Requires.NotNull(uri, nameof(uri));
+            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
 
             if (IsGelbooruUri(uri))
             {
@@ -44,8 +44,8 @@ namespace BooruDotNet.Links
 
         public async Task<IPost?> ResolveFromHashLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
+            Requires.NotNull(uri, nameof(uri));
+            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
 
             if (IsGelbooruUri(uri))
             {

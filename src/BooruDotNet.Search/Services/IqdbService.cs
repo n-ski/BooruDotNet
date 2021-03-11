@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using BooruDotNet.Resources;
 using BooruDotNet.Search.Resources;
 using BooruDotNet.Search.Results;
-using Easy.Common;
 using HtmlAgilityPack;
+using Validation;
 
 namespace BooruDotNet.Search.Services
 {
@@ -34,8 +34,8 @@ namespace BooruDotNet.Search.Services
 
         public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
+            Requires.NotNull(uri, nameof(uri));
+            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
 
             using HttpContent content = new MultipartFormDataContent
             {
@@ -47,7 +47,7 @@ namespace BooruDotNet.Search.Services
 
         public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
         {
-            Ensure.NotNull(fileStream, nameof(fileStream));
+            Requires.NotNull(fileStream, nameof(fileStream));
 
             using HttpContent content = new MultipartFormDataContent
             {
@@ -138,7 +138,7 @@ namespace BooruDotNet.Search.Services
 
         private static Uri CreateUri(string prefix)
         {
-            Ensure.NotNullOrEmptyOrWhiteSpace(prefix);
+            Requires.NotNullOrWhiteSpace(prefix, nameof(prefix));
 
             string formatted = string.Format(UploadUris.IqdbFormat, prefix);
             return new Uri(formatted);

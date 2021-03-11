@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Boorus
 {
@@ -12,7 +12,7 @@ namespace BooruDotNet.Boorus
     {
         protected BooruBase(HttpClient httpClient)
         {
-            HttpClient = Ensure.NotNull(httpClient, nameof(httpClient));
+            HttpClient = Requires.NotNull(httpClient, nameof(httpClient));
         }
 
         protected HttpClient HttpClient { get; }

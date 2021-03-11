@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using Easy.Common;
+using BooruDotNet.Resources;
+using Validation;
 
 namespace BooruDotNet.Extensions
 {
@@ -8,16 +9,16 @@ namespace BooruDotNet.Extensions
     {
         internal static string GetFileName(this Uri uri)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, "URI is not absolute.");
+            Assumes.NotNull(uri);
+            Assumes.True(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
 
             return Path.GetFileName(uri.AbsoluteUri);
         }
 
         internal static string GetExtension(this Uri uri)
         {
-            Ensure.NotNull(uri, nameof(uri));
-            Ensure.That(uri.IsAbsoluteUri, "URI is not absolute.");
+            Assumes.NotNull(uri);
+            Assumes.True(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
 
             return Path.GetExtension(uri.AbsoluteUri);
         }

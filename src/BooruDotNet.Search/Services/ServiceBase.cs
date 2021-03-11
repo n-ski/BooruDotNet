@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Resources;
 using BooruDotNet.Search.Results;
-using Easy.Common;
+using Validation;
 
 namespace BooruDotNet.Search.Services
 {
@@ -16,10 +16,11 @@ namespace BooruDotNet.Search.Services
         protected ServiceBase(HttpClient httpClient, HttpMethod uploadMethod, Uri uploadUri)
             : base(httpClient)
         {
-            UploadMethod = Ensure.NotNull(uploadMethod, nameof(uploadMethod));
+            UploadMethod = Requires.NotNull(uploadMethod, nameof(uploadMethod));
 
-            Ensure.NotNull(uploadUri, nameof(uploadUri));
-            Ensure.That(uploadUri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
+            Requires.NotNull(uploadUri, nameof(uploadUri));
+            Requires.Argument(uploadUri.IsAbsoluteUri, nameof(uploadUri), ErrorMessages.UriIsNotAbsolute);
+
             UploadUri = uploadUri;
         }
 
