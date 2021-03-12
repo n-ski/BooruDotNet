@@ -4,6 +4,6 @@ namespace BooruDotNet.Search.Results
 {
     public interface IResultWithPost : IResult
     {
-        IPost Post { get; set; }
+        IPost Post { get; }
     }
 }
