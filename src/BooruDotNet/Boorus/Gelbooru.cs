@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -19,6 +20,11 @@ namespace BooruDotNet.Boorus
             : base(httpClient)
         {
         }
+
+        protected JsonSerializerOptions TagSerializerOptions => new JsonSerializerOptions
+        {
+            NumberHandling = JsonNumberHandling.AllowReadingFromString
+        };
 
         public Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
@@ -60,8 +66,10 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelpers.CreateFormat(RequestUris.GelbooruTagName_Format, tagName);
 
-            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(uri, cancellationToken)
-                .ConfigureAwait(false);
+            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(
+                uri,
+                cancellationToken,
+                TagSerializerOptions).ConfigureAwait(false);
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 

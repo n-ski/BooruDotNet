@@ -11,7 +11,7 @@ namespace BooruDotNet.Json
 
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string dateString = reader.GetString();
+            string dateString = reader.GetString()!;
 
             return DateTime.ParseExact(dateString, _dateTimeFormat, CultureInfo.InvariantCulture);
         }

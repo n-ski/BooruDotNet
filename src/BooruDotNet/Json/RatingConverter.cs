@@ -8,7 +8,7 @@ namespace BooruDotNet.Json
     {
         public override Rating Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string ratingString = reader.GetString();
+            string ratingString = reader.GetString()!;
 
             if (ratingString.Length > 1)
             {

@@ -11,7 +11,7 @@ namespace BooruDotNet.Json
 
         public override ImmutableArray<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string tagString = reader.GetString();
+            string tagString = reader.GetString()!;
 
             if (tagString is null)
             {

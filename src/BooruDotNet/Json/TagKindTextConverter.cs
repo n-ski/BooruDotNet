@@ -8,7 +8,7 @@ namespace BooruDotNet.Json
     {
         public override TagKind Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string tagKindString = reader.GetString();
+            string tagKindString = reader.GetString()!;
 
             if (Enum.TryParse(tagKindString, out TagKind tagKind))
             {

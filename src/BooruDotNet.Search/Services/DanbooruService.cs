@@ -48,9 +48,11 @@ namespace BooruDotNet.Search.Services
         protected override async Task<IEnumerable<IResult>> DeserializeResponseAsync(
             Stream responseStream, CancellationToken cancellationToken)
         {
-            return await JsonSerializer.DeserializeAsync<DanbooruResult[]>(
+            DanbooruResult[]? results = await JsonSerializer.DeserializeAsync<DanbooruResult[]>(
                 responseStream,
                 cancellationToken: cancellationToken).ConfigureAwait(false);
+
+            return results!;
         }
     }
 }

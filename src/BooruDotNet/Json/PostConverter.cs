@@ -10,7 +10,7 @@ namespace BooruDotNet.Json
     {
         public override IPost Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return (IPost)JsonSerializer.Deserialize(ref reader, typeof(T), options);
+            return (IPost)JsonSerializer.Deserialize(ref reader, typeof(T), options)!;
         }
 
         public override void Write(Utf8JsonWriter writer, IPost value, JsonSerializerOptions options)

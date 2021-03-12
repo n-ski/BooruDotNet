@@ -39,22 +39,28 @@ namespace BooruDotNet.Boorus
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
 
-        protected async Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken)
+        protected async Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken,
+            JsonSerializerOptions? options = null)
         {
             using HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken)
                 .ConfigureAwait(false);
 
-            return await DeserializeAsync<T>(response, cancellationToken)
+            return await DeserializeAsync<T>(response, cancellationToken, options)
                 .ConfigureAwait(false);
         }
 
-        protected async static Task<T> DeserializeAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken)
+        protected async static Task<T> DeserializeAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken,
+            JsonSerializerOptions? options = null)
         {
             using Stream jsonStream = await response.Content.ReadAsStreamAsync()
                 .ConfigureAwait(false);
 
-            return await JsonSerializer.DeserializeAsync<T>(jsonStream, cancellationToken: cancellationToken)
-                .ConfigureAwait(false);
+            T deserialized = await JsonSerializer.DeserializeAsync<T>(
+                jsonStream,
+                options,
+                cancellationToken).ConfigureAwait(false);
+
+            return deserialized!;
         }
     }
 }

@@ -15,11 +15,9 @@ namespace BooruDotNet.Tags
         public TagKind Kind { get; set; }
 
         [JsonPropertyName("id")]
-        [JsonConverter(typeof(NumberConverter))]
         public int ID { get; set; }
 
         [JsonPropertyName("count")]
-        [JsonConverter(typeof(NumberConverter))]
         public int Count { get; set; }
     }
 }
