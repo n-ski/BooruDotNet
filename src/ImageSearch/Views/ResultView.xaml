@@ -7,9 +7,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveui="http://reactiveui.net"
     xmlns:viewmodels="clr-namespace:ImageSearch.ViewModels"
+    mc:Ignorable="d"
     d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+    d:DesignWidth="800">
 
     <Grid
         Margin="{StaticResource ControlMargin}">
@@ -30,8 +30,20 @@
             Width="150"
             Height="150"
             Margin="{StaticResource ControlMargin}"
-            d:Source="https://dummyimage.com/150/777/fff"
-            RenderOptions.BitmapScalingMode="HighQuality" />
+            RenderOptions.BitmapScalingMode="HighQuality"
+            d:Source="https://dummyimage.com/150/777/fff" />
+
+        <Image
+            x:Name="SiteImage"
+            Grid.Row="0"
+            Width="16"
+            Height="16"
+            Margin="{StaticResource ControlMargin}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Cursor="Help"
+            RenderOptions.BitmapScalingMode="HighQuality"
+            d:Source="https://dummyimage.com/16/333/fff" />
 
         <StackPanel
             Grid.Row="1"
@@ -39,13 +51,13 @@
 
             <TextBlock
                 x:Name="ImageSizeText"
-                d:Text="150x150"
-                TextAlignment="Center" />
+                TextAlignment="Center"
+                d:Text="150x150" />
 
             <TextBlock
                 x:Name="SimilarityText"
-                d:Text="100% similarity"
-                TextAlignment="Center" />
+                TextAlignment="Center"
+                d:Text="100% similarity" />
         </StackPanel>
 
         <StackPanel

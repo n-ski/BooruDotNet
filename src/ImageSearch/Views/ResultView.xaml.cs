@@ -26,6 +26,19 @@ namespace ImageSearch.Views
 
                 this.OneWayBind(
                     ViewModel,
+                    vm => vm.SourceUri.Host,
+                    v => v.SiteImage.Source,
+                    host => CreateFrom(new Uri($"https://www.google.com/s2/favicons?domain={host}")))
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
+                    vm => vm.SourceUri,
+                    v => v.SiteImage.ToolTip)
+                    .DisposeWith(d);
+
+                this.OneWayBind(
+                    ViewModel,
                     vm => vm.ImageSize,
                     v => v.ImageSizeText.Text,
                     size => $"{size.Width}x{size.Height}")
