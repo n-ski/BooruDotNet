@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -21,19 +22,20 @@ namespace BooruDotNet.Search.Tests
 
             [Test]
             [TestCase(typeof(DanbooruService))]
+            [TestCase(typeof(IqdbService))]
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByUri_Success(Type serviceType)
             {
                 var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
 
                 var results = await service.SearchByAsync(_testUri);
-                var firstResult = results.First();
 
-                Assert.IsTrue(ExtractPostIdFrom(firstResult) == _testPostId);
+                AssertHasPostWithId(results, _testPostId);
             }
 
             [Test]
             [TestCase(typeof(DanbooruService))]
+            [TestCase(typeof(IqdbService))]
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByUri_Cancellation(Type serviceType)
             {
@@ -52,6 +54,7 @@ namespace BooruDotNet.Search.Tests
 
             [Test]
             [TestCase(typeof(DanbooruService))]
+            [TestCase(typeof(IqdbService))]
             [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByFile_Success(Type serviceType)
             {
@@ -59,13 +62,13 @@ namespace BooruDotNet.Search.Tests
 
                 using var file = File.OpenRead(_testFilePath);
                 var results = await service.SearchByAsync(file);
-                var firstResult = results.First();
 
-                Assert.IsTrue(ExtractPostIdFrom(firstResult) == _testPostId);
+                AssertHasPostWithId(results, _testPostId);
             }
 
             [Test]
             [TestCase(typeof(DanbooruService))]
+            [TestCase(typeof(IqdbService))]
             [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByFile_Cancellation(Type serviceType)
             {
@@ -79,17 +82,22 @@ namespace BooruDotNet.Search.Tests
             }
         }
 
-        private static int ExtractPostIdFrom(IResult result)
+        private static void AssertHasPostWithId(IEnumerable<IResult> results, int id)
         {
-            if (result is IResultWithPost resultWithPost)
+            var postIds = results.Select(result =>
             {
-                return resultWithPost.Post.ID.Value;
-            }
-            else
-            {
-                // TODO: only works for Danbooru now.
-                return int.Parse(result.Source.Segments[^1]);
-            }
+                if (result is IResultWithPost resultWithPost)
+                {
+                    return resultWithPost.Post.ID.Value;
+                }
+                else
+                {
+                    // TODO: this retrieves post ID for Danbooru URLs only.
+                    return int.Parse(result.Source.Segments[^1]);
+                }
+            });
+
+            CollectionAssert.Contains(postIds, id);
         }
     }
 }

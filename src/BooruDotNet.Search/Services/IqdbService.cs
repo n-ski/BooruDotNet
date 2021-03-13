@@ -21,8 +21,7 @@ namespace BooruDotNet.Search.Services
         private static readonly Lazy<Regex> _similarityRegexLazy = new Lazy<Regex>(() =>
             new Regex(@"^(\d+)% similarity$", RegexOptions.Compiled));
 
-        // TODO: fix deserialization logic and then make public.
-        internal IqdbService(HttpClient httpClient)
+        public IqdbService(HttpClient httpClient)
             : base(httpClient, HttpMethod.Post, new Uri(UploadUris.Iqdb))
         {
         }
@@ -57,9 +56,11 @@ namespace BooruDotNet.Search.Services
             return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
-        protected override Task<IEnumerable<IResult>> DeserializeResponseAsync(
+        protected override async Task<IEnumerable<IResult>> DeserializeResponseAsync(
             Stream responseStream, CancellationToken cancellationToken)
         {
+            await Task.Yield();
+
             var doc = new HtmlDocument();
             doc.Load(responseStream);
 
@@ -69,71 +70,77 @@ namespace BooruDotNet.Search.Services
                 throw new HttpRequestException(errorNode.InnerText);
             }
 
-            // Skip uploaded image info.
-            var tables = doc.DocumentNode.SelectNodes(@"//*[@class=""pages""]/div/table")?.Skip(1);
+            var divNodes = doc.DocumentNode.SelectNodes(@"//div[@class=""pages""]/div")!;
+            var resultsList = new List<IResult>();
 
-            // TODO: cancellation.
-            IEnumerable<IResult> results = tables
-                .Select(table =>
+            // At index 0 we have uploaded image info, so start from 1 instead.
+            for (int i = 1; i < divNodes.Count; i++)
+            {
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    HtmlNode currentNode = table.FirstChild;
+                    throw new TaskCanceledException();
+                }
 
-                    // Skip one node if header is present.
-                    if (currentNode.FirstChild.Name == "th")
-                    {
-                        currentNode = currentNode.NextSibling;
-                    }
+                HtmlNode node = divNodes[i];
 
-                    HtmlNode linkNode = currentNode.FirstChild.FirstChild;
+                // Skip "No relevant matches" result.
+                if (node.Attributes["class"]?.Value is "nomatch")
+                {
+                    continue;
+                }
 
-                    // Skip if there's no link.
-                    // TODO: for multi-service search, skip additional rows.
-                    if (linkNode.Name != "a")
-                    {
-                        return null!;
-                    }
+                HtmlNode tableNode = node.FirstChild;
+                HtmlNode? sourceLinkNode = tableNode.SelectSingleNode(@"tr/td[@class=""image""]/a");
 
-                    // <a> node - source URI.
-                    Uri sourceUri = GetUriFromAttribute(linkNode, "href");
+                // Skip if there's no link.
+                if (sourceLinkNode is null)
+                {
+                    continue;
+                }
 
-                    // <img> node - preview image URI.
-                    Uri imageUri = GetUriFromAttribute(linkNode.FirstChild, "src");
+                // <a> node - source URI.
+                Uri sourceUri = GetUriFromAttribute(sourceLinkNode, "href");
 
-                    Match match;
+                // <img> node - preview image URI.
+                Uri imageUri = GetUriFromAttribute(sourceLinkNode.FirstChild, "src");
 
-                    // <td> node - file width and height.
-                    currentNode = currentNode.NextSibling;
-                    match = _widthHeightRegexLazy.Value.Match(currentNode.InnerText);
-                    int width = int.Parse(match.Groups[1].Value);
-                    int height = int.Parse(match.Groups[2].Value);
+                var textNodes = tableNode.SelectNodes(@"tr/td/text()");
+                Assumes.True(textNodes.Count >= 2);
 
-                    // <td> node - similarity.
-                    currentNode = currentNode.NextSibling;
-                    match = _similarityRegexLazy.Value.Match(currentNode.InnerText);
-                    double similarity = double.Parse(match.Groups[1].Value) / 100;
+                Match match;
 
-                    return new IqdbResult(sourceUri, imageUri, width, height, similarity);
-                })
-                .Where(result => !(result is null))
-                .ToArray();
+                // <td> node - file width and height.
+                match = _widthHeightRegexLazy.Value.Match(textNodes[^2].InnerText);
+                int width = int.Parse(match.Groups[1].Value);
+                int height = int.Parse(match.Groups[2].Value);
 
-            return Task.FromResult(results);
+                // <td> node - similarity.
+                match = _similarityRegexLazy.Value.Match(textNodes[^1].InnerText);
+                double similarity = double.Parse(match.Groups[1].Value) / 100;
+
+                resultsList.Add(new IqdbResult(
+                    sourceUri, imageUri, width, height, similarity));
+            }
+
+            return resultsList;
         }
 
         private Uri GetUriFromAttribute(HtmlNode node, string attribute)
         {
-            string href = node.Attributes[attribute].Value;
+            string? attributeValue = node.Attributes[attribute].Value;
 
-            if (href.StartsWith("//"))
+            Assumes.NotNull(attributeValue);
+
+            if (attributeValue.StartsWith("//"))
             {
-                href = $"{UploadUri.Scheme}:{href}";
+                attributeValue = $"{UploadUri.Scheme}:{attributeValue}";
             }
-            else if (href.StartsWith("/"))
+            else if (attributeValue.StartsWith("/"))
             {
-                href = $"{UploadUri.Scheme}://{UploadUri.Host}{href}";
+                attributeValue = $"{UploadUri.Scheme}://{UploadUri.Host}{attributeValue}";
             }
 
-            return new Uri(href);
+            return new Uri(attributeValue);
         }
 
         private static Uri CreateUri(string prefix)
