@@ -23,7 +23,6 @@ namespace BooruDotNet.Search.Tests
             [Test]
             [TestCase(typeof(DanbooruService))]
             [TestCase(typeof(IqdbService))]
-            [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByUri_Success(Type serviceType)
             {
                 var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
@@ -36,7 +35,6 @@ namespace BooruDotNet.Search.Tests
             [Test]
             [TestCase(typeof(DanbooruService))]
             [TestCase(typeof(IqdbService))]
-            [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByUri_Cancellation(Type serviceType)
             {
                 var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
@@ -55,7 +53,6 @@ namespace BooruDotNet.Search.Tests
             [Test]
             [TestCase(typeof(DanbooruService))]
             [TestCase(typeof(IqdbService))]
-            [TestCase(typeof(DanbooruIqdbService))]
             public async Task SearchByFile_Success(Type serviceType)
             {
                 var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
@@ -69,7 +66,6 @@ namespace BooruDotNet.Search.Tests
             [Test]
             [TestCase(typeof(DanbooruService))]
             [TestCase(typeof(IqdbService))]
-            [TestCase(typeof(DanbooruIqdbService))]
             public void SearchByFile_Cancellation(Type serviceType)
             {
                 var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);

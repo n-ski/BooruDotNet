@@ -24,13 +24,8 @@ namespace ImageSearch
                     (BitmapImage)App.Current.Resources["DanbooruIcon"]));
 
                 builder.Add(new SearchServiceModel(
-                    new IqdbService(App.HttpClient, "danbooru"),
-                    "IQDB (Danbooru)",
-                    (BitmapImage)App.Current.Resources["DanbooruIcon"]));
-
-                builder.Add(new SearchServiceModel(
                     new IqdbService(App.HttpClient, "gelbooru"),
-                    "IQDB (Gelbooru)",
+                    "Gelbooru",
                     (BitmapImage)App.Current.Resources["GelbooruIcon"]));
 
                 return builder.ToImmutable();
