@@ -146,10 +146,8 @@ namespace ImageSearch.Views
 
                 #region Search services ComboBox
 
-                this.OneWayBind(
-                    ViewModel,
-                    vm => vm.SearchServices,
-                    v => v.ServicesComboBox.ItemsSource)
+                Observable.Return(SearchServices.Services)
+                    .BindTo(this, v => v.ServicesComboBox.ItemsSource)
                     .DisposeWith(d);
 
                 // One-way to source binding.

@@ -40,13 +40,6 @@ namespace ImageSearch.ViewModels
             _uriUploadViewModel = new UriUploadViewModel();
             _fileUploadViewModel = new FileUploadViewModel();
 
-            SearchServices = new[]
-            {
-                ImageSearch.SearchServices.Danbooru,
-                ImageSearch.SearchServices.DanbooruIqdb,
-                ImageSearch.SearchServices.GelbooruIqdb,
-            };
-
             UploadMethods = new[]
             {
                 new UploadMethodModel(UploadMethod.Uri, "URL", _uriUploadViewModel),
@@ -152,7 +145,6 @@ namespace ImageSearch.ViewModels
         public bool HasBestResults => _hasBestResults.Value;
         public bool HasOtherResults => _hasOtherResults.Value;
         public bool IsSearching => _isSearching.Value;
-        public IEnumerable<SearchServiceModel> SearchServices { get; }
         public IEnumerable<UploadMethodModel> UploadMethods { get; }
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
