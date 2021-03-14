@@ -22,7 +22,7 @@ namespace ImageSearch.ViewModels
     {
         private const double _bestMatchThreshold = 0.85;
         private SearchServiceModel _selectedService;
-        private UploadMethodModel _selectedUploadMethod;
+        private UploadViewModelBase _selectedUploadMethod;
         private readonly UriUploadViewModel _uriUploadViewModel;
         private readonly FileUploadViewModel _fileUploadViewModel;
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResults;
@@ -37,14 +37,10 @@ namespace ImageSearch.ViewModels
 
         public MainViewModel()
         {
-            _uriUploadViewModel = new UriUploadViewModel();
-            _fileUploadViewModel = new FileUploadViewModel();
+            _uriUploadViewModel = new UriUploadViewModel("URL", UploadMethod.Uri);
+            _fileUploadViewModel = new FileUploadViewModel("File", UploadMethod.File);
 
-            UploadMethods = new[]
-            {
-                new UploadMethodModel(UploadMethod.Uri, "URL", _uriUploadViewModel),
-                new UploadMethodModel(UploadMethod.File, "File", _fileUploadViewModel),
-            };
+            UploadMethods = new UploadViewModelBase[] { _uriUploadViewModel, _fileUploadViewModel, };
             SetUploadMethod(UploadMethod.Uri);
 
             SearchCommand = ReactiveCommand.CreateFromObservable(
@@ -55,7 +51,7 @@ namespace ImageSearch.ViewModels
                     x => x._fileUploadViewModel.FileInfo,
                     (model, uri, fileInfo) =>
                     {
-                        return model?.Method switch
+                        return model?.UploadMethod switch
                         {
                             UploadMethod.Uri => Helpers.UriHelper.IsValid(uri),
                             UploadMethod.File => fileInfo?.Exists ?? false,
@@ -133,7 +129,7 @@ namespace ImageSearch.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedService, value);
         }
 
-        public UploadMethodModel SelectedUploadMethod
+        public UploadViewModelBase SelectedUploadMethod
         {
             get => _selectedUploadMethod;
             set => this.RaiseAndSetIfChanged(ref _selectedUploadMethod, value);
@@ -145,7 +141,7 @@ namespace ImageSearch.ViewModels
         public bool HasBestResults => _hasBestResults.Value;
         public bool HasOtherResults => _hasOtherResults.Value;
         public bool IsSearching => _isSearching.Value;
-        public IEnumerable<UploadMethodModel> UploadMethods { get; }
+        public IEnumerable<UploadViewModelBase> UploadMethods { get; }
 
         public ReactiveCommand<Unit, IEnumerable<ResultViewModel>> SearchCommand { get; }
         public ReactiveCommand<Unit, Unit> CancelSearchCommand { get; }
@@ -185,7 +181,7 @@ namespace ImageSearch.ViewModels
         {
             IEnumerable<IResult> results;
 
-            switch (SelectedUploadMethod.Method)
+            switch (SelectedUploadMethod.UploadMethod)
             {
                 case UploadMethod.Uri:
                     results = await SelectedService.SearchByAsync(_uriUploadViewModel.ImageUri, cancellationToken);
@@ -229,7 +225,7 @@ namespace ImageSearch.ViewModels
 
         private void SetUploadMethod(UploadMethod uploadMethod)
         {
-            SelectedUploadMethod = UploadMethods.First(x => x.Method == uploadMethod);
+            SelectedUploadMethod = UploadMethods.First(x => x.UploadMethod == uploadMethod);
         }
 
         // Invoke the command like this to avoid application crash in the exception interaction handler.

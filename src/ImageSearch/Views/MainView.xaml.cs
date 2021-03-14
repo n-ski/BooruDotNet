@@ -172,10 +172,9 @@ namespace ImageSearch.Views
                     v => v.UploadMethodComboBox.SelectedItem)
                     .DisposeWith(d);
 
-                // TODO: probably better be replaced with TemplateSelector.
                 this.OneWayBind(
                     ViewModel,
-                    vm => vm.SelectedUploadMethod.ViewModel,
+                    vm => vm.SelectedUploadMethod,
                     v => v.UploadMethodViewHost.ViewModel)
                     .DisposeWith(d);
 

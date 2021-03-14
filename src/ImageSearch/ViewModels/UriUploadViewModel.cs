@@ -5,11 +5,12 @@ using ReactiveUI;
 
 namespace ImageSearch.ViewModels
 {
-    public class UriUploadViewModel : ReactiveObject
+    public class UriUploadViewModel : UploadViewModelBase
     {
         private Uri _imageUri;
 
-        public UriUploadViewModel()
+        public UriUploadViewModel(string name, UploadMethod uploadMethod)
+            : base(name, uploadMethod)
         {
             SearchCommand = ReactiveCommand.CreateFromObservable(
                 () => ImageInteractions.SearchWithUri.Handle(ImageUri));

@@ -9,11 +9,12 @@ using ReactiveUI;
 
 namespace ImageSearch.ViewModels
 {
-    public class FileUploadViewModel : ReactiveObject
+    public class FileUploadViewModel : UploadViewModelBase
     {
         private FileInfo _fileInfo;
 
-        public FileUploadViewModel()
+        public FileUploadViewModel(string name, UploadMethod uploadMethod)
+            : base(name, uploadMethod)
         {
             OpenFileCommand = ReactiveCommand.CreateFromTask(async () =>
             {
