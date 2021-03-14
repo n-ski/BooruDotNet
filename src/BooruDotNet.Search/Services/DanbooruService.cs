@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Resources;
+using BooruDotNet.Extensions;
 using BooruDotNet.Search.Resources;
 using BooruDotNet.Search.Results;
 using Validation;
@@ -22,7 +22,7 @@ namespace BooruDotNet.Search.Services
         public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
-            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
+            uri.RequireAbsolute();
 
             using HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
             {

@@ -1,5 +1,5 @@
 ﻿using System;
-using BooruDotNet.Resources;
+using BooruDotNet.Extensions;
 using Validation;
 
 namespace BooruDotNet.Search.Results
@@ -9,10 +9,10 @@ namespace BooruDotNet.Search.Results
         public IqdbResult(Uri source, Uri previewImageUri, int width, int height, double similarity)
         {
             Requires.NotNull(source, nameof(source));
-            Requires.Argument(source.IsAbsoluteUri, nameof(source), ErrorMessages.UriIsNotAbsolute);
+            source.RequireAbsolute(nameof(source));
 
             Requires.NotNull(previewImageUri, nameof(previewImageUri));
-            Requires.Argument(source.IsAbsoluteUri, nameof(previewImageUri), ErrorMessages.UriIsNotAbsolute);
+            previewImageUri.RequireAbsolute(nameof(previewImageUri));
 
             Source = source;
             PreviewImageUri = previewImageUri;

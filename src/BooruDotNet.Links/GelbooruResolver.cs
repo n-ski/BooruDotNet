@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using BooruDotNet.Boorus;
+using BooruDotNet.Extensions;
 using BooruDotNet.Posts;
-using BooruDotNet.Resources;
 using Validation;
 
 namespace BooruDotNet.Links
@@ -25,7 +25,7 @@ namespace BooruDotNet.Links
         public async Task<IPost?> ResolveFromIdLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
-            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
+            uri.RequireAbsolute();
 
             if (IsGelbooruUri(uri))
             {
@@ -45,7 +45,7 @@ namespace BooruDotNet.Links
         public async Task<IPost?> ResolveFromHashLinkAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
-            Requires.Argument(uri.IsAbsoluteUri, nameof(uri), ErrorMessages.UriIsNotAbsolute);
+            uri.RequireAbsolute();
 
             if (IsGelbooruUri(uri))
             {

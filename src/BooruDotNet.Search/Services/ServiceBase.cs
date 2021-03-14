@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
-using BooruDotNet.Resources;
+using BooruDotNet.Extensions;
 using BooruDotNet.Search.Results;
 using Validation;
 
@@ -19,7 +19,7 @@ namespace BooruDotNet.Search.Services
             UploadMethod = Requires.NotNull(uploadMethod, nameof(uploadMethod));
 
             Requires.NotNull(uploadUri, nameof(uploadUri));
-            Requires.Argument(uploadUri.IsAbsoluteUri, nameof(uploadUri), ErrorMessages.UriIsNotAbsolute);
+            uploadUri.RequireAbsolute(nameof(uploadUri));
 
             UploadUri = uploadUri;
         }
