@@ -119,7 +119,7 @@ namespace ImageSearch.Views
                         {
                             var files = Clipboard.GetFileDropList();
                             var filePath = files.Count > 0 ? files[0] : null;
-                            
+
                             if (FileHelper.IsFileValid(filePath))
                             {
                                 var fileInfo = new FileInfo(files[0]);
@@ -180,6 +180,8 @@ namespace ImageSearch.Views
 
                 #endregion
 
+                #region Interactions
+
                 DialogInteractions.OpenFileBrowser.RegisterHandler(interaction =>
                 {
                     if (!Directory.Exists(_initialDirectory))
@@ -236,6 +238,8 @@ namespace ImageSearch.Views
 
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);
+
+                #endregion
             });
         }
 

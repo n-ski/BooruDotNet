@@ -7,20 +7,25 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using BooruDotNet;
 using BooruDotNet.Helpers;
+using BooruDotNet.Helpers.WPF;
 using BooruDotNet.Search.Results;
 using GongSolutions.Wpf.DragDrop;
+using Humanizer;
 using ImageSearch.Extensions;
 using ImageSearch.Helpers;
 using ImageSearch.Interactions;
 using ImageSearch.Models;
 using ReactiveUI;
+using Validation;
 
 namespace ImageSearch.ViewModels
 {
     public class MainViewModel : ReactiveObject, IDropTarget
     {
         private const double _bestMatchThreshold = 0.85;
+        private const double _thumbnailSize = 500.0;
         private SearchServiceModel _selectedService;
         private UploadViewModelBase _selectedUploadMethod;
         private readonly UriUploadViewModel _uriUploadViewModel;
@@ -31,9 +36,10 @@ namespace ImageSearch.ViewModels
         private readonly ObservableAsPropertyHelper<bool> _hasBestResults;
         private readonly ObservableAsPropertyHelper<bool> _hasOtherResults;
         private readonly ObservableAsPropertyHelper<bool> _isSearching;
-        // TODO: turn this into a setting.
+        // TODO: turn these into settings.
         private const bool _searchImmeaditelyAfterDrop = true;
         private const bool _searchImmeaditelyAfterPaste = true;
+        private const bool _compressImages = true;
 
         public MainViewModel()
         {
@@ -188,14 +194,25 @@ namespace ImageSearch.ViewModels
                     break;
 
                 case UploadMethod.File:
-                    using (var fileStream = _fileUploadViewModel.FileInfo.OpenRead())
+                {
+                    using var fileStream = _fileUploadViewModel.FileInfo.OpenRead();
+
+                    if (_compressImages)
+                    {
+                        using var thumbnailStream = await Task.Run(() => CompressImage(fileStream));
+
+                        results = await SelectedService.SearchByAsync(thumbnailStream, cancellationToken);
+                    }
+                    else
                     {
                         results = await SelectedService.SearchByAsync(fileStream, cancellationToken);
                     }
+
                     break;
+                }
 
                 default:
-                    throw new InvalidOperationException();
+                    throw Assumes.NotReachable();
             }
 
             return results.Select(result => new ResultViewModel(result));
@@ -230,5 +247,41 @@ namespace ImageSearch.ViewModels
 
         // Invoke the command like this to avoid application crash in the exception interaction handler.
         private IDisposable ExecuteSearch() => Observable.Return(Unit.Default).InvokeCommand(this, x => x.SearchCommand);
+
+        private FileStream CompressImage(FileStream originalFileStream)
+        {
+            var originalImage = ImageHelper.CreateImageFromStream(originalFileStream);
+
+            var scale = _thumbnailSize / Math.Max(originalImage.PixelWidth, originalImage.PixelHeight);
+
+            var resizedImage = scale < 1.0 ? ImageHelper.ScaleImage(originalImage, scale) : originalImage;
+
+            var originalImageName = Path.GetFileNameWithoutExtension(originalFileStream.Name);
+            var thumbnailImagePath = Path.Combine(Path.GetTempPath(), $"thumb-{originalImageName}.png");
+            var tempFileStream = File.Create(thumbnailImagePath, 0x1000, FileOptions.DeleteOnClose);
+
+            ImageHelper.SaveImage(resizedImage, tempFileStream);
+
+            if (tempFileStream.Length > originalFileStream.Length)
+            {
+                tempFileStream.Dispose();
+                tempFileStream = originalFileStream;
+
+                Logger.Debug(
+                    "Compressed image was larger than the original, original image will be uploaded.",
+                    this);
+            }
+            else
+            {
+                static string toHumanBytes(long length) => length.Bytes().Humanize("0.00");
+
+                Logger.Debug(
+                    $"Compressed image: {toHumanBytes(originalFileStream.Length)} -> {toHumanBytes(tempFileStream.Length)}",
+                    this);
+            }
+
+            tempFileStream.Position = 0;
+            return tempFileStream;
+        }
     }
 }
