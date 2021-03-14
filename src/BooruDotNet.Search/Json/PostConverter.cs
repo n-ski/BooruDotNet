@@ -2,9 +2,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using BooruDotNet.Posts;
-using BooruDotNet.Resources;
+using BooruDotNet.Search.Resources;
 
-namespace BooruDotNet.Json
+namespace BooruDotNet.Search.Json
 {
     internal sealed class PostConverter<T> : JsonConverter<IPost> where T : IPost
     {

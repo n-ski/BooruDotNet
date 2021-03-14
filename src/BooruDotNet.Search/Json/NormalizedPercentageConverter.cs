@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Json
+namespace BooruDotNet.Search.Json
 {
     // Normalizes input number value. 100 will be 1, 50 will be 0.5, etc.
     internal sealed class NormalizedPercentageConverter : JsonConverter<double>

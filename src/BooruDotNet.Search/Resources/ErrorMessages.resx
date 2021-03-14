@@ -117,19 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ExceptionStackHeader" xml:space="preserve">
-    <value>An error has occured:</value>
-  </data>
-  <data name="PostInvalidHashFormat" xml:space="preserve">
-    <value>Couldn't retrieve a post with the hash '{0}'</value>
-  </data>
-  <data name="PostInvalidIdFormat" xml:space="preserve">
-    <value>Couldn't retrieve a post with the ID '{0}'</value>
-  </data>
-  <data name="TagInvalidNameFormat" xml:space="preserve">
-    <value>Couldn't retrieve a tag with the name '{0}'</value>
-  </data>
-  <data name="UriIsNotAbsolute" xml:space="preserve">
-    <value>URI was not absolute.</value>
+  <data name="PostConverterInvalidTypeFormat" xml:space="preserve">
+    <value>Invalid post type. Expected: '{0}', actual: '{1}'.</value>
   </data>
 </root>

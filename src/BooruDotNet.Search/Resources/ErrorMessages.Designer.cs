@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BooruDotNet.Resources {
+namespace BooruDotNet.Search.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BooruDotNet.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Search.Resources.ErrorMessages", typeof(ErrorMessages).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,47 +61,11 @@ namespace BooruDotNet.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error has occured:.
+        ///   Looks up a localized string similar to Invalid post type. Expected: &apos;{0}&apos;, actual: &apos;{1}&apos;..
         /// </summary>
-        internal static string ExceptionStackHeader {
+        internal static string PostConverterInvalidTypeFormat {
             get {
-                return ResourceManager.GetString("ExceptionStackHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the hash &apos;{0}&apos;.
-        /// </summary>
-        internal static string PostInvalidHashFormat {
-            get {
-                return ResourceManager.GetString("PostInvalidHashFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a post with the ID &apos;{0}&apos;.
-        /// </summary>
-        internal static string PostInvalidIdFormat {
-            get {
-                return ResourceManager.GetString("PostInvalidIdFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Couldn&apos;t retrieve a tag with the name &apos;{0}&apos;.
-        /// </summary>
-        internal static string TagInvalidNameFormat {
-            get {
-                return ResourceManager.GetString("TagInvalidNameFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to URI was not absolute..
-        /// </summary>
-        internal static string UriIsNotAbsolute {
-            get {
-                return ResourceManager.GetString("UriIsNotAbsolute", resourceCulture);
+                return ResourceManager.GetString("PostConverterInvalidTypeFormat", resourceCulture);
             }
         }
     }

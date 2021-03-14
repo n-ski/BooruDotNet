@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
-using BooruDotNet.Json;
 using BooruDotNet.Posts;
+using BooruDotNet.Search.Json;
 
 namespace BooruDotNet.Search.Results
 {
