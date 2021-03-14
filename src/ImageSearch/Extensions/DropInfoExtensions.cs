@@ -25,7 +25,7 @@ namespace ImageSearch.Extensions
         {
             if (dropInfo.Data is DataObject data && data.ContainsText())
             {
-                text = data.GetText();
+                text = data.GetText().Trim();
                 return true;
             }
             else

@@ -132,7 +132,7 @@ namespace ImageSearch.Views
                         }
                         else if (Clipboard.ContainsText())
                         {
-                            var text = Clipboard.GetText();
+                            var text = Clipboard.GetText().Trim();
 
                             if (text.StartsWith(Uri.UriSchemeHttp) || text.StartsWith(Uri.UriSchemeHttps))
                             {
