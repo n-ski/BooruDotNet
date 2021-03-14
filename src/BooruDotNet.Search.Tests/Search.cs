@@ -76,6 +76,29 @@ namespace BooruDotNet.Search.Tests
 
                 Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchByAsync(file, tokenSource.Token));
             }
+
+            [Test]
+            [TestCase(typeof(IqdbService))]
+            public void SearchByFile_Fail_Size(Type serviceType)
+            {
+                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
+
+                Assert.Less(service.FileSizeLimit, long.MaxValue);
+
+                var tempFileName = Path.GetRandomFileName();
+
+                try
+                {
+                    using var file = File.Create(tempFileName);
+                    file.SetLength(service.FileSizeLimit + 1);
+
+                    Assert.ThrowsAsync<FileTooLargeException>(() => service.SearchByAsync(file));
+                }
+                finally
+                {
+                    File.Delete(tempFileName);
+                }
+            }
         }
 
         private static void AssertHasPostWithId(IEnumerable<IResult> results, int id)

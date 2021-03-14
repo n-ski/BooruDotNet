@@ -30,6 +30,8 @@ namespace BooruDotNet.Search.Services
         {
         }
 
+        public long FileSizeLimit => 8 << 20; // 8 MiB.
+
         public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
@@ -46,6 +48,10 @@ namespace BooruDotNet.Search.Services
         public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(fileStream, nameof(fileStream));
+
+            Error.If<FileTooLargeException>(
+                fileStream.Length > FileSizeLimit,
+                fileStream.Name, fileStream.Length, FileSizeLimit);
 
             using HttpContent content = new MultipartFormDataContent
             {

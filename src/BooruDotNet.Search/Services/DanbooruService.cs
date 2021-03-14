@@ -19,6 +19,8 @@ namespace BooruDotNet.Search.Services
         {
         }
 
+        public long FileSizeLimit => long.MaxValue;
+
         public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
@@ -36,6 +38,8 @@ namespace BooruDotNet.Search.Services
             FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(fileStream, nameof(fileStream));
+
+            // TODO: check file size.
 
             using HttpContent content = new MultipartFormDataContent
             {

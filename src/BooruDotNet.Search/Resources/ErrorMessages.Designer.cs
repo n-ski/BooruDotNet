@@ -61,6 +61,24 @@ namespace BooruDotNet.Search.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File exceeds file size limit..
+        /// </summary>
+        internal static string FileTooLarge {
+            get {
+                return ResourceManager.GetString("FileTooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &apos;{0}&apos; exceeds file size limit..
+        /// </summary>
+        internal static string FileTooLarge_Format {
+            get {
+                return ResourceManager.GetString("FileTooLarge_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid post type. Expected: &apos;{0}&apos;, actual: &apos;{1}&apos;..
         /// </summary>
         internal static string PostConverterInvalidTypeFormat {

@@ -25,6 +25,7 @@ namespace ImageSearch.Models
 
         public string Name { get; }
         public ImageSource Icon { get; }
+        public long FileSizeLimit => _service.FileSizeLimit;
 
         #region ISearchByUriAndFile implementation
 
