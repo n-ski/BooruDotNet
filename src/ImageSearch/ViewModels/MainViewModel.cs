@@ -195,17 +195,21 @@ namespace ImageSearch.ViewModels
 
                 case UploadMethod.File:
                 {
-                    using var fileStream = _fileUploadViewModel.FileInfo.OpenRead();
+                    FileStream imageStream;
 
                     if (_compressImages)
                     {
-                        using var thumbnailStream = await Task.Run(() => CompressImage(fileStream));
-
-                        results = await SelectedService.SearchByAsync(thumbnailStream, cancellationToken);
+                        using var originalFileStream = _fileUploadViewModel.FileInfo.OpenRead();
+                        imageStream = await Task.Run(() => CompressImage(originalFileStream));
                     }
                     else
                     {
-                        results = await SelectedService.SearchByAsync(fileStream, cancellationToken);
+                        imageStream = _fileUploadViewModel.FileInfo.OpenRead();
+                    }
+
+                    using (imageStream)
+                    {
+                        results = await SelectedService.SearchByAsync(imageStream, cancellationToken);
                     }
 
                     break;

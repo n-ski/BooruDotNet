@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
-using Humanizer.Bytes;
 using ImageSearch.Helpers;
 using ImageSearch.Interactions;
 using ReactiveUI;
@@ -23,11 +22,6 @@ namespace ImageSearch.ViewModels
                 // Return old file info if user didn't select any file or if file size exceeds 8 MiB.
                 if (fileInfo is null)
                 {
-                    return FileInfo;
-                }
-                else if (fileInfo.Length > 8 * ByteSize.BytesInMegabyte)
-                {
-                    await MessageInteractions.Warning.Handle("File exceeds maximum file size of 8 MB.");
                     return FileInfo;
                 }
                 else

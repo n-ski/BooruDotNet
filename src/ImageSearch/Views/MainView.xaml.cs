@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using BooruDotNet.Search.Services;
+using Humanizer;
 using ImageSearch.Helpers;
 using ImageSearch.Interactions;
 using ImageSearch.ViewModels;
@@ -226,12 +228,25 @@ namespace ImageSearch.Views
                 {
                     Exception exception = interaction.Input.InnerException ?? interaction.Input;
 
+                    string message;
+
+                    if (exception is FileTooLargeException fileTooLargeEx
+                        && fileTooLargeEx.MaximumFileSize.HasValue)
+                    {
+                        var maxSizeBytes = fileTooLargeEx.MaximumFileSize.Value.Bytes();
+                        message = $"File exceeds maximum file size of {maxSizeBytes.Humanize("0.##")}.";
+                    }
+                    else
+                    {
+                        message = exception.Message;
+                    }
+
                     MessageBox.Show(
                         string.Join(
                             Environment.NewLine,
                             "The following exception has occured:",
                             exception.GetType(),
-                            exception.Message),
+                            message),
                         "Exception",
                         MessageBoxButton.OK,
                         MessageBoxImage.Exclamation);
