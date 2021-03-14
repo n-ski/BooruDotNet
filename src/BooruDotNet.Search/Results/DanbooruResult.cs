@@ -18,9 +18,9 @@ namespace BooruDotNet.Search.Results
 
         public Uri PreviewImageUri => Post.PreviewImageUri!;
 
-        public int Width => Post.Width;
+        public int? Width => Post.Width;
 
-        public int Height => Post.Height;
+        public int? Height => Post.Height;
 
         [JsonPropertyName("score")]
         [JsonConverter(typeof(NormalizedPercentageConverter))]

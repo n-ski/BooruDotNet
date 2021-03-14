@@ -6,8 +6,8 @@ namespace BooruDotNet.Search.Results
     {
         Uri Source { get; }
         Uri PreviewImageUri { get; }
-        int Width { get; }
-        int Height { get; }
+        int? Width { get; }
+        int? Height { get; }
         double Similarity { get; }
     }
 }

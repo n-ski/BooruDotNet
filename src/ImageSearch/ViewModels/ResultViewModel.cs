@@ -17,7 +17,9 @@ namespace ImageSearch.ViewModels
         public ResultViewModel(IResult result)
         {
             _result = Requires.NotNull(result, nameof(result));
-            ImageSize = new Size(_result.Width, _result.Height);
+            ImageSize = _result.Width.HasValue && _result.Height.HasValue
+                ? new Size(_result.Width.Value, _result.Height.Value)
+                : Size.Empty;
 
             OpenSourceCommand = ReactiveCommand.Create(() =>
             {

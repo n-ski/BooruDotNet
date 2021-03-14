@@ -42,7 +42,7 @@ namespace ImageSearch.Views
                     ViewModel,
                     vm => vm.ImageSize,
                     v => v.ImageSizeText.Text,
-                    size => $"{size.Width}x{size.Height}")
+                    size => size.IsEmpty ? "Unknown size" : $"{size.Width}x{size.Height}")
                     .DisposeWith(d);
 
                 this.OneWayBind(

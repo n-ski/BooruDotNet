@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -111,8 +110,8 @@ namespace BooruDotNet.Search.Services
 
                 // <td> node - file width and height.
                 match = _widthHeightRegexLazy.Value.Match(textNodes[^2].InnerText);
-                int width = int.Parse(match.Groups[1].Value);
-                int height = int.Parse(match.Groups[2].Value);
+                int? width = match.Success ? int.Parse(match.Groups[1].Value) : (int?)null;
+                int? height = match.Success ? int.Parse(match.Groups[2].Value) : (int?)null;
 
                 // <td> node - similarity.
                 match = _similarityRegexLazy.Value.Match(textNodes[^1].InnerText);

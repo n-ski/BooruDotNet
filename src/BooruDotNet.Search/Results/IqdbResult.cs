@@ -6,7 +6,7 @@ namespace BooruDotNet.Search.Results
 {
     public class IqdbResult : IResult
     {
-        public IqdbResult(Uri source, Uri previewImageUri, int width, int height, double similarity)
+        public IqdbResult(Uri source, Uri previewImageUri, int? width, int? height, double similarity)
         {
             Requires.NotNull(source, nameof(source));
             source.RequireAbsolute(nameof(source));
@@ -25,9 +25,9 @@ namespace BooruDotNet.Search.Results
 
         public Uri PreviewImageUri { get; }
 
-        public int Width { get; }
+        public int? Width { get; }
 
-        public int Height { get; }
+        public int? Height { get; }
 
         public double Similarity { get; }
     }
