@@ -1,17 +1,26 @@
-﻿using System.Windows;
+﻿using System.Runtime.CompilerServices;
+using System.Windows;
 
-namespace BooruDotNet.Helpers.WPF
+namespace BooruDotNet.Helpers
 {
     internal static class MessageHelper
     {
-        internal static MessageBoxResult Warning(string message)
+        internal static void Information(string message, Window? owner = null)
         {
-            return ShowMessage(message, MessageBoxButton.OK, MessageBoxImage.Warning);
+            ShowMessage(owner, message, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private static MessageBoxResult ShowMessage(string message, MessageBoxButton button, MessageBoxImage image)
+        internal static void Warning(string message, Window? owner = null)
         {
-            return MessageBox.Show(message, image.ToString(), button, image);
+            ShowMessage(owner, message, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+
+        private static MessageBoxResult ShowMessage(Window? owner, string message,
+            MessageBoxButton button, MessageBoxImage image, [CallerMemberName] string? caption = null)
+        {
+            return owner is null
+                ? MessageBox.Show(message, caption!, button, image)
+                : MessageBox.Show(owner, message, caption!, button, image);
         }
     }
 }

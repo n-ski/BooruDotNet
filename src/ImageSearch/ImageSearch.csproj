@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BooruDotNet.Helpers.WPF\BooruDotNet.Helpers.WPF.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Reactive\BooruDotNet.Reactive.csproj" />
     <ProjectReference Include="..\BooruDotNet.Search\BooruDotNet.Search.csproj" />
   </ItemGroup>
 
@@ -23,8 +24,8 @@
     <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="PresentationTheme.Aero" Version="0.6.2" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="12.1.5" />
-    <PackageReference Include="ReactiveUI.WPF" Version="12.1.5" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.2" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.2.2" />
   </ItemGroup>
 
   <ItemGroup>

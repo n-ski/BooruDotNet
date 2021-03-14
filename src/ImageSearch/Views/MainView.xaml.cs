@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using BooruDotNet.Helpers;
+using BooruDotNet.Reactive.Interactions;
 using BooruDotNet.Search.Services;
 using Humanizer;
 using ImageSearch.Helpers;
@@ -213,18 +215,7 @@ namespace ImageSearch.Views
                     }
                 }).DisposeWith(d);
 
-                MessageInteractions.Warning.RegisterHandler(interaction =>
-                {
-                    MessageBox.Show(
-                        interaction.Input,
-                        "Warning",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
-
-                    interaction.SetOutput(Unit.Default);
-                }).DisposeWith(d);
-
-                MessageInteractions.Exception.RegisterHandler(interaction =>
+                MessageInteractions.ShowWarning.RegisterHandler(interaction =>
                 {
                     Exception exception = interaction.Input.InnerException ?? interaction.Input;
 
@@ -241,15 +232,13 @@ namespace ImageSearch.Views
                         message = exception.Message;
                     }
 
-                    MessageBox.Show(
+                    MessageHelper.Warning(
                         string.Join(
                             Environment.NewLine,
                             "The following exception has occured:",
                             exception.GetType(),
                             message),
-                        "Exception",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                        this);
 
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);

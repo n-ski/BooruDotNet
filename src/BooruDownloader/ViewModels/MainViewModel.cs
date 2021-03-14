@@ -14,6 +14,7 @@ using BooruDotNet.Downloaders;
 using BooruDotNet.Helpers;
 using BooruDotNet.Links;
 using BooruDotNet.Posts;
+using BooruDotNet.Reactive.Interactions;
 using DynamicData;
 using DynamicData.Binding;
 using Humanizer;
@@ -41,13 +42,13 @@ namespace BooruDownloader.ViewModels
                 () => Observable.StartAsync(AddFromUrlsImpl).TakeUntil(CancelAdd));
 
             AddFromUrls.ThrownExceptions.Subscribe(
-                async ex => await Interactions.ShowErrorMessage.Handle(ex));
+                async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             AddFromFile = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(AddFromFileImpl).TakeUntil(CancelAdd));
 
             AddFromFile.ThrownExceptions.Subscribe(
-                async ex => await Interactions.ShowErrorMessage.Handle(ex));
+                async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             RemoveSelection = ReactiveCommand.Create(
                 () => _queuedItems.RemoveMany(SelectedItems),
@@ -83,7 +84,7 @@ namespace BooruDownloader.ViewModels
                 .ToProperty(this, x => x.IsBusy);
 
             DownloadPosts.ThrownExceptions.Subscribe(
-                async ex => await Interactions.ShowErrorMessage.Handle(ex));
+                async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             OpenUrlInputDialog = new Interaction<Unit, IEnumerable<string>>();
 
@@ -154,7 +155,7 @@ namespace BooruDownloader.ViewModels
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)
         {
-            var file = await Interactions.OpenFileBrowser.Handle("Text files|*.txt");
+            var file = await DialogInteractions.OpenFileBrowser.Handle("Text files|*.txt");
 
             // Dialog was closed.
             if (file is null)
@@ -253,7 +254,7 @@ namespace BooruDownloader.ViewModels
                                 unresolvedPostCount > 1 ? "were" : "was");
                     }
 
-                    await Interactions.ShowWarning.Handle(messageBuilder.ToString());
+                    await MessageInteractions.ShowInformation.Handle(messageBuilder.ToString());
                 }
             }
         }
@@ -265,7 +266,7 @@ namespace BooruDownloader.ViewModels
 
             static async Task<string> showFolderDialog()
             {
-                var directory = await Interactions.OpenFolderBrowser.Handle(Unit.Default);
+                var directory = await DialogInteractions.OpenFolderBrowser.Handle(Unit.Default);
 
                 return directory?.FullName;
             }
@@ -277,7 +278,7 @@ namespace BooruDownloader.ViewModels
             else if (!Directory.Exists(settings.DownloadLocation))
             {
                 // Let the user know that directory doesn't exist anymore.
-                await Interactions.ShowWarning.Handle(string.Join(
+                await MessageInteractions.ShowInformation.Handle(string.Join(
                     Environment.NewLine,
                     $"Directory '{settings.DownloadLocation}' doesn't exist.",
                     "Download directory setting was changed to the default."));

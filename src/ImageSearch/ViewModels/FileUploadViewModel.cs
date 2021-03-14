@@ -2,8 +2,8 @@
 using System.IO;
 using System.Reactive;
 using System.Reactive.Linq;
+using BooruDotNet.Reactive.Interactions;
 using ImageSearch.Helpers;
-using ImageSearch.Interactions;
 using ReactiveUI;
 
 namespace ImageSearch.ViewModels

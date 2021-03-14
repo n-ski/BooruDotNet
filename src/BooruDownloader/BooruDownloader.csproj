@@ -19,8 +19,8 @@
     <PackageReference Include="FluentUI.Core" Version="1.0.48" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.1.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.1.1" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.2" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.2.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,7 @@
     <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
     <ProjectReference Include="..\BooruDotNet.Helpers.WPF\BooruDotNet.Helpers.WPF.csproj" />
     <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Reactive\BooruDotNet.Reactive.csproj" />
   </ItemGroup>
 
   <ItemGroup>

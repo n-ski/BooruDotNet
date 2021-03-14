@@ -3,7 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using BooruDotNet.Helpers.WPF;
+using BooruDotNet.Helpers;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 

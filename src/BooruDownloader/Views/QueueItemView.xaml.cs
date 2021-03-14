@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using BooruDotNet.Helpers.WPF;
+using BooruDotNet.Helpers;
 using BooruDotNet.Tags;
 using BooruDownloader.ViewModels;
 using Humanizer;

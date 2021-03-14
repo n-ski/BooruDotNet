@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using BooruDotNet;
 using BooruDotNet.Helpers;
-using BooruDotNet.Helpers.WPF;
+using BooruDotNet.Reactive.Interactions;
 using BooruDotNet.Search.Results;
 using GongSolutions.Wpf.DragDrop;
 using Humanizer;
@@ -66,7 +66,7 @@ namespace ImageSearch.ViewModels
                     }));
 
             SearchCommand.ThrownExceptions.Subscribe(
-                async ex => await MessageInteractions.Exception.Handle(ex));
+                async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             CancelSearchCommand = ReactiveCommand.Create(
                 MethodHelper.DoNothing,

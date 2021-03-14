@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using BooruDotNet.Reactive.Interactions;
 using ReactiveUI;
 
 namespace BooruDownloader.ViewModels
@@ -26,7 +27,7 @@ namespace BooruDownloader.ViewModels
             LoadSettings();
 
             ChangeDownloadLocation = ReactiveCommand.CreateFromObservable(
-                () => Interactions.OpenFolderBrowser.Handle(Unit.Default),
+                () => DialogInteractions.OpenFolderBrowser.Handle(Unit.Default),
                 this.WhenAnyValue(x => x.AskLocationBeforeDownload, ask => !ask));
 
             ChangeDownloadLocation.Subscribe(directoryInfo =>

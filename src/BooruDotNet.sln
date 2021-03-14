@@ -39,6 +39,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Helpers.WPF", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageSearch", "ImageSearch\ImageSearch.csproj", "{434B5A96-DCF1-4326-8692-977536897389}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Reactive", "BooruDotNet.Reactive\BooruDotNet.Reactive.csproj", "{F596F17B-E777-4FF2-8BD4-E22AEBC984F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,10 @@ Global
 		{434B5A96-DCF1-4326-8692-977536897389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{434B5A96-DCF1-4326-8692-977536897389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{434B5A96-DCF1-4326-8692-977536897389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F596F17B-E777-4FF2-8BD4-E22AEBC984F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F596F17B-E777-4FF2-8BD4-E22AEBC984F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F596F17B-E777-4FF2-8BD4-E22AEBC984F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F596F17B-E777-4FF2-8BD4-E22AEBC984F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{0C9E391D-E1E8-4148-B198-ADA26044CDF3} = {17DC096B-845C-42A6-98AD-749437F76B1C}
 		{9072B0F3-2E64-4FC2-BB11-4B563FF6A15E} = {EBCE795C-4FAE-4098-9354-6155BB35A49F}
 		{434B5A96-DCF1-4326-8692-977536897389} = {EBCE795C-4FAE-4098-9354-6155BB35A49F}
+		{F596F17B-E777-4FF2-8BD4-E22AEBC984F4} = {EBCE795C-4FAE-4098-9354-6155BB35A49F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37EE282A-EDA5-44CA-A880-D6986D77081C}

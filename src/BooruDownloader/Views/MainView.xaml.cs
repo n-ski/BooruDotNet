@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDotNet.Helpers;
-using BooruDotNet.Helpers.WPF;
+using BooruDotNet.Reactive.Interactions;
 using BooruDownloader.ViewModels;
 using Humanizer;
 using Microsoft.Win32;
@@ -116,7 +116,7 @@ namespace BooruDownloader.Views
 
                 #region Global interactions
 
-                Interactions.OpenFileBrowser.RegisterHandler(interaction =>
+                DialogInteractions.OpenFileBrowser.RegisterHandler(interaction =>
                 {
                     if (!Directory.Exists(_initialDialogDirectory))
                     {
@@ -145,7 +145,7 @@ namespace BooruDownloader.Views
                     }
                 }).DisposeWith(d);
 
-                Interactions.OpenFolderBrowser.RegisterHandler(interaction =>
+                DialogInteractions.OpenFolderBrowser.RegisterHandler(interaction =>
                 {
                     var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
 
@@ -160,20 +160,20 @@ namespace BooruDownloader.Views
                     }
                 }).DisposeWith(d);
 
-                Interactions.ShowErrorMessage.RegisterHandler(interaction =>
+                MessageInteractions.ShowWarning.RegisterHandler(interaction =>
                 {
                     var message = ExceptionHelper.GetAllMessages(interaction.Input);
 
-                    MessageHelper.Warning(message);
+                    MessageHelper.Warning(message, this);
 
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);
 
-                Interactions.ShowWarning.RegisterHandler(interaction =>
+                MessageInteractions.ShowInformation.RegisterHandler(interaction =>
                 {
                     var message = interaction.Input;
 
-                    MessageHelper.Warning(message);
+                    MessageHelper.Information(message, this);
 
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);

@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Windows;
-using BooruDotNet;
 using BooruDotNet.Boorus;
 using BooruDotNet.Caching;
 using BooruDotNet.Downloaders;
