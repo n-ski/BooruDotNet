@@ -34,7 +34,8 @@ namespace ImageSearch.Views
                 this.OneWayBind(
                     ViewModel,
                     vm => vm.SourceUri,
-                    v => v.SiteImage.ToolTip)
+                    v => v.OpenSourceButton.ToolTip,
+                    uri => string.Join(Environment.NewLine, "Open in browser", uri))
                     .DisposeWith(d);
 
                 this.OneWayBind(

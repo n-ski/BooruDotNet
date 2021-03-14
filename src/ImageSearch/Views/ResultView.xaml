@@ -33,18 +33,6 @@
             RenderOptions.BitmapScalingMode="HighQuality"
             d:Source="https://dummyimage.com/150/777/fff" />
 
-        <Image
-            x:Name="SiteImage"
-            Grid.Row="0"
-            Width="16"
-            Height="16"
-            Margin="{StaticResource ControlMargin}"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Cursor="Help"
-            RenderOptions.BitmapScalingMode="HighQuality"
-            d:Source="https://dummyimage.com/16/333/fff" />
-
         <StackPanel
             Grid.Row="1"
             Margin="{StaticResource ControlMargin}">
@@ -68,11 +56,13 @@
             <Button
                 x:Name="OpenSourceButton"
                 Margin="{StaticResource ControlMargin}"
-                Style="{StaticResource GlyphButton}"
-                ToolTip="Open in browser">
-                <Viewbox
-                    Child="{StaticResource IconLinkExternal}"
-                    Style="{StaticResource IconViewBox_16x}" />
+                Style="{StaticResource GlyphButton}">
+                <Image
+                    x:Name="SiteImage"
+                    Width="16"
+                    Height="16"
+                    RenderOptions.BitmapScalingMode="HighQuality"
+                    d:Source="https://dummyimage.com/16/333/fff" />
             </Button>
 
             <Button
