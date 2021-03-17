@@ -199,8 +199,13 @@ namespace ImageSearch.ViewModels
 
                     if (_compressImages)
                     {
-                        using var originalFileStream = _fileUploadViewModel.FileInfo.OpenRead();
+                        var originalFileStream = _fileUploadViewModel.FileInfo.OpenRead();
                         imageStream = await Task.Run(() => CompressImage(originalFileStream));
+
+                        if (imageStream != originalFileStream)
+                        {
+                            originalFileStream.Dispose();
+                        }
                     }
                     else
                     {
@@ -260,32 +265,39 @@ namespace ImageSearch.ViewModels
 
             var resizedImage = scale < 1.0 ? ImageHelper.ScaleImage(originalImage, scale) : originalImage;
 
-            var originalImageName = Path.GetFileNameWithoutExtension(originalFileStream.Name);
-            var thumbnailImagePath = Path.Combine(Path.GetTempPath(), $"thumb-{originalImageName}.png");
-            var tempFileStream = File.Create(thumbnailImagePath, 0x1000, FileOptions.DeleteOnClose);
+            // Save to memory first.
+            var resizedImageStream = new MemoryStream();
+            ImageHelper.SaveImage(resizedImage, resizedImageStream);
 
-            ImageHelper.SaveImage(resizedImage, tempFileStream);
-
-            if (tempFileStream.Length > originalFileStream.Length)
+            // Return the original stream if the resized image wasn't smaller.
+            if (resizedImageStream.Length > originalFileStream.Length)
             {
-                tempFileStream.Dispose();
-                tempFileStream = originalFileStream;
-
                 Logger.Debug(
                     "Compressed image was larger than the original, original image will be uploaded.",
                     this);
+
+                originalFileStream.Position = 0;
+                return originalFileStream;
             }
+            // Otherwise copy from memory to a temporary file and return that.
             else
             {
                 static string toHumanBytes(long length) => length.Bytes().Humanize("0.00");
 
                 Logger.Debug(
-                    $"Compressed image: {toHumanBytes(originalFileStream.Length)} -> {toHumanBytes(tempFileStream.Length)}",
+                    $"Compressed image: {toHumanBytes(originalFileStream.Length)} -> {toHumanBytes(resizedImageStream.Length)}",
                     this);
-            }
 
-            tempFileStream.Position = 0;
-            return tempFileStream;
+                var originalImageName = Path.GetFileNameWithoutExtension(originalFileStream.Name);
+                var thumbnailImagePath = Path.Combine(Path.GetTempPath(), $"thumb-{originalImageName}.png");
+                var tempFileStream = File.Create(thumbnailImagePath, 0x1000, FileOptions.DeleteOnClose);
+
+                resizedImageStream.Position = 0;
+                resizedImageStream.CopyTo(tempFileStream);
+
+                tempFileStream.Position = 0;
+                return tempFileStream;
+            }
         }
     }
 }
