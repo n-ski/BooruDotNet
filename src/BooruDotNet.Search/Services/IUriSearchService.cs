@@ -6,8 +6,8 @@ using BooruDotNet.Search.Results;
 
 namespace BooruDotNet.Search.Services
 {
-    public interface ISearchByUri
+    public interface IUriSearchService
     {
-        Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default);
+        Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default);
     }
 }

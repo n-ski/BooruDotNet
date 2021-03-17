@@ -12,7 +12,7 @@ using Validation;
 
 namespace BooruDotNet.Search.Services
 {
-    public class DanbooruService : ServiceBase, ISearchByUriAndFile
+    public class DanbooruService : ServiceBase, IFileAndUriSearchService
     {
         public DanbooruService(HttpClient httpClient)
             : base(httpClient, HttpMethod.Get, new Uri(UploadUris.Danbooru))
@@ -21,7 +21,7 @@ namespace BooruDotNet.Search.Services
 
         public long FileSizeLimit => long.MaxValue;
 
-        public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
             uri.RequireAbsolute();
@@ -34,7 +34,7 @@ namespace BooruDotNet.Search.Services
             return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<IResult>> SearchByAsync(
+        public async Task<IEnumerable<IResult>> SearchAsync(
             FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(fileStream, nameof(fileStream));

@@ -25,9 +25,9 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(IqdbService))]
             public async Task SearchByUri_Success(Type serviceType)
             {
-                var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
+                var service = ServiceHelper.CreateService<IUriSearchService>(serviceType);
 
-                var results = await service.SearchByAsync(_testUri);
+                var results = await service.SearchAsync(_testUri);
 
                 AssertHasPostWithId(results, _testPostId);
             }
@@ -37,12 +37,12 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(IqdbService))]
             public void SearchByUri_Cancellation(Type serviceType)
             {
-                var service = ServiceHelper.CreateService<ISearchByUri>(serviceType);
+                var service = ServiceHelper.CreateService<IUriSearchService>(serviceType);
 
                 using var tokenSource = new CancellationTokenSource();
                 tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
 
-                Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchByAsync(_testUri, tokenSource.Token));
+                Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchAsync(_testUri, tokenSource.Token));
             }
         }
 
@@ -55,10 +55,10 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(IqdbService))]
             public async Task SearchByFile_Success(Type serviceType)
             {
-                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
+                var service = ServiceHelper.CreateService<IFileSearchService>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
-                var results = await service.SearchByAsync(file);
+                var results = await service.SearchAsync(file);
 
                 AssertHasPostWithId(results, _testPostId);
             }
@@ -68,20 +68,20 @@ namespace BooruDotNet.Search.Tests
             [TestCase(typeof(IqdbService))]
             public void SearchByFile_Cancellation(Type serviceType)
             {
-                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
+                var service = ServiceHelper.CreateService<IFileSearchService>(serviceType);
 
                 using var file = File.OpenRead(_testFilePath);
                 using var tokenSource = new CancellationTokenSource();
                 tokenSource.CancelAfter(BooruHelper.TaskCancellationDelay);
 
-                Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchByAsync(file, tokenSource.Token));
+                Assert.ThrowsAsync<TaskCanceledException>(() => service.SearchAsync(file, tokenSource.Token));
             }
 
             [Test]
             [TestCase(typeof(IqdbService))]
             public void SearchByFile_Fail_Size(Type serviceType)
             {
-                var service = ServiceHelper.CreateService<ISearchByFile>(serviceType);
+                var service = ServiceHelper.CreateService<IFileSearchService>(serviceType);
 
                 Assert.Less(service.FileSizeLimit, long.MaxValue);
 
@@ -92,7 +92,7 @@ namespace BooruDotNet.Search.Tests
                     using var file = File.Create(tempFileName);
                     file.SetLength(service.FileSizeLimit + 1);
 
-                    Assert.ThrowsAsync<FileTooLargeException>(() => service.SearchByAsync(file));
+                    Assert.ThrowsAsync<FileTooLargeException>(() => service.SearchAsync(file));
                 }
                 finally
                 {

@@ -190,7 +190,7 @@ namespace ImageSearch.ViewModels
             switch (SelectedUploadMethod.UploadMethod)
             {
                 case UploadMethod.Uri:
-                    results = await SelectedService.SearchByAsync(_uriUploadViewModel.ImageUri, cancellationToken);
+                    results = await SelectedService.SearchAsync(_uriUploadViewModel.ImageUri, cancellationToken);
                     break;
 
                 case UploadMethod.File:
@@ -214,7 +214,7 @@ namespace ImageSearch.ViewModels
 
                     using (imageStream)
                     {
-                        results = await SelectedService.SearchByAsync(imageStream, cancellationToken);
+                        results = await SelectedService.SearchAsync(imageStream, cancellationToken);
                     }
 
                     break;

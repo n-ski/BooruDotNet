@@ -6,10 +6,10 @@ using BooruDotNet.Search.Results;
 
 namespace BooruDotNet.Search.Services
 {
-    public interface ISearchByFile
+    public interface IFileSearchService
     {
         long FileSizeLimit { get; }
 
-        Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default);
+        Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default);
     }
 }

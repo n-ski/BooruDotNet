@@ -10,11 +10,11 @@ using Validation;
 
 namespace ImageSearch.Models
 {
-    public class SearchServiceModel : ISearchByUriAndFile
+    public class SearchServiceModel : IFileAndUriSearchService
     {
-        private readonly ISearchByUriAndFile _service;
+        private readonly IFileAndUriSearchService _service;
 
-        public SearchServiceModel(ISearchByUriAndFile service, string name, ImageSource icon)
+        public SearchServiceModel(IFileAndUriSearchService service, string name, ImageSource icon)
         {
             Requires.NotNullOrWhiteSpace(name, nameof(name));
 
@@ -27,13 +27,13 @@ namespace ImageSearch.Models
         public ImageSource Icon { get; }
         public long FileSizeLimit => _service.FileSizeLimit;
 
-        #region ISearchByUriAndFile implementation
+        #region IFileAndUriSearchService implementation
 
-        public Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default) =>
-            _service.SearchByAsync(uri, cancellationToken);
+        public Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default) =>
+            _service.SearchAsync(uri, cancellationToken);
 
-        public Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default) =>
-            _service.SearchByAsync(fileStream, cancellationToken);
+        public Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default) =>
+            _service.SearchAsync(fileStream, cancellationToken);
 
         #endregion
     }

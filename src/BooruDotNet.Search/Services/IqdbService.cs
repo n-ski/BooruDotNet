@@ -13,7 +13,7 @@ using Validation;
 
 namespace BooruDotNet.Search.Services
 {
-    public class IqdbService : ServiceBase, ISearchByUriAndFile
+    public class IqdbService : ServiceBase, IFileAndUriSearchService
     {
         private static readonly Lazy<Regex> _widthHeightRegexLazy = new Lazy<Regex>(() =>
             new Regex(@"^(\d+).(\d+) \[\w+\]$", RegexOptions.Compiled));
@@ -32,7 +32,7 @@ namespace BooruDotNet.Search.Services
 
         public long FileSizeLimit => 8 << 20; // 8 MiB.
 
-        public async Task<IEnumerable<IResult>> SearchByAsync(Uri uri, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
             uri.RequireAbsolute();
@@ -45,7 +45,7 @@ namespace BooruDotNet.Search.Services
             return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<IResult>> SearchByAsync(FileStream fileStream, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(fileStream, nameof(fileStream));
 
