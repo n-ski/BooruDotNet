@@ -4,7 +4,7 @@ using Validation;
 
 namespace BooruDotNet.Search.Results
 {
-    public class IqdbResult : IResult
+    internal sealed class IqdbResult : IResult
     {
         public IqdbResult(Uri source, Uri previewImageUri, int? width, int? height, double similarity)
         {

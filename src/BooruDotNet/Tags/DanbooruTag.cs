@@ -5,7 +5,7 @@ using BooruDotNet.Json;
 namespace BooruDotNet.Tags
 {
     [DebuggerDisplay(ITag.DebuggerDisplayString)]
-    public class DanbooruTag : ITag
+    internal sealed class DanbooruTag : ITag
     {
         [JsonPropertyName("name")]
         public string Name { get; set; } = "";

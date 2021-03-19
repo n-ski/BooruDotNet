@@ -9,7 +9,7 @@ using BooruDotNet.Resources;
 namespace BooruDotNet.Posts
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
-    public class GelbooruPost : IPost
+    internal sealed class GelbooruPost : IPost
     {
         private readonly Lazy<Uri?> _postUriLazy;
         private readonly Lazy<Uri?> _sampleImageUriLazy;

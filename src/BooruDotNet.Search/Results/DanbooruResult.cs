@@ -5,7 +5,7 @@ using BooruDotNet.Search.Json;
 
 namespace BooruDotNet.Search.Results
 {
-    public class DanbooruResult : IResult, IResultWithPost
+    internal sealed class DanbooruResult : IResult, IResultWithPost
     {
         public DanbooruResult()
         {
