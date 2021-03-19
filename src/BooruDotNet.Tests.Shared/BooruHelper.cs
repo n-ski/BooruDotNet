@@ -19,11 +19,13 @@ namespace BooruDotNet.Tests.Shared
 
             Danbooru = new Danbooru(HttpClient);
             Gelbooru = new Gelbooru(HttpClient);
+            SankakuComplex = new SankakuComplex(HttpClient);
 
             PostCaches = new Dictionary<Type, PostCache>
             {
                 [typeof(Danbooru)] = new PostCache(Danbooru),
                 [typeof(Gelbooru)] = new PostCache(Gelbooru),
+                [typeof(SankakuComplex)] = new PostCache(SankakuComplex),
             }.ToImmutableDictionary();
 
             TagCaches = new Dictionary<Type, TagCache>
@@ -40,6 +42,8 @@ namespace BooruDotNet.Tests.Shared
         internal static Danbooru Danbooru { get; }
 
         internal static Gelbooru Gelbooru { get; }
+
+        internal static SankakuComplex SankakuComplex { get; }
 
         internal static IReadOnlyDictionary<Type, PostCache> PostCaches { get; } 
 

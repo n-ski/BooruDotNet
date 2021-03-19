@@ -136,4 +136,7 @@
   <data name="Gelbooru_TagName_Format" xml:space="preserve">
     <value>https://gelbooru.com/index.php?page=dapi&amp;s=tag&amp;q=index&amp;name={0}&amp;json=1</value>
   </data>
+  <data name="SankakuComplex_PostId_Format" xml:space="preserve">
+    <value>https://capi-v2.sankakucomplex.com/posts/{0}</value>
+  </data>
 </root>

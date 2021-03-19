@@ -113,5 +113,14 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("Gelbooru_TagName_Format", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://capi-v2.sankakucomplex.com/posts/{0}.
+        /// </summary>
+        internal static string SankakuComplex_PostId_Format {
+            get {
+                return ResourceManager.GetString("SankakuComplex_PostId_Format", resourceCulture);
+            }
+        }
     }
 }

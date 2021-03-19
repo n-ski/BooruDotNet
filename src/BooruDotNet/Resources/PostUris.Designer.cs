@@ -77,5 +77,14 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("Gelbooru_Format", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://chan.sankakucomplex.com/post/show/{0}.
+        /// </summary>
+        internal static string SankakuComplex_Format {
+            get {
+                return ResourceManager.GetString("SankakuComplex_Format", resourceCulture);
+            }
+        }
     }
 }
