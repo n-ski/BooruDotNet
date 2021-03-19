@@ -5,6 +5,7 @@ using System.Windows;
 using BooruDotNet.Boorus;
 using BooruDotNet.Caching;
 using BooruDotNet.Downloaders;
+using BooruDotNet.Helpers;
 using BooruDotNet.Links;
 using BooruDotNet.Namers;
 using BooruDotNet.Posts;
@@ -26,6 +27,10 @@ namespace BooruDownloader
             {
                 AutomaticDecompression = DecompressionMethods.All,
             });
+
+            // HACK: Band-aid fix for SankakuComplex downloads. I cba to create a separate downloader
+            // for Sankaku posts.
+            httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(NetHelper.UserAgentForRuntime);
 
             var danbooru = new Danbooru(httpClient);
             var gelbooru = new Gelbooru(httpClient);

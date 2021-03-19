@@ -20,7 +20,7 @@ namespace BooruDotNet.Extensions
             Assumes.NotNull(uri);
             Assumes.True(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
 
-            return Path.GetFileName(uri.AbsoluteUri);
+            return Path.GetFileName(uri.AbsolutePath);
         }
 
         internal static string GetExtension(this Uri uri)
@@ -28,7 +28,7 @@ namespace BooruDotNet.Extensions
             Assumes.NotNull(uri);
             Assumes.True(uri.IsAbsoluteUri, ErrorMessages.UriIsNotAbsolute);
 
-            return Path.GetExtension(uri.AbsoluteUri);
+            return Path.GetExtension(uri.AbsolutePath);
         }
     }
 }
