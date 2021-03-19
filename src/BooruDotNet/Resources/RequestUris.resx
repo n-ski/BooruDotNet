@@ -117,23 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DanbooruPostHash_Format" xml:space="preserve">
+  <data name="Danbooru_PostHash_Format" xml:space="preserve">
     <value>https://danbooru.donmai.us/posts.json?limit=1&amp;md5={0}</value>
   </data>
-  <data name="DanbooruPostId_Format" xml:space="preserve">
+  <data name="Danbooru_PostId_Format" xml:space="preserve">
     <value>https://danbooru.donmai.us/posts/{0}.json</value>
   </data>
-  <data name="DanbooruTagName_Format" xml:space="preserve">
+  <data name="Danbooru_TagName_Format" xml:space="preserve">
     <value>https://danbooru.donmai.us/tags.json?search[name_or_alias_matches]={0}</value>
   </data>
-  <data name="GelbooruPostHash_Format" xml:space="preserve">
+  <data name="Gelbooru_PostHash_Format" xml:space="preserve">
     <value>http://gelbooru.com/index.php?page=post&amp;s=list&amp;md5={0}</value>
     <comment>Doesn't respond with JSON, redirects to the post page instead.</comment>
   </data>
-  <data name="GelbooruPostId_Format" xml:space="preserve">
+  <data name="Gelbooru_PostId_Format" xml:space="preserve">
     <value>https://gelbooru.com/index.php?page=dapi&amp;s=post&amp;q=index&amp;id={0}&amp;json=1</value>
   </data>
-  <data name="GelbooruTagName_Format" xml:space="preserve">
+  <data name="Gelbooru_TagName_Format" xml:space="preserve">
     <value>https://gelbooru.com/index.php?page=dapi&amp;s=tag&amp;q=index&amp;name={0}&amp;json=1</value>
   </data>
 </root>

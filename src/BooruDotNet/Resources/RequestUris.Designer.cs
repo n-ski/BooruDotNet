@@ -63,54 +63,54 @@ namespace BooruDotNet.Resources {
         /// <summary>
         ///   Looks up a localized string similar to https://danbooru.donmai.us/posts.json?limit=1&amp;md5={0}.
         /// </summary>
-        internal static string DanbooruPostHash_Format {
+        internal static string Danbooru_PostHash_Format {
             get {
-                return ResourceManager.GetString("DanbooruPostHash_Format", resourceCulture);
+                return ResourceManager.GetString("Danbooru_PostHash_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://danbooru.donmai.us/posts/{0}.json.
         /// </summary>
-        internal static string DanbooruPostId_Format {
+        internal static string Danbooru_PostId_Format {
             get {
-                return ResourceManager.GetString("DanbooruPostId_Format", resourceCulture);
+                return ResourceManager.GetString("Danbooru_PostId_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://danbooru.donmai.us/tags.json?search[name_or_alias_matches]={0}.
         /// </summary>
-        internal static string DanbooruTagName_Format {
+        internal static string Danbooru_TagName_Format {
             get {
-                return ResourceManager.GetString("DanbooruTagName_Format", resourceCulture);
+                return ResourceManager.GetString("Danbooru_TagName_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to http://gelbooru.com/index.php?page=post&amp;s=list&amp;md5={0}.
         /// </summary>
-        internal static string GelbooruPostHash_Format {
+        internal static string Gelbooru_PostHash_Format {
             get {
-                return ResourceManager.GetString("GelbooruPostHash_Format", resourceCulture);
+                return ResourceManager.GetString("Gelbooru_PostHash_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://gelbooru.com/index.php?page=dapi&amp;s=post&amp;q=index&amp;id={0}&amp;json=1.
         /// </summary>
-        internal static string GelbooruPostId_Format {
+        internal static string Gelbooru_PostId_Format {
             get {
-                return ResourceManager.GetString("GelbooruPostId_Format", resourceCulture);
+                return ResourceManager.GetString("Gelbooru_PostId_Format", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to https://gelbooru.com/index.php?page=dapi&amp;s=tag&amp;q=index&amp;name={0}&amp;json=1.
         /// </summary>
-        internal static string GelbooruTagName_Format {
+        internal static string Gelbooru_TagName_Format {
             get {
-                return ResourceManager.GetString("GelbooruTagName_Format", resourceCulture);
+                return ResourceManager.GetString("Gelbooru_TagName_Format", resourceCulture);
             }
         }
     }
