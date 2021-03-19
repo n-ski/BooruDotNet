@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using BooruDotNet.Helpers;
@@ -16,6 +16,14 @@ namespace BooruDotNet.Posts
         public DanbooruPost()
         {
             _postUriLazy = new Lazy<Uri?>(() => ID.HasValue ? UriHelper.CreateFormat(PostUris.Danbooru_Format, ID) : null);
+
+            string[] emptyTags = Array.Empty<string>();
+            Tags = emptyTags;
+            ArtistTags = emptyTags;
+            CharacterTags = emptyTags;
+            CopyrightTags = emptyTags;
+            GeneralTags = emptyTags;
+            MetaTags = emptyTags;
         }
 
         #region IPost implementation
@@ -51,7 +59,7 @@ namespace BooruDotNet.Posts
 
         [JsonPropertyName("tag_string")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> Tags { get; set; }
+        public IReadOnlyList<string> Tags { get; set; }
 
         [JsonPropertyName("rating")]
         [JsonConverter(typeof(RatingConverter))]
@@ -69,23 +77,23 @@ namespace BooruDotNet.Posts
 
         [JsonPropertyName("tag_string_artist")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> ArtistTags { get; set; }
+        public IReadOnlyList<string> ArtistTags { get; set; }
 
         [JsonPropertyName("tag_string_character")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> CharacterTags { get; set; }
+        public IReadOnlyList<string> CharacterTags { get; set; }
 
         [JsonPropertyName("tag_string_copyright")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> CopyrightTags { get; set; }
+        public IReadOnlyList<string> CopyrightTags { get; set; }
 
         [JsonPropertyName("tag_string_general")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> GeneralTags { get; set; }
+        public IReadOnlyList<string> GeneralTags { get; set; }
 
         [JsonPropertyName("tag_string_meta")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> MetaTags { get; set; }
+        public IReadOnlyList<string> MetaTags { get; set; }
 
         #endregion
     }

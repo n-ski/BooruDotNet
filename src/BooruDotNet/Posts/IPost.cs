@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 
 namespace BooruDotNet.Posts
 {
@@ -17,7 +17,7 @@ namespace BooruDotNet.Posts
         public Uri? FileUri { get; }
         public Uri? SampleImageUri { get; }
         public Uri? PreviewImageUri { get; }
-        ImmutableArray<string> Tags { get; }
+        IReadOnlyList<string> Tags { get; }
         Rating Rating { get; }
         string Source { get; }
         int? Score { get; }

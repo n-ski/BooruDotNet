@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 using BooruDotNet.Helpers;
@@ -30,6 +30,8 @@ namespace BooruDotNet.Posts
                 }
             });
             _previewImageUriLazy = new Lazy<Uri>(() => new Uri($"https://img1.gelbooru.com/thumbnails/{Directory}/thumbnail_{Hash}.jpg"));
+
+            Tags = Array.Empty<string>();
         }
 
         [JsonPropertyName("id")]
@@ -61,7 +63,7 @@ namespace BooruDotNet.Posts
 
         [JsonPropertyName("tags")]
         [JsonConverter(typeof(TagStringConverter))]
-        public ImmutableArray<string> Tags { get; set; }
+        public IReadOnlyList<string> Tags { get; set; }
 
         [JsonPropertyName("rating")]
         [JsonConverter(typeof(RatingConverter))]

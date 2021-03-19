@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Immutable;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace BooruDotNet.Json
 {
-    internal sealed class TagStringConverter : JsonConverter<ImmutableArray<string>>
+    internal sealed class TagStringConverter : JsonConverter<IReadOnlyList<string>>
     {
         private static readonly char _separator = ' ';
 
-        public override ImmutableArray<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IReadOnlyList<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string tagString = reader.GetString()!;
 
@@ -18,19 +18,12 @@ namespace BooruDotNet.Json
                 throw new JsonException();
             }
 
-            if (tagString.Length > 0)
-            {
-                string[] tags = tagString.Split(_separator);
-
-                return ImmutableArray.Create(tags);
-            }
-            else
-            {
-                return ImmutableArray.Create<string>();
-            }
+            return tagString.Length > 0
+                ? tagString.Split(_separator) 
+                : Array.Empty<string>();
         }
 
-        public override void Write(Utf8JsonWriter writer, ImmutableArray<string> value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, IReadOnlyList<string> value, JsonSerializerOptions options)
         {
             string tagString = string.Join(_separator, value);
 
