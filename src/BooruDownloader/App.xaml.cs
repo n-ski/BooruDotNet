@@ -29,9 +29,11 @@ namespace BooruDownloader
 
             var danbooru = new Danbooru(httpClient);
             var gelbooru = new Gelbooru(httpClient);
+            var sankaku = new SankakuComplex(httpClient);
 
             LinkResolver.RegisterResolver(new DanbooruResolver(danbooru));
             LinkResolver.RegisterResolver(new GelbooruResolver(gelbooru));
+            LinkResolver.RegisterResolver(new SankakuComplexResolver(sankaku));
 
             var tagCache = new TagCache(danbooru);
 
