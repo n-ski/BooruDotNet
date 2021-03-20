@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using BooruDotNet.Helpers;
+using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using BooruDownloader.ViewModels;
 using Humanizer;
@@ -65,11 +66,15 @@ namespace BooruDownloader.Views
                         }
                         else
                         {
+                            var viewModel = ViewModel.Post is IPostExtendedTags postExtendedTags
+                                ? new PostViewModel(postExtendedTags)
+                                : new PostViewModel(ViewModel.Post, _tagExtractor);
+
                             postView = new PostView
                             {
                                 Owner = Window.GetWindow(this),
                                 Tag = postUri,
-                                ViewModel = new PostViewModel(ViewModel.Post, _tagExtractor),
+                                ViewModel = viewModel,
                             };
 
                             postView.Show();

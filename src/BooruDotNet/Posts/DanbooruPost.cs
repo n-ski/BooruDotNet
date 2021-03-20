@@ -9,7 +9,7 @@ using BooruDotNet.Resources;
 namespace BooruDotNet.Posts
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
-    internal sealed class DanbooruPost : IPost, IPostExtendedTags
+    internal sealed class DanbooruPost : IPost, IPostExtraTags
     {
         private readonly Lazy<Uri?> _postUriLazy;
 
@@ -73,7 +73,7 @@ namespace BooruDotNet.Posts
 
         #endregion
 
-        #region IExtendedPostTags implementation
+        #region IPostExtraTags implementation
 
         [JsonPropertyName("tag_string_artist")]
         [JsonConverter(typeof(TagStringConverter))]

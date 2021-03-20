@@ -41,22 +41,6 @@ namespace BooruDotNet.Namers
             var copyrightTags = new List<ITag>();
             var characterTags = new List<ITag>();
 
-            // Get tags using provided function in parallel.
-            var getTagBlock = new TransformBlock<string, ITag?>(
-                async tagName =>
-                {
-                    try
-                    {
-                        return await _tagExtractorFunc(tagName).ConfigureAwait(false);
-                    }
-                    catch (InvalidTagNameException)
-                    {
-                        Logger.Debug($"Got invalid tag '{tagName}'.", this);
-                        return null;
-                    }
-                },
-                new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount });
-
             // Put tags into their own lists.
             var addTagBlock = new ActionBlock<ITag?>(tag =>
             {
@@ -74,29 +58,52 @@ namespace BooruDotNet.Namers
                 }
             });
 
-            // IMPORTANT: getTagBlock must propagate its completion if we want to wait for
-            // addTagBlock's completion. This is the correct usage as per MS docs.
-            getTagBlock.LinkTo(addTagBlock, _linkOptions);
-
-            // Fast path: post just the tags that we need.
-            if (post is IPostExtendedTags extendedPost)
+            if (post is IPostExtendedTags postExtendedTags)
             {
-                void postTag(string tag) => getTagBlock.Post(tag);
+                postExtendedTags.ExtendedTags.ForEach(tag => addTagBlock.Post(tag));
 
-                extendedPost.CharacterTags.ForEach(postTag);
-                extendedPost.CopyrightTags.ForEach(postTag);
-                extendedPost.ArtistTags.ForEach(postTag);
+                addTagBlock.Complete();
             }
-            // Slow path: post every tag.
             else
             {
-                foreach (string tag in post.Tags)
-                {
-                    getTagBlock.Post(tag);
-                }
-            }
+                // Get tags using provided function in parallel.
+                var getTagBlock = new TransformBlock<string, ITag?>(
+                    async tagName =>
+                    {
+                        try
+                        {
+                            return await _tagExtractorFunc(tagName).ConfigureAwait(false);
+                        }
+                        catch (InvalidTagNameException)
+                        {
+                            Logger.Debug($"Got invalid tag '{tagName}'.", this);
+                            return null;
+                        }
+                    },
+                    new ExecutionDataflowBlockOptions { MaxDegreeOfParallelism = MaxActiveTagRequestsCount });
 
-            getTagBlock.Complete();
+                // IMPORTANT: getTagBlock must propagate its completion if we want to wait for
+                // addTagBlock's completion. This is the correct usage as per MS docs.
+                getTagBlock.LinkTo(addTagBlock, _linkOptions);
+
+                if (post is IPostExtraTags extraTags)
+                {
+                    void postTag(string tag) => getTagBlock.Post(tag);
+
+                    extraTags.CharacterTags.ForEach(postTag);
+                    extraTags.CopyrightTags.ForEach(postTag);
+                    extraTags.ArtistTags.ForEach(postTag);
+                }
+                else
+                {
+                    foreach (string tag in post.Tags)
+                    {
+                        getTagBlock.Post(tag);
+                    }
+                }
+
+                getTagBlock.Complete();
+            }
 
             // Wait until all the tags are processed.
             addTagBlock.Completion.Wait();

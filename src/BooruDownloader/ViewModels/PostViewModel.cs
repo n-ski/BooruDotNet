@@ -15,12 +15,26 @@ namespace BooruDownloader.ViewModels
         private readonly ObservableAsPropertyHelper<IEnumerable<TagViewModel>> _tags;
 
         public PostViewModel(IPost post, IBooruTagByName tagExtractor)
+            : this(post)
         {
-            Post = Requires.NotNull(post, nameof(post));
             Requires.NotNull(tagExtractor, nameof(tagExtractor));
 
-            _tags = Observable.Start(() => Post.Tags.Select(tag => new TagViewModel(tag, tagExtractor)))
+            _tags = Observable.Return(Post.Tags)
+                .Select(tags => tags.Select(tag => new TagViewModel(tag, tagExtractor)))
                 .ToProperty(this, x => x.Tags);
+        }
+
+        public PostViewModel(IPostExtendedTags post)
+            : this((IPost)post)
+        {
+            _tags = Observable.Return(((IPostExtendedTags)Post).ExtendedTags)
+                .Select(tags => tags.Select(tag => new TagViewModel(tag)))
+                .ToProperty(this, x => x.Tags);
+        }
+
+        private PostViewModel(IPost post)
+        {
+            Post = Requires.NotNull(post, nameof(post));
 
             OpenInBrowser = ReactiveCommand.Create(() =>
             {

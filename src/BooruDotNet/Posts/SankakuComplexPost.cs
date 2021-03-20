@@ -6,7 +6,6 @@ using BooruDotNet.Helpers;
 using BooruDotNet.Json;
 using BooruDotNet.Resources;
 using BooruDotNet.Tags;
-using Validation;
 
 namespace BooruDotNet.Posts
 {
@@ -14,6 +13,7 @@ namespace BooruDotNet.Posts
     internal sealed class SankakuComplexPost : IPost, IPostExtendedTags
     {
         private readonly Lazy<Uri?> _postUriLazy;
+        private readonly Lazy<IReadOnlyList<string>> _tagsLazy;
 
         public SankakuComplexPost()
         {
@@ -21,14 +21,18 @@ namespace BooruDotNet.Posts
 
             Hash = string.Empty;
             Source = string.Empty;
+            ExtendedTags = Array.Empty<ITag>();
 
-            string[] emptyTags = Array.Empty<string>();
-            Tags = emptyTags;
-            ArtistTags = emptyTags;
-            CharacterTags = emptyTags;
-            CopyrightTags = emptyTags;
-            GeneralTags = emptyTags;
-            MetaTags = emptyTags;
+            _tagsLazy = new Lazy<IReadOnlyList<string>>(() =>
+            {
+                string[] tagNames = new string[ExtendedTags.Count];
+                for (int i = 0; i < tagNames.Length; i++)
+                {
+                    tagNames[i] = ExtendedTags[i].Name;
+                }
+
+                return tagNames;
+            });
         }
 
         #region Helper classes
@@ -71,7 +75,7 @@ namespace BooruDotNet.Posts
         [JsonPropertyName("preview_url")]
         public Uri? PreviewImageUri { get; set; }
 
-        public IReadOnlyList<string> Tags { get; set; }
+        public IReadOnlyList<string> Tags => _tagsLazy.Value;
 
         [JsonPropertyName("rating"), JsonConverter(typeof(RatingConverter))]
         public Rating Rating { get; set; }
@@ -86,15 +90,8 @@ namespace BooruDotNet.Posts
 
         #region IPostExtendedTags implementation
 
-        public IReadOnlyList<string> ArtistTags { get; set; }
-
-        public IReadOnlyList<string> CharacterTags { get; set; }
-
-        public IReadOnlyList<string> CopyrightTags { get; set; }
-
-        public IReadOnlyList<string> GeneralTags { get; set; }
-
-        public IReadOnlyList<string> MetaTags { get; set; }
+        [JsonPropertyName("tags"), JsonConverter(typeof(TagCollectionConverter<SankakuComplexTag>))]
+        public IReadOnlyList<ITag> ExtendedTags { get; set; }
 
         #endregion
 
@@ -102,56 +99,6 @@ namespace BooruDotNet.Posts
         public CreationDateInfo SankakuCreationDate
         {
             set => CreationDate = value.CreationDate;
-        }
-
-        [JsonPropertyName("tags")]
-        public IReadOnlyList<SankakuComplexTag> SankakuTags
-        {
-            // For some stupid reason this needs to have "get" accessor,
-            // otherwise "set" won't be called on deserialization.
-            get => throw Assumes.NotReachable();
-            set
-            {
-                var tags = new List<string>(value.Count);
-                var artists = new List<string>();
-                var characters = new List<string>();
-                var copyrights = new List<string>();
-                var general = new List<string>();
-                var meta = new List<string>();
-
-                foreach (ITag tag in value)
-                {
-                    tags.Add(tag.Name);
-
-                    switch (tag.Kind)
-                    {
-                        case TagKind.General:
-                            general.Add(tag.Name);
-                            break;
-                        case TagKind.Artist:
-                            artists.Add(tag.Name);
-                            break;
-                        case TagKind.Copyright:
-                            copyrights.Add(tag.Name);
-                            break;
-                        case TagKind.Character:
-                            characters.Add(tag.Name);
-                            break;
-                        case TagKind.Metadata:
-                            meta.Add(tag.Name);
-                            break;
-                    }
-                }
-
-                tags.Sort();
-
-                Tags = tags;
-                ArtistTags = artists;
-                CharacterTags = characters;
-                CopyrightTags = copyrights;
-                GeneralTags = general;
-                MetaTags = meta;
-            }
         }
     }
 }

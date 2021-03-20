@@ -9,6 +9,7 @@ namespace BooruDownloader.ViewModels
 {
     public class TagViewModel : ReactiveObject
     {
+        private readonly string _tagName;
         private readonly ObservableAsPropertyHelper<ITag> _tag;
         private readonly IBooruTagByName _tagExtractor;
 
@@ -16,7 +17,7 @@ namespace BooruDownloader.ViewModels
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Name = tagName;
+            _tagName = tagName;
             _tagExtractor = Requires.NotNull(tagExtractor, nameof(tagExtractor));
 
             _tag = Observable.StartAsync(GetTagInfo, RxApp.TaskpoolScheduler)
@@ -25,7 +26,15 @@ namespace BooruDownloader.ViewModels
                 .ToProperty(this, x => x.Tag);
         }
 
-        public string Name { get; }
+        public TagViewModel(ITag tag)
+        {
+            Requires.NotNull(tag, nameof(tag));
+
+            _tag = Observable.Return(tag)
+                .ToProperty(this, x => x.Tag);
+        }
+
+        public string Name => _tagName ?? Tag.Name;
 
         public ITag Tag => _tag.Value;
 
