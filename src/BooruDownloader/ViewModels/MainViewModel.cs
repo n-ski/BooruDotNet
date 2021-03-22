@@ -203,6 +203,7 @@ namespace BooruDownloader.ViewModels
                 catch (ApiException)
                 {
                     ++unresolvedPostCount;
+                    Logger.Debug($"Skipped {uri} (couldn't resolve).");
                     continue;
                 }
 
@@ -210,6 +211,7 @@ namespace BooruDownloader.ViewModels
                 if (post?.FileUri is null)
                 {
                     ++unresolvedPostCount;
+                    Logger.Debug($"Skipped {uri} (couldn't resolve or file is missing).");
                     continue;
                 }
 
