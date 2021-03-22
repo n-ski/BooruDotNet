@@ -12,7 +12,7 @@ namespace BooruDotNet.Links
     public class DanbooruResolver : ResolverBase, IIdResolver
     {
         private static readonly Lazy<Regex> _idRegexLazy = new Lazy<Regex>(
-            () => new Regex(@"^https:\/\/danbooru\.donmai\.us\/posts\/(\d+)$", RegexOptions.Compiled));
+            () => new Regex(@"^https:\/\/danbooru\.donmai\.us\/posts\/(\d+)", RegexOptions.Compiled));
 
         public DanbooruResolver(Danbooru danbooru)
         {
