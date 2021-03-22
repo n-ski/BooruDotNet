@@ -10,7 +10,7 @@ namespace BooruDotNet.Json
         {
             long timestamp = reader.GetInt64();
 
-            return DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime;
+            return DateTimeOffset.FromUnixTimeSeconds(timestamp).ToLocalTime().DateTime;
         }
 
         public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

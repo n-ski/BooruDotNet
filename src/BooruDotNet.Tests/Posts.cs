@@ -14,6 +14,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru), 123456)]
         [TestCase(typeof(Gelbooru), 5632370)]
         [TestCase(typeof(SankakuComplex), 5235625)]
+        [TestCase(typeof(Yandere), 759835)]
         public async Task GetById_Success(Type booruType, int id)
         {
             var booru = BooruHelper.PostCaches[booruType];
@@ -39,6 +40,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru), 123456)]
         [TestCase(typeof(Gelbooru), 5632370)]
         [TestCase(typeof(SankakuComplex), 5235625)]
+        [TestCase(typeof(Yandere), 759835)]
         public void GetById_Cancellation(Type booruType, int id)
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
@@ -68,6 +70,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
         [TestCase(typeof(SankakuComplex))]
+        [TestCase(typeof(Yandere))]
         public void GetById_Fail(Type booruType)
         {
             var booru = BooruHelper.PostCaches[booruType];

@@ -20,18 +20,21 @@ namespace BooruDotNet.Tests.Shared
             Danbooru = new Danbooru(HttpClient);
             Gelbooru = new Gelbooru(HttpClient);
             SankakuComplex = new SankakuComplex(HttpClient);
+            Yandere = new Yandere(HttpClient);
 
             PostCaches = new Dictionary<Type, PostCache>
             {
                 [typeof(Danbooru)] = new PostCache(Danbooru),
                 [typeof(Gelbooru)] = new PostCache(Gelbooru),
                 [typeof(SankakuComplex)] = new PostCache(SankakuComplex),
+                [typeof(Yandere)] = new PostCache(Yandere),
             }.ToImmutableDictionary();
 
             TagCaches = new Dictionary<Type, TagCache>
             {
                 [typeof(Danbooru)] = new TagCache(Danbooru),
                 [typeof(Gelbooru)] = new TagCache(Gelbooru),
+                [typeof(Yandere)] = new TagCache(Yandere),
             }.ToImmutableDictionary();
 
             TaskCancellationDelay = TimeSpan.FromMilliseconds(50);
@@ -44,6 +47,8 @@ namespace BooruDotNet.Tests.Shared
         internal static Gelbooru Gelbooru { get; }
 
         internal static SankakuComplex SankakuComplex { get; }
+
+        internal static Yandere Yandere { get; }
 
         internal static IReadOnlyDictionary<Type, PostCache> PostCaches { get; } 
 

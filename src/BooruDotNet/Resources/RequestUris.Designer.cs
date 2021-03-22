@@ -122,5 +122,23 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("SankakuComplex_PostId_Format", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://yande.re/post.json?tags=id%3A{0}.
+        /// </summary>
+        internal static string Yandere_PostId_Format {
+            get {
+                return ResourceManager.GetString("Yandere_PostId_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://yande.re/tag.json?name={0}.
+        /// </summary>
+        internal static string Yandere_TagName_Format {
+            get {
+                return ResourceManager.GetString("Yandere_TagName_Format", resourceCulture);
+            }
+        }
     }
 }

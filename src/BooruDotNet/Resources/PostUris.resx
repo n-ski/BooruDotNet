@@ -126,4 +126,7 @@
   <data name="SankakuComplex_Format" xml:space="preserve">
     <value>https://chan.sankakucomplex.com/post/show/{0}</value>
   </data>
+  <data name="Yandere_Format" xml:space="preserve">
+    <value>https://yande.re/post/show/{0}</value>
+  </data>
 </root>

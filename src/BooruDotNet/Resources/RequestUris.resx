@@ -139,4 +139,10 @@
   <data name="SankakuComplex_PostId_Format" xml:space="preserve">
     <value>https://capi-v2.sankakucomplex.com/posts/{0}</value>
   </data>
+  <data name="Yandere_PostId_Format" xml:space="preserve">
+    <value>https://yande.re/post.json?tags=id%3A{0}</value>
+  </data>
+  <data name="Yandere_TagName_Format" xml:space="preserve">
+    <value>https://yande.re/tag.json?name={0}</value>
+  </data>
 </root>

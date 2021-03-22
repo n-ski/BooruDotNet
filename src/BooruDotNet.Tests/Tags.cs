@@ -13,6 +13,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Yandere))]
         public async Task GetByName_Success(Type booruType, string name = "pantyhose")
         {
             var booru = BooruHelper.TagCaches[booruType];
@@ -25,6 +26,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Yandere))]
         public void GetByName_Cancellation(Type booruType, string name = "pantyhose")
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
@@ -40,6 +42,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Yandere))]
         public void GetByName_Fail(Type booruType)
         {
             var booru = BooruHelper.TagCaches[booruType];

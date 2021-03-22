@@ -86,5 +86,14 @@ namespace BooruDotNet.Resources {
                 return ResourceManager.GetString("SankakuComplex_Format", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://yande.re/post/show/{0}.
+        /// </summary>
+        internal static string Yandere_Format {
+            get {
+                return ResourceManager.GetString("Yandere_Format", resourceCulture);
+            }
+        }
     }
 }
