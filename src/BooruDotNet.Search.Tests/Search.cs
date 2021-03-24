@@ -107,7 +107,8 @@ namespace BooruDotNet.Search.Tests
             {
                 if (result is IResultWithPost resultWithPost)
                 {
-                    return resultWithPost.Post.ID.Value;
+                    Assert.NotNull(resultWithPost.Post.ID);
+                    return resultWithPost.Post.ID!.Value;
                 }
                 else
                 {

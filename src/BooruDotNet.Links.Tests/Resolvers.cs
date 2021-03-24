@@ -34,7 +34,8 @@ namespace BooruDotNet.Links.Tests
         {
             var resolved = await LinkResolver.ResolveAsync(new Uri(url));
 
-            Assert.AreEqual(expectedId, resolved.ID);
+            Assert.NotNull(resolved);
+            Assert.AreEqual(expectedId, resolved!.ID);
         }
     }
 }

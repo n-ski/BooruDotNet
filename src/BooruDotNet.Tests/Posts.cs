@@ -82,7 +82,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru))]
         [TestCase(typeof(Gelbooru))]
         [TestCase(typeof(Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
-        public void GetByHash_Fail(Type booruType, string hash = null)
+        public void GetByHash_Fail(Type booruType, string? hash = null)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
             hash ??= new string('0', 32);
