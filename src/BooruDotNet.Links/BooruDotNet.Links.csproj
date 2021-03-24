@@ -2,14 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
-    <Nullable>enable</Nullable>
     <Version>0.1.0</Version>
-    <Authors>Sergey Volkov</Authors>
     <Product Condition="'$(TargetFramework)' == 'netstandard2.1'">Booru .NET (.NET Standard 2.1)</Product>
     <Product Condition="'$(TargetFramework)' == 'netcoreapp3.1'">Booru .NET (.NET Core 3.1)</Product>
     <Description>A library for fetching posts from URLs (Danbooru, Gelbooru, etc.).</Description>
-    <Copyright>Copyright (c) 2020 Sergey Volkov</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

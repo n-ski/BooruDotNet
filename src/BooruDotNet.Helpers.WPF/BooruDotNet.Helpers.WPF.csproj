@@ -4,11 +4,7 @@
     <RootNamespace>BooruDotNet.Helpers</RootNamespace>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Nullable>enable</Nullable>
     <Version>0.1.0</Version>
-    <Authors>Sergey Volkov</Authors>
-    <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>

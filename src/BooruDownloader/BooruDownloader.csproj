@@ -4,12 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <Nullable>disable</Nullable>
     <Version>0.1.0</Version>
-    <Authors>Sergey Volkov</Authors>
     <Product>Booru Downloader</Product>
     <Description>An application for downloading images from boorus (Danbooru, Gelbooru, etc.).</Description>
-    <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Assets\Images\AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
