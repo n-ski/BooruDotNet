@@ -2,13 +2,16 @@
 using System.Net;
 using System.Net.Http;
 using System.Windows;
-using BooruDotNet.Boorus;
 using BooruDotNet.Caching;
+using BooruDotNet.Danbooru;
 using BooruDotNet.Downloaders;
+using BooruDotNet.Gelbooru;
 using BooruDotNet.Helpers;
 using BooruDotNet.Links;
 using BooruDotNet.Namers;
 using BooruDotNet.Posts;
+using BooruDotNet.SankakuComplex;
+using BooruDotNet.Yandere;
 using BooruDownloader.ViewModels;
 using BooruDownloader.Views;
 using ReactiveUI;

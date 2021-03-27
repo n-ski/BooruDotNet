@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Danbooru;
+using BooruDotNet.Gelbooru;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
 

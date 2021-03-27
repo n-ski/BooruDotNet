@@ -23,30 +23,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\PostUris.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PostUris.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\RequestUris.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>RequestUris.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\ErrorMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\PostUris.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>PostUris.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\RequestUris.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>RequestUris.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Boorus;
 using BooruDotNet.Tags;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
@@ -11,9 +10,9 @@ namespace BooruDotNet.Tests
     public class Tags
     {
         [Test]
-        [TestCase(typeof(Danbooru))]
-        [TestCase(typeof(Gelbooru))]
-        [TestCase(typeof(Yandere))]
+        [TestCase(typeof(Danbooru.Danbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Yandere.Yandere))]
         public async Task GetByName_Success(Type booruType, string name = "pantyhose")
         {
             var booru = BooruHelper.TagCaches[booruType];
@@ -24,9 +23,9 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru))]
-        [TestCase(typeof(Gelbooru))]
-        [TestCase(typeof(Yandere))]
+        [TestCase(typeof(Danbooru.Danbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Yandere.Yandere))]
         public void GetByName_Cancellation(Type booruType, string name = "pantyhose")
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
@@ -40,9 +39,9 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru))]
-        [TestCase(typeof(Gelbooru))]
-        [TestCase(typeof(Yandere))]
+        [TestCase(typeof(Danbooru.Danbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Yandere.Yandere))]
         public void GetByName_Fail(Type booruType)
         {
             var booru = BooruHelper.TagCaches[booruType];

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Danbooru\BooruDotNet.Danbooru.csproj" />
     <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using BooruDotNet.Danbooru;
 using BooruDotNet.Posts;
 using BooruDotNet.Search.Json;
 

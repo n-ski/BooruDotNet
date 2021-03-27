@@ -4,7 +4,6 @@ using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Boorus;
 using BooruDotNet.Extensions;
 using BooruDotNet.Search.Results;
 using Validation;

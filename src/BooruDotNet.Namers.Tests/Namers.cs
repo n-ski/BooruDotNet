@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using BooruDotNet.Boorus;
 using BooruDotNet.Caching;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
@@ -8,8 +7,8 @@ namespace BooruDotNet.Namers.Tests
 {
     public class Namers
     {
-        private static readonly PostCache _postCache = BooruHelper.PostCaches[typeof(Danbooru)];
-        private static readonly TagCache _tagCache = BooruHelper.TagCaches[typeof(Danbooru)];
+        private static readonly PostCache _postCache = BooruHelper.PostCaches[typeof(Danbooru.Danbooru)];
+        private static readonly TagCache _tagCache = BooruHelper.TagCaches[typeof(Danbooru.Danbooru)];
         private static readonly IPostNamer _hashNamer = new HashNamer();
         private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_tagCache);
         private static readonly IPostNamer _fancyNamer = new DanbooruFancyNamer(_tagCache);

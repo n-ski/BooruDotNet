@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
@@ -11,10 +10,10 @@ namespace BooruDotNet.Tests
     public class Posts
     {
         [Test]
-        [TestCase(typeof(Danbooru), 123456)]
-        [TestCase(typeof(Gelbooru), 5632370)]
-        [TestCase(typeof(SankakuComplex), 5235625)]
-        [TestCase(typeof(Yandere), 759835)]
+        [TestCase(typeof(Danbooru.Danbooru), 123456)]
+        [TestCase(typeof(Gelbooru.Gelbooru), 5632370)]
+        [TestCase(typeof(SankakuComplex.SankakuComplex), 5235625)]
+        [TestCase(typeof(Yandere.Yandere), 759835)]
         public async Task GetById_Success(Type booruType, int id)
         {
             var booru = BooruHelper.PostCaches[booruType];
@@ -25,8 +24,8 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253)]
-        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
+        [TestCase(typeof(Danbooru.Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253)]
+        [TestCase(typeof(Gelbooru.Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
         public async Task GetByHash_Success(Type booruType, string hash, int expectedId)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
@@ -37,10 +36,10 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru), 123456)]
-        [TestCase(typeof(Gelbooru), 5632370)]
-        [TestCase(typeof(SankakuComplex), 5235625)]
-        [TestCase(typeof(Yandere), 759835)]
+        [TestCase(typeof(Danbooru.Danbooru), 123456)]
+        [TestCase(typeof(Gelbooru.Gelbooru), 5632370)]
+        [TestCase(typeof(SankakuComplex.SankakuComplex), 5235625)]
+        [TestCase(typeof(Yandere.Yandere), 759835)]
         public void GetById_Cancellation(Type booruType, int id)
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
@@ -54,8 +53,8 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752")]
-        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752")]
+        [TestCase(typeof(Danbooru.Danbooru), "a8044be47c86a36f7cf74253accd0752")]
+        [TestCase(typeof(Gelbooru.Gelbooru), "a8044be47c86a36f7cf74253accd0752")]
         public void GetByHash_Cancellation(Type booruType, string hash)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
@@ -67,10 +66,10 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru))]
-        [TestCase(typeof(Gelbooru))]
-        [TestCase(typeof(SankakuComplex))]
-        [TestCase(typeof(Yandere))]
+        [TestCase(typeof(Danbooru.Danbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(SankakuComplex.SankakuComplex))]
+        [TestCase(typeof(Yandere.Yandere))]
         public void GetById_Fail(Type booruType)
         {
             var booru = BooruHelper.PostCaches[booruType];
@@ -79,9 +78,9 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru))]
-        [TestCase(typeof(Gelbooru))]
-        [TestCase(typeof(Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
+        [TestCase(typeof(Danbooru.Danbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Gelbooru.Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
         public void GetByHash_Fail(Type booruType, string? hash = null)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
