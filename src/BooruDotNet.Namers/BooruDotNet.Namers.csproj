@@ -9,4 +9,8 @@
     <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
+  </ItemGroup>
+
 </Project>
