@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BooruDotNet.Links\BooruDotNet.Links.csproj" />
-    <ProjectReference Include="..\BooruDotNet\BooruDotNet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
