@@ -8,6 +8,7 @@
     <ProjectReference Include="..\BooruDotNet.Caching\BooruDotNet.Caching.csproj" />
     <ProjectReference Include="..\BooruDotNet.Danbooru\BooruDotNet.Danbooru.csproj" />
     <ProjectReference Include="..\BooruDotNet.Gelbooru\BooruDotNet.Gelbooru.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Konachan\BooruDotNet.Konachan.csproj" />
     <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
     <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
   </ItemGroup>

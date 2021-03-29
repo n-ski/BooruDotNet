@@ -12,6 +12,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru.Danbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Konachan.Konachan))]
         [TestCase(typeof(Yandere.Yandere))]
         public async Task GetByName_Success(Type booruType, string name = "pantyhose")
         {
@@ -25,6 +26,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru.Danbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Konachan.Konachan))]
         [TestCase(typeof(Yandere.Yandere))]
         public void GetByName_Cancellation(Type booruType, string name = "pantyhose")
         {
@@ -41,12 +43,14 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru.Danbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru))]
+        [TestCase(typeof(Konachan.Konachan))]
+        [TestCase(typeof(Konachan.Konachan), "Pantyhose")] // Case-sensitive search.
         [TestCase(typeof(Yandere.Yandere))]
-        public void GetByName_Fail(Type booruType)
+        public void GetByName_Fail(Type booruType, string name = "ThisDoesNotExist")
         {
-            var booru = BooruHelper.TagCaches[booruType];
+            var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
 
-            Assert.ThrowsAsync<InvalidTagNameException>(() => booru.GetTagAsync("ThisDoesNotExist"));
+            Assert.ThrowsAsync<InvalidTagNameException>(() => booru.GetTagAsync(name));
         }
     }
 }

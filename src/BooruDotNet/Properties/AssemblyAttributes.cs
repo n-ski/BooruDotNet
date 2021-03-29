@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("BooruDotNet.Danbooru")]
 [assembly: InternalsVisibleTo("BooruDotNet.Downloaders")]
 [assembly: InternalsVisibleTo("BooruDotNet.Gelbooru")]
+[assembly: InternalsVisibleTo("BooruDotNet.Konachan")]
 [assembly: InternalsVisibleTo("BooruDotNet.Links")]
 [assembly: InternalsVisibleTo("BooruDotNet.Namers")]
 [assembly: InternalsVisibleTo("BooruDotNet.SankakuComplex")]

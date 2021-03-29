@@ -7,6 +7,7 @@ using BooruDotNet.Danbooru;
 using BooruDotNet.Downloaders;
 using BooruDotNet.Gelbooru;
 using BooruDotNet.Helpers;
+using BooruDotNet.Konachan;
 using BooruDotNet.Links;
 using BooruDotNet.Namers;
 using BooruDotNet.Posts;
@@ -37,11 +38,13 @@ namespace BooruDownloader
 
             var danbooru = new Danbooru(httpClient);
             var gelbooru = new Gelbooru(httpClient);
+            var konachan = new Konachan(httpClient);
             var sankaku = new SankakuComplex(httpClient);
             var yandere = new Yandere(httpClient);
 
             LinkResolver.RegisterResolver(new DanbooruResolver(danbooru));
             LinkResolver.RegisterResolver(new GelbooruResolver(gelbooru));
+            LinkResolver.RegisterResolver(new KonachanResolver(konachan));
             LinkResolver.RegisterResolver(new SankakuComplexResolver(sankaku));
             LinkResolver.RegisterResolver(new YandereResolver(yandere));
 

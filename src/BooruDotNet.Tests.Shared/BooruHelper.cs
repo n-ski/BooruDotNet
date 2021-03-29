@@ -18,6 +18,7 @@ namespace BooruDotNet.Tests.Shared
 
             Danbooru = new Danbooru.Danbooru(HttpClient);
             Gelbooru = new Gelbooru.Gelbooru(HttpClient);
+            Konachan = new Konachan.Konachan(HttpClient);
             SankakuComplex = new SankakuComplex.SankakuComplex(HttpClient);
             Yandere = new Yandere.Yandere(HttpClient);
 
@@ -25,6 +26,7 @@ namespace BooruDotNet.Tests.Shared
             {
                 [typeof(Danbooru.Danbooru)] = new PostCache(Danbooru),
                 [typeof(Gelbooru.Gelbooru)] = new PostCache(Gelbooru),
+                [typeof(Konachan.Konachan)] = new PostCache(Konachan),
                 [typeof(SankakuComplex.SankakuComplex)] = new PostCache(SankakuComplex),
                 [typeof(Yandere.Yandere)] = new PostCache(Yandere),
             }.ToImmutableDictionary();
@@ -33,6 +35,7 @@ namespace BooruDotNet.Tests.Shared
             {
                 [typeof(Danbooru.Danbooru)] = new TagCache(Danbooru),
                 [typeof(Gelbooru.Gelbooru)] = new TagCache(Gelbooru),
+                [typeof(Konachan.Konachan)] = new TagCache(Konachan),
                 [typeof(Yandere.Yandere)] = new TagCache(Yandere),
             }.ToImmutableDictionary();
 
@@ -44,6 +47,8 @@ namespace BooruDotNet.Tests.Shared
         internal static Danbooru.Danbooru Danbooru { get; }
 
         internal static Gelbooru.Gelbooru Gelbooru { get; }
+
+        internal static Konachan.Konachan Konachan { get; }
 
         internal static SankakuComplex.SankakuComplex SankakuComplex { get; }
 
