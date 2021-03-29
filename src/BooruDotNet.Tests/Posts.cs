@@ -26,6 +26,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru.Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253)]
         [TestCase(typeof(Gelbooru.Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
+        [TestCase(typeof(Yandere.Yandere), "d483d8dfdc9753125d82b4561752d128", 759835)]
         public async Task GetByHash_Success(Type booruType, string hash, int expectedId)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
@@ -55,6 +56,7 @@ namespace BooruDotNet.Tests
         [Test]
         [TestCase(typeof(Danbooru.Danbooru), "a8044be47c86a36f7cf74253accd0752")]
         [TestCase(typeof(Gelbooru.Gelbooru), "a8044be47c86a36f7cf74253accd0752")]
+        [TestCase(typeof(Yandere.Yandere), "d483d8dfdc9753125d82b4561752d128")]
         public void GetByHash_Cancellation(Type booruType, string hash)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
@@ -81,6 +83,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru.Danbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru), "7225a1f1acd195823053613e41953cd0")] // Deleted post.
+        [TestCase(typeof(Yandere.Yandere))]
         public void GetByHash_Fail(Type booruType, string? hash = null)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);

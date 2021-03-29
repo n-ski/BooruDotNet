@@ -11,7 +11,7 @@ using Validation;
 
 namespace BooruDotNet.Yandere
 {
-    public class Yandere : BooruBase, IBooruPostById, IBooruTagByName
+    public class Yandere : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {
         public Yandere(HttpClient httpClient) : base(httpClient)
         {
@@ -31,6 +31,23 @@ namespace BooruDotNet.Yandere
                 .ConfigureAwait(false);
 
             Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
+
+            return posts[0];
+        }
+
+        public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
+        {
+            Requires.NotNullOrWhiteSpace(hash, nameof(hash));
+
+            Uri uri = UriHelper.CreateFormat(Uris.Yandere_PostHash_Format, hash);
+
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken)
+                .ConfigureAwait(false);
+
+            YanderePost[] posts = await DeserializeAsync<YanderePost[]>(response, cancellationToken)
+                .ConfigureAwait(false);
+
+            Error.IfNot<InvalidPostHashException>(posts.Length == 1, hash);
 
             return posts[0];
         }

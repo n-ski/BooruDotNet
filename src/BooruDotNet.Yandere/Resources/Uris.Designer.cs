@@ -61,6 +61,15 @@ namespace BooruDotNet.Yandere.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://yande.re/post.json?tags=md5%3A{0}.
+        /// </summary>
+        internal static string Yandere_PostHash_Format {
+            get {
+                return ResourceManager.GetString("Yandere_PostHash_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to https://yande.re/post.json?tags=id%3A{0}.
         /// </summary>
         internal static string Yandere_PostId_Format {
