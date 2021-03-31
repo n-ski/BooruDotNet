@@ -5,10 +5,11 @@ This project was initially inspired by [BooruSharp](https://github.com/Xwilarg/B
 ## Library support
 
 - Booru APIs
-  - Danbooru: posts by ID/MD5, tags by name
-  - Gelbooru: posts by ID/MD5, tags by name
-  - Sankaku Complex: posts by ID
-  - Yande.re: posts by ID, tags by name
+  - Danbooru: post by ID+MD5, tag by name
+  - Gelbooru: post by ID+MD5, tag by name
+  - Konachan: post by ID+MD5, tag by name
+  - Sankaku Complex: post by ID
+  - Yande.re: post by ID+MD5, tag by name
 - Parse URL into a booru post (see above for supported sites)
 - Reverse image search (with file or URL, see below for supported services)
 - Create names for posts (post hash or Danbooru-style format)
@@ -18,6 +19,7 @@ This project was initially inspired by [BooruSharp](https://github.com/Xwilarg/B
 - BooruDownloader: download files from these sites
   - Danbooru
   - Gelbooru
+  - Konachan
   - Sankaku Complex
   - Yande.re
 - ImageSearch: reverse image search using one of these services
