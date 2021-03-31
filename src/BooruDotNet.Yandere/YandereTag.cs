@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 using BooruDotNet.Tags;
 using BooruDotNet.Yandere.Json;
 
 namespace BooruDotNet.Yandere
 {
+    [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class YandereTag : ITag
     {
         [JsonPropertyName("name")]

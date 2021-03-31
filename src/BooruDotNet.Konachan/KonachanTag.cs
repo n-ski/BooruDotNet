@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics;
+using System.Text.Json.Serialization;
 using BooruDotNet.Konachan.Json;
 using BooruDotNet.Tags;
 
 namespace BooruDotNet.Konachan
 {
+    [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class KonachanTag : ITag
     {
         [JsonPropertyName("name")]
