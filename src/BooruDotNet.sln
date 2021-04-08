@@ -56,7 +56,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.SankakuComplex"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Yandere", "BooruDotNet.Yandere\BooruDotNet.Yandere.csproj", "{60166351-1949-4DE3-AF20-4FBC83ED098E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BooruDotNet.Konachan", "BooruDotNet.Konachan\BooruDotNet.Konachan.csproj", "{650D4D54-3E05-4740-845A-2604EDAD4C39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Konachan", "BooruDotNet.Konachan\BooruDotNet.Konachan.csproj", "{650D4D54-3E05-4740-845A-2604EDAD4C39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
