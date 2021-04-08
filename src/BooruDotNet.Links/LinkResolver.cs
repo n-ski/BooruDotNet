@@ -37,7 +37,7 @@ namespace BooruDotNet.Links
             {
                 post = await idResolver.ResolveFromIdLinkAsync(uri, cancellationToken).ConfigureAwait(false);
 
-                if (post is null == false)
+                if (post is object)
                 {
                     return post;
                 }
@@ -47,7 +47,7 @@ namespace BooruDotNet.Links
             {
                 post = await hashResolver.ResolveFromHashLinkAsync(uri, cancellationToken).ConfigureAwait(false);
 
-                if (post is null == false)
+                if (post is object)
                 {
                     return post;
                 }

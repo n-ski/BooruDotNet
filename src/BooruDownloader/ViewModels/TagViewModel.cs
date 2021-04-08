@@ -21,7 +21,7 @@ namespace BooruDownloader.ViewModels
             _tagExtractor = Requires.NotNull(tagExtractor, nameof(tagExtractor));
 
             _tag = Observable.StartAsync(GetTagInfo, RxApp.TaskpoolScheduler)
-                .Where(tag => tag != null)
+                .Where(tag => tag is object)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .ToProperty(this, x => x.Tag);
         }

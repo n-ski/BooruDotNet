@@ -32,7 +32,7 @@ namespace BooruDownloader.ViewModels
 
             ChangeDownloadLocation.Subscribe(directoryInfo =>
             {
-                if (directoryInfo != null)
+                if (directoryInfo is object)
                 {
                     DownloadLocation = directoryInfo.FullName;
                 }

@@ -13,7 +13,7 @@ namespace BooruDotNet.Helpers
         {
             Assumes.NotNull(exception);
 
-            for (Exception? ex = exception; ex is null == false; ex = ex.InnerException)
+            for (Exception? ex = exception; ex is object; ex = ex.InnerException)
             {
                 yield return ex;
             }

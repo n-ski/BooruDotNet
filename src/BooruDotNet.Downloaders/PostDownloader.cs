@@ -34,7 +34,7 @@ namespace BooruDotNet.Downloaders
 
         private Uri GetFileOrSampleUri(IPost post)
         {
-            Verify.Operation(post.FileUri is null == false, "File URI is null.");
+            Verify.Operation(post.FileUri is object, "File URI is null.");
 
             Uri uri = post.FileUri!;
 
@@ -49,7 +49,7 @@ namespace BooruDotNet.Downloaders
                     case ".7z":
                     case ".rar":
                     case ".zip":
-                        Verify.Operation(post.SampleImageUri is null == false, "Sample URI is null.");
+                        Verify.Operation(post.SampleImageUri is object, "Sample URI is null.");
                         uri = post.SampleImageUri!;
                         break;
                 }

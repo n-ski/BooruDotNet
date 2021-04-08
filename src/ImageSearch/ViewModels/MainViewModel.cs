@@ -87,7 +87,7 @@ namespace ImageSearch.ViewModels
             _searchResultsBest = this
                 .WhenAnyValue(x => x.SearchResults)
                 .Select(results => from result in results
-                                   where result.SourceUri != null && result.Similarity > _bestMatchThreshold
+                                   where result.SourceUri is object && result.Similarity > _bestMatchThreshold
                                    select result)
                 .ToProperty(this, x => x.SearchResultsBestMatches);
 
@@ -103,7 +103,7 @@ namespace ImageSearch.ViewModels
             _searchResultsOther = this
                 .WhenAnyValue(x => x.SearchResults)
                 .Select(results => from result in results
-                                   where result.SourceUri != null && result.Similarity <= _bestMatchThreshold
+                                   where result.SourceUri is object && result.Similarity <= _bestMatchThreshold
                                    select result)
                 .ToProperty(this, x => x.SearchResultsOtherMatches);
 

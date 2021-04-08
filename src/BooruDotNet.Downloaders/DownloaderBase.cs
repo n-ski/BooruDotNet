@@ -120,7 +120,7 @@ namespace BooruDotNet.Downloaders
                 {
                     FileInfo? file = await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
 
-                    if (file is null == false)
+                    if (file is object)
                     {
                         yield return file;
                     }
@@ -132,7 +132,7 @@ namespace BooruDotNet.Downloaders
                 {
                     FileInfo? file = await downloadItemAsync(item).ConfigureAwait(false);
 
-                    if (file is null == false)
+                    if (file is object)
                     {
                         yield return file;
                     }
