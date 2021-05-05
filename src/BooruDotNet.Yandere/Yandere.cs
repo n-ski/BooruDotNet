@@ -61,9 +61,16 @@ namespace BooruDotNet.Yandere
             YandereTag[] tags = await GetResponseAndDeserializeAsync<YandereTag[]>(uri, cancellationToken)
                 .ConfigureAwait(false);
 
-            Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
+            foreach (YandereTag tag in tags)
+            {
+                // Tag search is case-sensitive, see unit tests.
+                if (tag.Name == tagName)
+                {
+                    return tag;
+                }
+            }
 
-            return tags[0];
+            throw new InvalidTagNameException(tagName);
         }
     }
 }
