@@ -14,13 +14,14 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru.Gelbooru))]
         [TestCase(typeof(Konachan.Konachan))]
         [TestCase(typeof(Yandere.Yandere))]
-        public async Task GetByName_Success(Type booruType, string name = "pantyhose")
+        public async Task GetByName_Success(Type booruType, string name = "kantai_collection")
         {
             var booru = BooruHelper.TagCaches[booruType];
 
             var tag = await booru.GetTagAsync(name);
 
             Assert.AreEqual(name, tag.Name);
+            Assert.AreEqual(TagKind.Copyright, tag.Kind);
         }
 
         [Test]
@@ -28,7 +29,7 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Gelbooru.Gelbooru))]
         [TestCase(typeof(Konachan.Konachan))]
         [TestCase(typeof(Yandere.Yandere))]
-        public void GetByName_Cancellation(Type booruType, string name = "pantyhose")
+        public void GetByName_Cancellation(Type booruType, string name = "kantai_collection")
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
             // See TagsCache.cs.
@@ -44,8 +45,10 @@ namespace BooruDotNet.Tests
         [TestCase(typeof(Danbooru.Danbooru))]
         [TestCase(typeof(Gelbooru.Gelbooru))]
         [TestCase(typeof(Konachan.Konachan))]
-        [TestCase(typeof(Konachan.Konachan), "Pantyhose")] // Case-sensitive search.
         [TestCase(typeof(Yandere.Yandere))]
+        // Case-sensitive search.
+        [TestCase(typeof(Konachan.Konachan), "Pantyhose")]
+        [TestCase(typeof(Yandere.Yandere), "Kantai_Collection")]
         public void GetByName_Fail(Type booruType, string name = "ThisDoesNotExist")
         {
             var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
