@@ -10,7 +10,7 @@ namespace BooruDotNet.Gelbooru.Json
         {
             string tagKindString = reader.GetString()!;
 
-            if (Enum.TryParse(tagKindString, out TagKind tagKind))
+            if (Enum.TryParse(tagKindString, true, out TagKind tagKind))
             {
                 return tagKind;
             }
