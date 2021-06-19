@@ -4,7 +4,6 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
-    <Nullable>disable</Nullable>
     <Version>0.1.0</Version>
     <Product>Booru Downloader</Product>
     <Description>An application for downloading images from boorus (Danbooru, Gelbooru, etc.).</Description>

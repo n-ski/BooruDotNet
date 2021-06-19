@@ -6,7 +6,7 @@ namespace BooruDownloader.ViewModels
 {
     public class MediaViewModel : ReactiveObject
     {
-        private Uri _uri;
+        private Uri? _uri;
         private readonly ObservableAsPropertyHelper<bool> _isAnimatedMedia;
         private readonly ObservableAsPropertyHelper<bool> _isStaticImage;
 
@@ -19,7 +19,7 @@ namespace BooruDownloader.ViewModels
                 .ToProperty(this, x => x.IsStaticImage);
         }
 
-        public Uri Uri
+        public Uri? Uri
         {
             get => _uri;
             set => this.RaiseAndSetIfChanged(ref _uri, value);

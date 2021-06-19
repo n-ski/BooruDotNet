@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Reactive.Disposables;
 using System.Windows.Media;
 using BooruDotNet;

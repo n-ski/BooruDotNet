@@ -19,7 +19,7 @@ namespace BooruDownloader.ViewModels
         private bool _playSoundWhenComplete;
         private bool _overwirteExistingFiles;
         private bool _askLocationBeforeDownload;
-        private string _downloadLocation; // I'd really love to make this a OAPH, but we need to read from the settings into the property.
+        private string _downloadLocation = null!; // I'd really love to make this a OAPH, but we need to read from the settings into the property.
         private static readonly IEnumerable<FileNamingStyle> _fileNamingStyles = Enum.GetValues(typeof(FileNamingStyle)).Cast<FileNamingStyle>();
 
         public SettingsViewModel()

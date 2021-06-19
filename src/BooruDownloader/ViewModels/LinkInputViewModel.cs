@@ -14,6 +14,8 @@ namespace BooruDownloader.ViewModels
 
         public LinkInputViewModel()
         {
+            _inputText = string.Empty;
+
             _links = this
                 .WhenAnyValue(x => x.InputText)
                 .Throttle(TimeSpan.FromMilliseconds(100))
@@ -33,7 +35,7 @@ namespace BooruDownloader.ViewModels
             set => this.RaiseAndSetIfChanged(ref _inputText, value);
         }
 
-        public IEnumerable<string> Links => _links.Value;
+        public IEnumerable<string> Links => _links.Value!;
 
         public bool IsValid => _isValid.Value;
     }

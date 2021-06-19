@@ -12,7 +12,7 @@ namespace BooruDownloader.ViewModels
 {
     public class PostViewModel : ReactiveObject
     {
-        private readonly ObservableAsPropertyHelper<IEnumerable<TagViewModel>> _tags;
+        private readonly ObservableAsPropertyHelper<IEnumerable<TagViewModel>> _tags = null!;
 
         public PostViewModel(IPost post, IBooruTagByName tagExtractor)
             : this(post)
@@ -35,12 +35,13 @@ namespace BooruDownloader.ViewModels
         private PostViewModel(IPost post)
         {
             Post = Requires.NotNull(post, nameof(post));
+            Requires.Argument(Post.Uri is object, nameof(post), "Uri must not be null.");
 
             OpenInBrowser = ReactiveCommand.Create(() =>
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = Post.Uri.AbsoluteUri,
+                    FileName = Post.Uri!.AbsoluteUri,
                     UseShellExecute = true,
                 };
 
@@ -52,7 +53,7 @@ namespace BooruDownloader.ViewModels
 
         public IPost Post { get; }
 
-        public IEnumerable<TagViewModel> Tags => _tags.Value;
+        public IEnumerable<TagViewModel> Tags => _tags.Value!;
 
         public ReactiveCommand<Unit, Unit> OpenInBrowser { get; }
     }

@@ -26,7 +26,7 @@ namespace BooruDownloader.ViewModels
     public class MainViewModel : ReactiveObject
     {
         private readonly ObservableCollectionExtended<QueueItemViewModel> _queuedItems;
-        private IEnumerable<QueueItemViewModel> _selectedItems;
+        private IEnumerable<QueueItemViewModel>? _selectedItems;
         private readonly ObservableAsPropertyHelper<bool> _isAddingPosts;
         private readonly ObservableAsPropertyHelper<bool> _isDownloading;
         private readonly ObservableAsPropertyHelper<bool> _isBusy;
@@ -37,6 +37,10 @@ namespace BooruDownloader.ViewModels
         {
             _queuedItems = new ObservableCollectionExtended<QueueItemViewModel>();
             QueuedItems = new ReadOnlyObservableCollection<QueueItemViewModel>(_queuedItems);
+
+            CancelAdd = ReactiveCommand.Create(
+                MethodHelper.DoNothing,
+                this.WhenAnyValue(x => x.IsAddingPosts));
 
             AddFromUrls = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(AddFromUrlsImpl).TakeUntil(CancelAdd));
@@ -51,7 +55,7 @@ namespace BooruDownloader.ViewModels
                 async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             RemoveSelection = ReactiveCommand.Create(
-                () => _queuedItems.RemoveMany(SelectedItems),
+                () => _queuedItems.RemoveMany(SelectedItems!),
                 this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() == true));
 
             ClearQueue = ReactiveCommand.Create(
@@ -61,9 +65,9 @@ namespace BooruDownloader.ViewModels
             _isAddingPosts = Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
                 .ToProperty(this, x => x.IsAddingPosts);
 
-            CancelAdd = ReactiveCommand.Create(
+            CancelDownload = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
-                this.WhenAnyValue(x => x.IsAddingPosts));
+                this.WhenAnyValue(x => x.IsDownloading));
 
             DownloadPosts = ReactiveCommand.CreateFromObservable(
                 () => Observable.StartAsync(DownloadPostsImpl).TakeUntil(CancelDownload),
@@ -73,10 +77,6 @@ namespace BooruDownloader.ViewModels
                     (isAdding, count) => !isAdding && count > 0));
 
             _isDownloading = DownloadPosts.IsExecuting.ToProperty(this, x => x.IsDownloading);
-
-            CancelDownload = ReactiveCommand.Create(
-                MethodHelper.DoNothing,
-                this.WhenAnyValue(x => x.IsDownloading));
 
             _isBusy = Observable.Merge(
                 this.WhenAnyValue(x => x.IsAddingPosts),
@@ -96,7 +96,7 @@ namespace BooruDownloader.ViewModels
 
         public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
 
-        public IEnumerable<QueueItemViewModel> SelectedItems
+        public IEnumerable<QueueItemViewModel>? SelectedItems
         {
             get => _selectedItems;
             set => this.RaiseAndSetIfChanged(ref _selectedItems, value);
@@ -175,7 +175,7 @@ namespace BooruDownloader.ViewModels
 
             foreach (string url in links)
             {
-                if (Uri.TryCreate(url, UriKind.Absolute, out Uri uri))
+                if (Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
                 {
                     if (_queuedItems.Any(vm => vm.Post.Uri == uri))
                     {
@@ -194,7 +194,7 @@ namespace BooruDownloader.ViewModels
 
             foreach (Uri uri in urisToResolve)
             {
-                IPost post;
+                IPost? post;
 
                 try
                 {
@@ -264,9 +264,9 @@ namespace BooruDownloader.ViewModels
         private async Task DownloadPostsImpl(CancellationToken cancellationToken)
         {
             var settings = Settings.Default;
-            string targetDirectory;
+            string? targetDirectory;
 
-            static async Task<string> showFolderDialog()
+            static async Task<string?> showFolderDialog()
             {
                 var directory = await DialogInteractions.OpenFolderBrowser.Handle(Unit.Default);
 
