@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
@@ -7,7 +8,7 @@ namespace ImageSearch.Extensions
 {
     internal static class DropInfoExtensions
     {
-        internal static bool TryGetDroppedFiles(this IDropInfo dropInfo, out IEnumerable<string> files)
+        internal static bool TryGetDroppedFiles(this IDropInfo dropInfo, [NotNullWhen(true)] out IEnumerable<string>? files)
         {
             if (dropInfo.Data is DataObject data && data.ContainsFileDropList())
             {
@@ -21,7 +22,7 @@ namespace ImageSearch.Extensions
             }
         }
 
-        internal static bool TryGetDroppedText(this IDropInfo dropInfo, out string text)
+        internal static bool TryGetDroppedText(this IDropInfo dropInfo, [NotNullWhen(true)] out string? text)
         {
             if (dropInfo.Data is DataObject data && data.ContainsText())
             {

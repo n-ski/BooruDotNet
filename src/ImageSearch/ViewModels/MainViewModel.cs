@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive;
@@ -26,8 +27,8 @@ namespace ImageSearch.ViewModels
     {
         private const double _bestMatchThreshold = 0.85;
         private const double _thumbnailSize = 500.0;
-        private SearchServiceModel _selectedService;
-        private UploadViewModelBase _selectedUploadMethod;
+        private SearchServiceModel? _selectedService;
+        private UploadViewModelBase? _selectedUploadMethod;
         private readonly UriUploadViewModel _uriUploadViewModel;
         private readonly FileUploadViewModel _fileUploadViewModel;
         private readonly ObservableAsPropertyHelper<IEnumerable<ResultViewModel>> _searchResults;
@@ -50,7 +51,7 @@ namespace ImageSearch.ViewModels
             SetUploadMethod(UploadMethod.Uri);
 
             SearchCommand = ReactiveCommand.CreateFromObservable(
-                () => Observable.StartAsync(SearchCommandImpl).TakeUntil(CancelSearchCommand),
+                () => Observable.StartAsync(SearchCommandImpl).TakeUntil(CancelSearchCommand!),
                 this.WhenAnyValue(
                     x => x.SelectedUploadMethod,
                     x => x._uriUploadViewModel.ImageUri,
@@ -65,12 +66,12 @@ namespace ImageSearch.ViewModels
                         };
                     }));
 
-            SearchCommand.ThrownExceptions.Subscribe(
-                async ex => await MessageInteractions.ShowWarning.Handle(ex));
-
             CancelSearchCommand = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
                 SearchCommand.IsExecuting);
+
+            SearchCommand.ThrownExceptions.Subscribe(
+                async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             _isSearching = SearchCommand.IsExecuting.ToProperty(this, x => x.IsSearching);
 
@@ -80,7 +81,7 @@ namespace ImageSearch.ViewModels
                 initialValue: Enumerable.Empty<ResultViewModel>(),
                 scheduler: RxApp.MainThreadScheduler);
 
-            static bool hasAnyItems<T>(IEnumerable<T> enumerable) => enumerable.Any();
+            static bool hasAnyItems<T>(IEnumerable<T>? enumerable) => enumerable?.Any() is true;
 
             #region Best results
 
@@ -129,21 +130,21 @@ namespace ImageSearch.ViewModels
             });
         }
 
-        public SearchServiceModel SelectedService
+        public SearchServiceModel? SelectedService
         {
             get => _selectedService;
             set => this.RaiseAndSetIfChanged(ref _selectedService, value);
         }
 
-        public UploadViewModelBase SelectedUploadMethod
+        public UploadViewModelBase? SelectedUploadMethod
         {
             get => _selectedUploadMethod;
             set => this.RaiseAndSetIfChanged(ref _selectedUploadMethod, value);
         }
 
-        public IEnumerable<ResultViewModel> SearchResults => _searchResults.Value;
-        public IEnumerable<ResultViewModel> SearchResultsBestMatches => _searchResultsBest.Value;
-        public IEnumerable<ResultViewModel> SearchResultsOtherMatches => _searchResultsOther.Value;
+        public IEnumerable<ResultViewModel> SearchResults => _searchResults.Value!;
+        public IEnumerable<ResultViewModel> SearchResultsBestMatches => _searchResultsBest.Value!;
+        public IEnumerable<ResultViewModel> SearchResultsOtherMatches => _searchResultsOther.Value!;
         public bool HasBestResults => _hasBestResults.Value;
         public bool HasOtherResults => _hasOtherResults.Value;
         public bool IsSearching => _isSearching.Value;
@@ -156,8 +157,8 @@ namespace ImageSearch.ViewModels
 
         public void DragOver(IDropInfo dropInfo)
         {
-            if ((dropInfo.TryGetDroppedFiles(out IEnumerable<string> files) && files.Any(FileHelper.IsFileValid))
-                || (dropInfo.TryGetDroppedText(out string text) && Uri.IsWellFormedUriString(text, UriKind.Absolute)))
+            if ((dropInfo.TryGetDroppedFiles(out IEnumerable<string>? files) && files.Any(FileHelper.IsFileValid))
+                || (dropInfo.TryGetDroppedText(out string? text) && Uri.IsWellFormedUriString(text, UriKind.Absolute)))
             {
                 dropInfo.Effects = DragDropEffects.Copy;
             }
@@ -169,13 +170,13 @@ namespace ImageSearch.ViewModels
 
         public void Drop(IDropInfo dropInfo)
         {
-            if (dropInfo.TryGetDroppedFiles(out IEnumerable<string> files)
+            if (dropInfo.TryGetDroppedFiles(out IEnumerable<string>? files)
                 && files.FirstOrDefault(FileHelper.IsFileValid) is string path)
             {
                 SearchWithFile(new FileInfo(path), _searchImmeaditelyAfterDrop);
             }
-            else if (dropInfo.TryGetDroppedText(out string text)
-                && Uri.TryCreate(text, UriKind.Absolute, out Uri uri))
+            else if (dropInfo.TryGetDroppedText(out string? text)
+                && Uri.TryCreate(text, UriKind.Absolute, out Uri? uri))
             {
                 SearchWithUri(uri, _searchImmeaditelyAfterDrop);
             }
@@ -187,7 +188,9 @@ namespace ImageSearch.ViewModels
         {
             IEnumerable<IResult> results;
 
-            switch (SelectedUploadMethod.UploadMethod)
+            Debug.Assert(SelectedService is object);
+
+            switch (SelectedUploadMethod?.UploadMethod)
             {
                 case UploadMethod.Uri:
                     results = await SelectedService.SearchAsync(_uriUploadViewModel.ImageUri, cancellationToken);
@@ -195,6 +198,8 @@ namespace ImageSearch.ViewModels
 
                 case UploadMethod.File:
                 {
+                    Debug.Assert(_fileUploadViewModel.FileInfo is object);
+
                     FileStream imageStream;
 
                     if (_compressImages)

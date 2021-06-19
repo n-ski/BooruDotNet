@@ -4,7 +4,7 @@ namespace ImageSearch.Helpers
 {
     internal static class UriHelper
     {
-        internal static bool IsValid(Uri uri)
+        internal static bool IsValid(Uri? uri)
         {
             if (uri is null)
             {

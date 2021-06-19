@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reactive;
+using ImageSearch.Helpers;
 using ImageSearch.Interactions;
 using ReactiveUI;
 
@@ -7,13 +8,14 @@ namespace ImageSearch.ViewModels
 {
     public class UriUploadViewModel : UploadViewModelBase
     {
-        private Uri _imageUri;
+        private Uri? _imageUri;
 
         public UriUploadViewModel(string name, UploadMethod uploadMethod)
             : base(name, uploadMethod)
         {
             SearchCommand = ReactiveCommand.CreateFromObservable(
-                () => ImageInteractions.SearchWithUri.Handle(ImageUri));
+                () => ImageInteractions.SearchWithUri.Handle(ImageUri!),
+                this.WhenAnyValue(x => x.ImageUri, uri => UriHelper.IsValid(uri)));
 
             // Swallow the exception. MainViewModel handles the interaction by executing
             // SearchCommand which also handles exceptions, so interacting with an exception
@@ -21,7 +23,7 @@ namespace ImageSearch.ViewModels
             SearchCommand.ThrownExceptions.Subscribe();
         }
 
-        public Uri ImageUri
+        public Uri? ImageUri
         {
             get => _imageUri;
             set => this.RaiseAndSetIfChanged(ref _imageUri, value);

@@ -10,7 +10,7 @@ namespace ImageSearch.ViewModels
 {
     public class FileUploadViewModel : UploadViewModelBase
     {
-        private FileInfo _fileInfo;
+        private FileInfo? _fileInfo;
 
         public FileUploadViewModel(string name, UploadMethod uploadMethod)
             : base(name, uploadMethod)
@@ -33,12 +33,12 @@ namespace ImageSearch.ViewModels
             OpenFileCommand.Subscribe(file => FileInfo = file);
         }
 
-        public FileInfo FileInfo
+        public FileInfo? FileInfo
         {
             get => _fileInfo;
             set => this.RaiseAndSetIfChanged(ref _fileInfo, value);
         }
 
-        public ReactiveCommand<Unit, FileInfo> OpenFileCommand { get; }
+        public ReactiveCommand<Unit, FileInfo?> OpenFileCommand { get; }
     }
 }
