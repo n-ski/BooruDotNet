@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <Version>0.1.0</Version>
-    <Product Condition="'$(TargetFramework)' == 'netstandard2.1'">Booru .NET Image Search (.NET Standard 2.1)</Product>
-    <Product Condition="'$(TargetFramework)' == 'netcoreapp3.1'">Booru .NET Image Search (.NET Core 3.1)</Product>
+    <Product>Booru .NET Image Search (.NET Standard 2.1)</Product>
     <Description>A simple library for reverse image searching (Danbooru, Gelbooru, etc.).</Description>
   </PropertyGroup>
 
