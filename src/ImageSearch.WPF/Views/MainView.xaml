@@ -1,0 +1,94 @@
+﻿<rui:ReactiveWindow
+    x:Class="ImageSearch.WPF.Views.MainView"
+    x:TypeArguments="vm:MainViewModel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rui="http://reactiveui.net"
+    xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
+    Title="IQDB Image Search"
+    Width="800"
+    Height="450"
+    UseLayoutRounding="True"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <Grid
+        Margin="{StaticResource MarginMedium}">
+
+        <Grid.RowDefinitions>
+            <RowDefinition
+                Height="1*" />
+            <RowDefinition
+                Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="Auto" />
+            <ColumnDefinition
+                Width="100" />
+            <ColumnDefinition
+                Width="1*" />
+            <ColumnDefinition
+                Width="200" />
+            <ColumnDefinition
+                Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="5"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+
+            <ItemsControl
+                x:Name="BestSearchResultsControl">
+
+                <ItemsControl.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <WrapPanel
+                            HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="{StaticResource MarginMedium}"
+            Text="Upload:" />
+
+        <ComboBox
+            x:Name="UploadMethodsComboBox"
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="{StaticResource MarginMedium}"
+            DisplayMemberPath="." />
+
+        <rui:ViewModelViewHost
+            x:Name="UploadMethodHost"
+            Grid.Row="1"
+            Grid.Column="2"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch" />
+
+        <ComboBox
+            x:Name="SearchServicesComboBox"
+            Grid.Row="1"
+            Grid.Column="3"
+            Margin="{StaticResource MarginMedium}" />
+
+        <Button
+            x:Name="SearchButton"
+            Grid.Row="1"
+            Grid.Column="4"
+            Margin="{StaticResource MarginMedium}"
+            Content="Search" />
+    </Grid>
+</rui:ReactiveWindow>
