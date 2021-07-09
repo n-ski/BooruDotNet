@@ -24,14 +24,10 @@ namespace ImageSearch.ViewModels
 
         public MainViewModel()
         {
-            UploadMethods = new UploadViewModelBase[]
-            {
-                new FileUploadViewModel(),
-                new UriUploadViewModel(),
-            };
+            UploadMethods = (UploadMethod[])Enum.GetValues(typeof(UploadMethod));
 
             var canSearch = this.WhenAnyValue(
-                x => x.SelectedUploadMethod,
+                x => x.UploadMethod,
                 x => x.SelectedSearchService,
                 (selectedMethod, selectedService) =>
                 {
@@ -62,7 +58,16 @@ namespace ImageSearch.ViewModels
 
             CopySource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => CopyUriInteraction.Handle(uri));
 
-            this.WhenAnyObservable(x => x.SelectedUploadMethod!.Search)
+            this.WhenAnyValue(x => x.SelectedUploadMethod)
+                .WhereNotNull()
+                .Select<UploadMethod?, UploadViewModelBase>(method => method switch
+                {
+                    ImageSearch.UploadMethod.File => new FileUploadViewModel(),
+                    ImageSearch.UploadMethod.Uri => new UriUploadViewModel(),
+                    _ => throw Assumes.NotReachable()
+                }).ToPropertyEx(this, x => x.UploadMethod);
+
+            this.WhenAnyObservable(x => x.UploadMethod!.Search)
                 .InvokeCommand(this, x => x.Search);
 
             #region Search results bindings
@@ -115,16 +120,18 @@ namespace ImageSearch.ViewModels
 
         #region Properties
 
-        public IEnumerable<UploadViewModelBase> UploadMethods { get; }
+        public IEnumerable<UploadMethod> UploadMethods { get; }
 
         [Reactive]
-        public UploadViewModelBase? SelectedUploadMethod { get; set; }
+        public UploadMethod? SelectedUploadMethod { get; set; }
 
         [Reactive]
         public IEnumerable<SearchServiceViewModel>? SearchServices { get; set; }
 
         [Reactive]
         public SearchServiceViewModel? SelectedSearchService { get; set; }
+
+        public extern UploadViewModelBase? UploadMethod { [ObservableAsProperty] get; }
 
         public extern bool IsSearching { [ObservableAsProperty] get; }
 
@@ -155,12 +162,12 @@ namespace ImageSearch.ViewModels
 
         private async Task<IEnumerable<SearchResultViewModel>> SearchImpl(CancellationToken cancellationToken)
         {
-            Debug.Assert(SelectedUploadMethod is object);
+            Debug.Assert(UploadMethod is object);
             Debug.Assert(SelectedSearchService is object);
 
             IEnumerable<IResult> results;
 
-            switch (SelectedUploadMethod)
+            switch (UploadMethod)
             {
                 case FileUploadViewModel fileUpload:
                 {
@@ -188,10 +195,15 @@ namespace ImageSearch.ViewModels
 
         private IObservable<IEnumerable<SearchResultViewModel>> SearchForSimilarImpl(Uri uri)
         {
-            var uriUpload = UploadMethods.OfType<UriUploadViewModel>().First();
-            uriUpload.FileUri = uri;
+            if (UploadMethod is UriUploadViewModel uriUpload)
+            {
+            }
+            else
+            {
+                uriUpload = new UriUploadViewModel();
+            }
 
-            SelectedUploadMethod = uriUpload;
+            uriUpload.FileUri = uri;
 
             return Search.Execute();
         }
