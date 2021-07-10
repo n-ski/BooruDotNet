@@ -22,26 +22,33 @@ namespace ImageSearch.ViewModels
         private const double _bestResultThreshold = 0.8;
         private readonly ReadOnlyObservableCollection<SearchResultViewModel> _bestResults;
         private readonly ReadOnlyObservableCollection<SearchResultViewModel> _otherResults;
+        private readonly FileUploadViewModel _fileUploadViewModel;
+        private readonly UriUploadViewModel _uriUploadViewModel;
 
         public MainViewModel()
         {
+            _fileUploadViewModel = new FileUploadViewModel();
+            _uriUploadViewModel = new UriUploadViewModel();
+
             UploadMethods = (UploadMethod[])Enum.GetValues(typeof(UploadMethod));
             SearchServices = Locator.Current.GetService<IEnumerable<SearchServiceViewModel>>();
 
             var canSearch = this.WhenAnyValue(
                 x => x.UploadMethod,
+                x => x._fileUploadViewModel.FileToUpload,
+                x => x._uriUploadViewModel.FileUri,
                 x => x.SelectedSearchService,
-                (selectedMethod, selectedService) =>
+                (selectedMethod, file, uri, selectedService) =>
                 {
                     if (selectedService is object)
                     {
                         switch (selectedMethod)
                         {
-                            case FileUploadViewModel fileUpload:
-                                return fileUpload.FileToUpload?.Exists is true;
+                            case FileUploadViewModel _:
+                                return file?.Exists is true;
 
-                            case UriUploadViewModel uriUpload:
-                                return uriUpload.FileUri?.IsAbsoluteUri is true;
+                            case UriUploadViewModel _:
+                                return uri?.IsAbsoluteUri is true;
                         }
                     }
 
@@ -64,8 +71,8 @@ namespace ImageSearch.ViewModels
                 .WhereNotNull()
                 .Select<UploadMethod?, UploadViewModelBase>(method => method switch
                 {
-                    ImageSearch.UploadMethod.File => new FileUploadViewModel(),
-                    ImageSearch.UploadMethod.Uri => new UriUploadViewModel(),
+                    ImageSearch.UploadMethod.File => _fileUploadViewModel,
+                    ImageSearch.UploadMethod.Uri => _uriUploadViewModel,
                     _ => throw Assumes.NotReachable()
                 }).ToPropertyEx(this, x => x.UploadMethod);
 
@@ -201,7 +208,7 @@ namespace ImageSearch.ViewModels
             }
             else
             {
-                uriUpload = new UriUploadViewModel();
+                uriUpload = _uriUploadViewModel;
             }
 
             uriUpload.FileUri = uri;
