@@ -40,6 +40,8 @@ namespace ImageSearch.WPF.Views
 
                 #endregion
 
+                #region Upload methods
+
                 this.OneWayBind(ViewModel, vm => vm.UploadMethods, v => v.UploadMethodsComboBox.ItemsSource)
                     .DisposeWith(d);
 
@@ -50,12 +52,18 @@ namespace ImageSearch.WPF.Views
                 this.OneWayBind(ViewModel, vm => vm.UploadMethod, v => v.UploadMethodHost.ViewModel)
                     .DisposeWith(d);
 
+                #endregion
+
+                #region Search services
+
                 this.OneWayBind(ViewModel, vm => vm.SearchServices, v => v.SearchServicesComboBox.ItemsSource)
                     .DisposeWith(d);
 
                 this.WhenAnyValue(v => v.SearchServicesComboBox.SelectedItem)
                     .BindTo(this, v => v.ViewModel.SelectedSearchService)
                     .DisposeWith(d);
+
+                #endregion
 
                 this.BindCommand(ViewModel, vm => vm.Search, v => v.SearchButton)
                     .DisposeWith(d);
