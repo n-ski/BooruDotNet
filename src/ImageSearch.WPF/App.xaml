@@ -16,6 +16,8 @@
                 <ResourceDictionary
                     Source="./Assets/Styles/Button.xaml" />
                 <ResourceDictionary
+                    Source="./Assets/Styles/ItemsControl.xaml" />
+                <ResourceDictionary
                     Source="./Assets/Styles/TextBlock.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

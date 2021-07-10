@@ -45,18 +45,28 @@
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
 
-            <ItemsControl
-                x:Name="BestSearchResultsControl">
+            <StackPanel>
 
-                <ItemsControl.ItemsPanel>
+                <TextBlock
+                    x:Name="BestSearchResultsTextBlock"
+                    Margin="{StaticResource MarginMedium}"
+                    Style="{StaticResource SearchResultGroupHeader}"
+                    Text="Best matches" />
 
-                    <ItemsPanelTemplate>
+                <ItemsControl
+                    x:Name="BestSearchResultsControl"
+                    Style="{StaticResource SearchResultItemsControl}" />
 
-                        <WrapPanel
-                            HorizontalAlignment="Center" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                <TextBlock
+                    x:Name="OtherSearchResultsTextBlock"
+                    Margin="{StaticResource MarginMedium}"
+                    Style="{StaticResource SearchResultGroupHeader}"
+                    Text="Other matches" />
+
+                <ItemsControl
+                    x:Name="OtherSearchResultsControl"
+                    Style="{StaticResource SearchResultItemsControl}" />
+            </StackPanel>
         </ScrollViewer>
 
         <TextBlock
