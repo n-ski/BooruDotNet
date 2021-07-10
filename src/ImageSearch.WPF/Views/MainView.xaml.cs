@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using ImageSearch.ViewModels;
 using ReactiveUI;
@@ -74,6 +75,11 @@ namespace ImageSearch.WPF.Views
                 // Because selection is bound from view to view model, initialize default selection after we're done binding here.
                 UploadMethodsComboBox.SelectedIndex = 0;
                 SearchServicesComboBox.SelectedIndex = 0;
+
+                // Scroll to top when the results change.
+                this.WhenAnyValue(x => x.ViewModel.BestResults.Count, x => x.ViewModel.OtherResults.Count)
+                    .Subscribe(_ => SearchResultsScrollViewer.ScrollToTop())
+                    .DisposeWith(d);
 
                 #region Interactions
 

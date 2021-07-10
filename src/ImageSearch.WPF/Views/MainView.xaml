@@ -39,6 +39,7 @@
         </Grid.ColumnDefinitions>
 
         <ScrollViewer
+            x:Name="SearchResultsScrollViewer"
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="5"
