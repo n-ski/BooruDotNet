@@ -83,38 +83,31 @@ namespace ImageSearch.ViewModels
 
             #region Search results bindings
 
-            // Not sure whether or not we're supposed to dispose of these subscriptions.
-            // MainViewModel doesn't change so it shouldn't be a problem.
-
             _searchResults = new ObservableCollectionExtended<SearchResultViewModel>();
 
             var searchResults = _searchResults
                 .ToObservableChangeSet()
                 .RefCount();
 
-            searchResults
-                .Transform(result => result
-                    .WhenAnyObservable(r => r.OpenSource)
-                    .WhereNotNull()
-                    .InvokeCommand(this, x => x.OpenSource))
-                .DisposeMany()
-                .Subscribe();
+            // First, observe commands from search results and pipe them to main commands.
 
             searchResults
-                .Transform(result => result
-                    .WhenAnyObservable(r => r.CopySource)
-                    .WhereNotNull()
-                    .InvokeCommand(this, x => x.CopySource))
-                .DisposeMany()
-                .Subscribe();
+                .AutoRefreshOnObservable(result => result.OpenSource)
+                .Select(_ => _searchResults.Select(result => result.OpenSource).Merge())
+                .Switch()
+                .InvokeCommand(this, x => x.OpenSource);
 
             searchResults
-                .Transform(result => result
-                    .WhenAnyObservable(r => r.SearchForSimilar)
-                    .WhereNotNull()
-                    .InvokeCommand(this, x => x.SearchForSimilar))
-                .DisposeMany()
-                .Subscribe();
+                .AutoRefreshOnObservable(result => result.CopySource)
+                .Select(_ => _searchResults.Select(result => result.CopySource).Merge())
+                .Switch()
+                .InvokeCommand(this, x => x.CopySource);
+
+            searchResults
+                .AutoRefreshOnObservable(result => result.SearchForSimilar)
+                .Select(_ => _searchResults.Select(result => result.SearchForSimilar).Merge())
+                .Switch()
+                .InvokeCommand(this, x => x.SearchForSimilar);
 
             searchResults
                 .Filter(result => result.Similarity >= _bestResultThreshold)
