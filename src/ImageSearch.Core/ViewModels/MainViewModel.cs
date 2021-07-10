@@ -9,6 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Results;
 using DynamicData;
+using DynamicData.Binding;
 using ImageSearch.Helpers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -20,6 +21,7 @@ namespace ImageSearch.ViewModels
     public class MainViewModel : ReactiveObject
     {
         private const double _bestResultThreshold = 0.8;
+        private readonly ObservableCollectionExtended<SearchResultViewModel> _searchResults;
         private readonly ReadOnlyObservableCollection<SearchResultViewModel> _bestResults;
         private readonly ReadOnlyObservableCollection<SearchResultViewModel> _otherResults;
         private readonly FileUploadViewModel _fileUploadViewModel;
@@ -59,7 +61,7 @@ namespace ImageSearch.ViewModels
 
             Search.IsExecuting.ToPropertyEx(this, x => x.IsSearching);
 
-            SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, IEnumerable<SearchResultViewModel>>(SearchForSimilarImpl);
+            SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, Unit>(SearchForSimilarImpl);
 
             CancelSearch = ReactiveCommand.Create(MethodHelper.DoNothing, Search.IsExecuting);
 
@@ -84,7 +86,9 @@ namespace ImageSearch.ViewModels
             // Not sure whether or not we're supposed to dispose of these subscriptions.
             // MainViewModel doesn't change so it shouldn't be a problem.
 
-            var searchResults = Search
+            _searchResults = new ObservableCollectionExtended<SearchResultViewModel>();
+
+            var searchResults = _searchResults
                 .ToObservableChangeSet()
                 .RefCount();
 
@@ -151,11 +155,11 @@ namespace ImageSearch.ViewModels
 
         #region Commands
 
-        public ReactiveCommand<Unit, IEnumerable<SearchResultViewModel>> Search { get; }
+        public ReactiveCommand<Unit, Unit> Search { get; }
         public ReactiveCommand<Unit, Unit> CancelSearch { get; }
         public ReactiveCommand<Uri, Unit> OpenSource { get; }
         public ReactiveCommand<Uri, Unit> CopySource { get; }
-        public ReactiveCommand<Uri, IEnumerable<SearchResultViewModel>> SearchForSimilar { get; }
+        public ReactiveCommand<Uri, Unit> SearchForSimilar { get; }
 
         #endregion
 
@@ -168,7 +172,7 @@ namespace ImageSearch.ViewModels
 
         #region Command implementations
 
-        private async Task<IEnumerable<SearchResultViewModel>> SearchImpl(CancellationToken cancellationToken)
+        private async Task SearchImpl(CancellationToken cancellationToken)
         {
             Debug.Assert(UploadMethod is object);
             Debug.Assert(SelectedSearchService is object);
@@ -198,10 +202,16 @@ namespace ImageSearch.ViewModels
                     throw Assumes.NotReachable();
             }
 
-            return results.Select(x => new SearchResultViewModel(x));
+            var resultViewModels = results.Select(x => new SearchResultViewModel(x));
+
+            using (_searchResults.SuspendNotifications())
+            {
+                _searchResults.Clear();
+                _searchResults.AddRange(resultViewModels);
+            }
         }
 
-        private IObservable<IEnumerable<SearchResultViewModel>> SearchForSimilarImpl(Uri uri)
+        private IObservable<Unit> SearchForSimilarImpl(Uri uri)
         {
             SelectedUploadMethod = ImageSearch.UploadMethod.Uri;
 
