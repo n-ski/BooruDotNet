@@ -39,6 +39,10 @@ namespace ImageSearch.WPF.Views
 
                 this.BindCommand(ViewModel, vm => vm.Search, v => v.SearchButton)
                     .DisposeWith(d);
+
+                // Because selection is bound from view to view model, initialize default selection after we're done binding here.
+                UploadMethodsComboBox.SelectedIndex = 0;
+                SearchServicesComboBox.SelectedIndex = 0;
             });
         }
     }

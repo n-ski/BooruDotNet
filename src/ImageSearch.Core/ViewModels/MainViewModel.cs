@@ -12,6 +12,7 @@ using DynamicData;
 using ImageSearch.Helpers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using Splat;
 using Validation;
 
 namespace ImageSearch.ViewModels
@@ -25,6 +26,7 @@ namespace ImageSearch.ViewModels
         public MainViewModel()
         {
             UploadMethods = (UploadMethod[])Enum.GetValues(typeof(UploadMethod));
+            SearchServices = Locator.Current.GetService<IEnumerable<SearchServiceViewModel>>();
 
             var canSearch = this.WhenAnyValue(
                 x => x.UploadMethod,
@@ -125,8 +127,7 @@ namespace ImageSearch.ViewModels
         [Reactive]
         public UploadMethod? SelectedUploadMethod { get; set; }
 
-        [Reactive]
-        public IEnumerable<SearchServiceViewModel>? SearchServices { get; set; }
+        public IEnumerable<SearchServiceViewModel>? SearchServices { get; }
 
         [Reactive]
         public SearchServiceViewModel? SelectedSearchService { get; set; }
