@@ -1,4 +1,7 @@
 ﻿#nullable disable
+using System;
+using System.Diagnostics;
+using System.Reactive;
 using System.Reactive.Disposables;
 using System.Windows;
 using ImageSearch.ViewModels;
@@ -71,6 +74,34 @@ namespace ImageSearch.WPF.Views
                 // Because selection is bound from view to view model, initialize default selection after we're done binding here.
                 UploadMethodsComboBox.SelectedIndex = 0;
                 SearchServicesComboBox.SelectedIndex = 0;
+
+                #region Interactions
+
+                ViewModel.OpenUriInteraction.RegisterHandler(interaction =>
+                {
+                    Uri uri = interaction.Input;
+                    Debug.Assert(uri.IsAbsoluteUri);
+
+                    using var process = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = uri.AbsoluteUri,
+                        UseShellExecute = true,
+                    });
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
+
+                ViewModel.CopyUriInteraction.RegisterHandler(interaction =>
+                {
+                    Uri uri = interaction.Input;
+                    Debug.Assert(uri.IsAbsoluteUri);
+
+                    Clipboard.SetText(uri.AbsoluteUri);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
+
+                #endregion
             });
         }
     }
