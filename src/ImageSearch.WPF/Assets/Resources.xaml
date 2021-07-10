@@ -1,0 +1,29 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Thickness
+        x:Key="MarginMedium"
+        Bottom="4"
+        Left="4"
+        Right="4"
+        Top="4" />
+
+    <BitmapImage
+        x:Key="AppIcon"
+        UriSource="./Images/AppIcon.ico" />
+
+    <BitmapImage
+        x:Key="IqdbIcon"
+        DecodePixelHeight="16"
+        DecodePixelWidth="16"
+        UriSource="./Images/AppIcon.ico" />
+
+    <BitmapImage
+        x:Key="DanbooruIcon"
+        UriSource="./Images/Danbooru.ico" />
+
+    <BitmapImage
+        x:Key="GelbooruIcon"
+        UriSource="./Images/Gelbooru.png" />
+</ResourceDictionary>

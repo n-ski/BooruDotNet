@@ -6,23 +6,17 @@
 
     <Application.Resources>
 
-        <Thickness
-            x:Key="MarginMedium"
-            Bottom="4"
-            Left="4"
-            Right="4 "
-            Top="4" />
+        <ResourceDictionary>
 
-        <Style
-            TargetType="Button">
+            <ResourceDictionary.MergedDictionaries>
 
-            <Setter Property="Padding" Value="8,2" />
-        </Style>
-
-        <Style TargetType="TextBlock">
-
-            <Setter Property="VerticalAlignment"
-                    Value="Center" />
-        </Style>
+                <ResourceDictionary
+                    Source="./Assets/Resources.xaml" />
+                <ResourceDictionary
+                    Source="./Assets/Styles/Button.xaml" />
+                <ResourceDictionary
+                    Source="./Assets/Styles/TextBlock.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

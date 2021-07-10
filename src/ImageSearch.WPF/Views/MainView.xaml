@@ -10,6 +10,7 @@
     Title="IQDB Image Search"
     Width="800"
     Height="450"
+    Icon="{StaticResource IqdbIcon}"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
