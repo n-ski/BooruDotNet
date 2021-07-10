@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:ImageSearch.WPF.Converters">
 
     <Thickness
         x:Key="MarginMedium"
@@ -8,6 +9,9 @@
         Left="4"
         Right="4"
         Top="4" />
+
+    <converters:BitmapToNativeConverter
+        x:Key="BitmapToNativeConverter" />
 
     <BitmapImage
         x:Key="AppIcon"
