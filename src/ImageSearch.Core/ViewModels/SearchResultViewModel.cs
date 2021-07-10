@@ -18,11 +18,9 @@ namespace ImageSearch.ViewModels
             ImageSize = result.Width.HasValue && result.Height.HasValue
                 ? new Size(result.Width.Value, result.Height.Value) : Size.Empty;
 
-            Uri getSourceUri() => SourceUri;
-
-            OpenSource = ReactiveCommand.Create(getSourceUri);
-            CopySource = ReactiveCommand.Create(getSourceUri);
-            SearchForSimilar = ReactiveCommand.Create(getSourceUri);
+            OpenSource = ReactiveCommand.Create(() => SourceUri);
+            CopySource = ReactiveCommand.Create(() => SourceUri);
+            SearchForSimilar = ReactiveCommand.Create(() => ImageUri);
         }
 
         public Uri ImageUri => _result.PreviewImageUri;

@@ -59,7 +59,7 @@ namespace ImageSearch.ViewModels
 
             Search.IsExecuting.ToPropertyEx(this, x => x.IsSearching);
 
-            SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, IEnumerable<SearchResultViewModel>>(SearchForSimilarImpl, canSearch);
+            SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, IEnumerable<SearchResultViewModel>>(SearchForSimilarImpl);
 
             CancelSearch = ReactiveCommand.Create(MethodHelper.DoNothing, Search.IsExecuting);
 
@@ -91,7 +91,7 @@ namespace ImageSearch.ViewModels
             searchResults
                 .Transform(result => result
                     .WhenAnyObservable(r => r.OpenSource)
-                    .Select(_ => result.SourceUri)
+                    .WhereNotNull()
                     .InvokeCommand(this, x => x.OpenSource))
                 .DisposeMany()
                 .Subscribe();
@@ -99,7 +99,7 @@ namespace ImageSearch.ViewModels
             searchResults
                 .Transform(result => result
                     .WhenAnyObservable(r => r.CopySource)
-                    .Select(_ => result.SourceUri)
+                    .WhereNotNull()
                     .InvokeCommand(this, x => x.CopySource))
                 .DisposeMany()
                 .Subscribe();
@@ -107,7 +107,7 @@ namespace ImageSearch.ViewModels
             searchResults
                 .Transform(result => result
                     .WhenAnyObservable(r => r.SearchForSimilar)
-                    .Select(_ => result.SourceUri)
+                    .WhereNotNull()
                     .InvokeCommand(this, x => x.SearchForSimilar))
                 .DisposeMany()
                 .Subscribe();
@@ -203,15 +203,16 @@ namespace ImageSearch.ViewModels
 
         private IObservable<IEnumerable<SearchResultViewModel>> SearchForSimilarImpl(Uri uri)
         {
+            SelectedUploadMethod = ImageSearch.UploadMethod.Uri;
+
             if (UploadMethod is UriUploadViewModel uriUpload)
             {
+                uriUpload.FileUri = uri;
             }
             else
             {
-                uriUpload = _uriUploadViewModel;
+                throw Assumes.NotReachable();
             }
-
-            uriUpload.FileUri = uri;
 
             return Search.Execute();
         }
