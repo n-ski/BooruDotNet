@@ -90,7 +90,8 @@ namespace ImageSearch.ViewModels
 
             var searchResults = _searchResults
                 .ToObservableChangeSet()
-                .RefCount();
+                .RefCount()
+                .Filter(result => result.SourceUri is object);
 
             // First, observe commands from search results and pipe them to main commands.
 
