@@ -29,6 +29,7 @@ namespace ImageSearch.ViewModels
 
         public MainViewModel()
         {
+            StatusViewModel = new StatusViewModel();
             _fileUploadViewModel = new FileUploadViewModel();
             _uriUploadViewModel = new UriUploadViewModel();
 
@@ -57,13 +58,11 @@ namespace ImageSearch.ViewModels
                     return false;
                 });
 
-            Search = ReactiveCommand.CreateFromObservable(() => Observable.StartAsync(SearchImpl).TakeUntil(CancelSearch!), canSearch);
+            Search = ReactiveCommand.CreateFromObservable(() => Observable.StartAsync(SearchImpl).TakeUntil(StatusViewModel.CancelOperation), canSearch);
 
-            Search.IsExecuting.ToPropertyEx(this, x => x.IsSearching);
+            Search.IsExecuting.BindTo(this, x => x.StatusViewModel.IsActive);
 
             SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, Unit>(SearchForSimilarImpl);
-
-            CancelSearch = ReactiveCommand.Create(MethodHelper.DoNothing, Search.IsExecuting);
 
             OpenSource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => OpenUriInteraction.Handle(uri));
 
@@ -126,6 +125,8 @@ namespace ImageSearch.ViewModels
 
         #region Properties
 
+        public StatusViewModel StatusViewModel { get; }
+
         public IEnumerable<UploadMethod> UploadMethods { get; }
 
         [Reactive]
@@ -138,8 +139,6 @@ namespace ImageSearch.ViewModels
 
         public extern UploadViewModelBase? UploadMethod { [ObservableAsProperty] get; }
 
-        public extern bool IsSearching { [ObservableAsProperty] get; }
-
         public ReadOnlyObservableCollection<SearchResultViewModel> BestResults => _bestResults;
 
         public ReadOnlyObservableCollection<SearchResultViewModel> OtherResults => _otherResults;
@@ -149,7 +148,6 @@ namespace ImageSearch.ViewModels
         #region Commands
 
         public ReactiveCommand<Unit, Unit> Search { get; }
-        public ReactiveCommand<Unit, Unit> CancelSearch { get; }
         public ReactiveCommand<Uri, Unit> OpenSource { get; }
         public ReactiveCommand<Uri, Unit> CopySource { get; }
         public ReactiveCommand<Uri, Unit> SearchForSimilar { get; }
@@ -171,6 +169,9 @@ namespace ImageSearch.ViewModels
             Debug.Assert(SelectedSearchService is object);
 
             IEnumerable<IResult> results;
+
+            // TODO: Store localizable text in resources.
+            StatusViewModel.StatusText = "Please wait\u2026";
 
             switch (UploadMethod)
             {

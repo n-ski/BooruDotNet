@@ -22,6 +22,16 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
+                #region Status indicator
+
+                this.OneWayBind(ViewModel, vm => vm.StatusViewModel, v => v.BusyIndicator.BusyContent)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.StatusViewModel.IsActive, v => v.BusyIndicator.IsBusy)
+                    .DisposeWith(d);
+
+                #endregion
+
                 static Visibility intToVisibility(int n) => n > 0 ? Visibility.Visible : Visibility.Collapsed;
 
                 #region Best results

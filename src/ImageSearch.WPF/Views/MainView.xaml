@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rui="http://reactiveui.net"
     xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="IQDB Image Search"
     Width="800"
     Height="450"
@@ -15,112 +16,127 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Grid
-        Margin="{StaticResource MarginMedium}">
+    <xctk:BusyIndicator
+        x:Name="BusyIndicator"
+        DisplayAfter="0"
+        ProgressBarStyle="{StaticResource CollapsedProgressBar}">
 
-        <Grid.RowDefinitions>
-            <RowDefinition
-                Height="1*" />
-            <RowDefinition
-                Height="Auto" />
-        </Grid.RowDefinitions>
+        <xctk:BusyIndicator.BusyContentTemplate>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                Width="Auto" />
-            <ColumnDefinition
-                Width="100" />
-            <ColumnDefinition
-                Width="1*" />
-            <ColumnDefinition
-                Width="200" />
-            <ColumnDefinition
-                Width="Auto" />
-        </Grid.ColumnDefinitions>
+            <DataTemplate>
 
-        <ScrollViewer
-            x:Name="SearchResultsScrollViewer"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.ColumnSpan="5"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Auto">
+                <rui:ViewModelViewHost
+                    ViewModel="{Binding Mode=OneWay}" />
+            </DataTemplate>
+        </xctk:BusyIndicator.BusyContentTemplate>
 
-            <StackPanel>
-
-                <TextBlock
-                    x:Name="BestSearchResultsTextBlock"
-                    Margin="{StaticResource MarginMedium}"
-                    Style="{StaticResource SearchResultGroupHeader}"
-                    Text="Best matches" />
-
-                <ItemsControl
-                    x:Name="BestSearchResultsControl"
-                    Style="{StaticResource SearchResultItemsControl}" />
-
-                <TextBlock
-                    x:Name="OtherSearchResultsTextBlock"
-                    Margin="{StaticResource MarginMedium}"
-                    Style="{StaticResource SearchResultGroupHeader}"
-                    Text="Other matches" />
-
-                <ItemsControl
-                    x:Name="OtherSearchResultsControl"
-                    Style="{StaticResource SearchResultItemsControl}" />
-            </StackPanel>
-        </ScrollViewer>
-
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="{StaticResource MarginMedium}"
-            Text="Upload:" />
-
-        <ComboBox
-            x:Name="UploadMethodsComboBox"
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="{StaticResource MarginMedium}"
-            DisplayMemberPath="." />
-
-        <rui:ViewModelViewHost
-            x:Name="UploadMethodHost"
-            Grid.Row="1"
-            Grid.Column="2"
-            HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Stretch" />
-
-        <ComboBox
-            x:Name="SearchServicesComboBox"
-            Grid.Row="1"
-            Grid.Column="3"
+        <Grid
             Margin="{StaticResource MarginMedium}">
 
-            <ComboBox.ItemTemplate>
+            <Grid.RowDefinitions>
+                <RowDefinition
+                    Height="1*" />
+                <RowDefinition
+                    Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <DataTemplate>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto" />
+                <ColumnDefinition
+                    Width="100" />
+                <ColumnDefinition
+                    Width="1*" />
+                <ColumnDefinition
+                    Width="200" />
+                <ColumnDefinition
+                    Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-                    <DockPanel>
+            <ScrollViewer
+                x:Name="SearchResultsScrollViewer"
+                Grid.Row="0"
+                Grid.Column="0"
+                Grid.ColumnSpan="5"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto">
 
-                        <Image
-                            DockPanel.Dock="Left"
-                            Width="16"
-                            Height="16"
-                            Margin="0,0,4,0"
-                            Source="{Binding Icon, Mode=OneWay, Converter={StaticResource BitmapToNativeConverter}}" />
+                <StackPanel>
 
-                        <TextBlock
-                            Text="{Binding Name, Mode=OneWay}" />
-                    </DockPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                    <TextBlock
+                        x:Name="BestSearchResultsTextBlock"
+                        Margin="{StaticResource MarginMedium}"
+                        Style="{StaticResource SearchResultGroupHeader}"
+                        Text="Best matches" />
 
-        <Button
-            x:Name="SearchButton"
-            Grid.Row="1"
-            Grid.Column="4"
-            Margin="{StaticResource MarginMedium}"
-            Content="Search" />
-    </Grid>
+                    <ItemsControl
+                        x:Name="BestSearchResultsControl"
+                        Style="{StaticResource SearchResultItemsControl}" />
+
+                    <TextBlock
+                        x:Name="OtherSearchResultsTextBlock"
+                        Margin="{StaticResource MarginMedium}"
+                        Style="{StaticResource SearchResultGroupHeader}"
+                        Text="Other matches" />
+
+                    <ItemsControl
+                        x:Name="OtherSearchResultsControl"
+                        Style="{StaticResource SearchResultItemsControl}" />
+                </StackPanel>
+            </ScrollViewer>
+
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="{StaticResource MarginMedium}"
+                Text="Upload:" />
+
+            <ComboBox
+                x:Name="UploadMethodsComboBox"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="{StaticResource MarginMedium}"
+                DisplayMemberPath="." />
+
+            <rui:ViewModelViewHost
+                x:Name="UploadMethodHost"
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Stretch" />
+
+            <ComboBox
+                x:Name="SearchServicesComboBox"
+                Grid.Row="1"
+                Grid.Column="3"
+                Margin="{StaticResource MarginMedium}">
+
+                <ComboBox.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <DockPanel>
+
+                            <Image
+                                DockPanel.Dock="Left"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,4,0"
+                                Source="{Binding Icon, Mode=OneWay, Converter={StaticResource BitmapToNativeConverter}}" />
+
+                            <TextBlock
+                                Text="{Binding Name, Mode=OneWay}" />
+                        </DockPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Button
+                x:Name="SearchButton"
+                Grid.Row="1"
+                Grid.Column="4"
+                Margin="{StaticResource MarginMedium}"
+                Content="Search" />
+        </Grid>
+    </xctk:BusyIndicator>
 </rui:ReactiveWindow>
