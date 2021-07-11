@@ -11,12 +11,15 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
 
+    <!--
+        Set solid background because IsMouseOver detection is kind of ass with transparent background.
+        Required for information/button panels visibility.
+    -->
     <Grid
-        Margin="{StaticResource MarginSmall}">
+        Margin="{StaticResource MarginSmall}"
+        Background="White">
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
@@ -31,8 +34,10 @@
             Margin="{StaticResource MarginSmall}" />
 
         <StackPanel
+            x:Name="ImageInfoPanel"
             Grid.Row="1"
             Margin="{StaticResource MarginSmall}"
+            VerticalAlignment="Center"
             Orientation="Vertical">
 
             <TextBlock
@@ -46,8 +51,9 @@
 
         <StackPanel
             x:Name="QuickActionButtonsPanel"
-            Grid.Row="2"
+            Grid.Row="1"
             HorizontalAlignment="Center"
+            VerticalAlignment="Center"
             Orientation="Horizontal">
 
             <Button

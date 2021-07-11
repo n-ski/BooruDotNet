@@ -1,6 +1,7 @@
 ﻿#nullable disable
-using System;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Windows;
 using BooruDotNet.Helpers;
 using ImageSearch.ViewModels;
 using ReactiveUI;
@@ -35,6 +36,22 @@ namespace ImageSearch.WPF.Views
 
                 this.BindCommand(ViewModel, vm => vm.SearchForSimilar, v => v.SearchForSimilarButton)
                     .DisposeWith(d);
+
+                #region Panels visibility
+
+                var isMouseOverObservable = this.WhenAnyValue(v => v.IsMouseOver);
+
+                isMouseOverObservable
+                    .Select(isMouseOver => isMouseOver ? Visibility.Hidden : Visibility.Visible)
+                    .BindTo(this, v => v.ImageInfoPanel.Visibility)
+                    .DisposeWith(d);
+
+                isMouseOverObservable
+                    .Select(isMouseOver => isMouseOver ? Visibility.Visible : Visibility.Hidden)
+                    .BindTo(this, v => v.QuickActionButtonsPanel.Visibility)
+                    .DisposeWith(d);
+
+                #endregion
             });
         }
     }
