@@ -37,9 +37,9 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.SearchForSimilar, v => v.SearchForSimilarButton)
                     .DisposeWith(d);
 
-                #region Panels visibility
-
                 var isMouseOverObservable = this.WhenAnyValue(v => v.IsMouseOver);
+
+                #region Panels visibility
 
                 isMouseOverObservable
                     .Select(isMouseOver => isMouseOver ? Visibility.Hidden : Visibility.Visible)
@@ -52,6 +52,11 @@ namespace ImageSearch.WPF.Views
                     .DisposeWith(d);
 
                 #endregion
+
+                isMouseOverObservable
+                    .Select(isMouseOver => isMouseOver ? Resources["MouseOverShadow"] : null)
+                    .BindTo(this, v => v.Effect)
+                    .DisposeWith(d);
             });
         }
     }
