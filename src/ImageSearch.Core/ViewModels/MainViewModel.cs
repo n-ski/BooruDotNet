@@ -106,6 +106,7 @@ namespace ImageSearch.ViewModels
                 .Switch()
                 .InvokeCommand(this, x => x.CopySource);
 
+            // TODO: stops working if the search invoked by this command is canceled or exception was thrown.
             searchResults
                 .AutoRefreshOnObservable(result => result.SearchForSimilar)
                 .Select(_ => _searchResults.Select(result => result.SearchForSimilar).Merge())
