@@ -52,17 +52,38 @@
             <Button
                 x:Name="OpenSourceButton"
                 Margin="{StaticResource MarginMedium}"
-                Content="O" />
+                Style="{x:Null}"
+                ToolTip="Open in browser">
+
+                <Viewbox
+                    Width="16"
+                    Height="16"
+                    Child="{StaticResource OpenInNewIcon}" />
+            </Button>
 
             <Button
                 x:Name="CopySourceButton"
                 Margin="{StaticResource MarginMedium}"
-                Content="C" />
+                Style="{x:Null}"
+                ToolTip="Copy source URL">
+
+                <Viewbox
+                    Width="16"
+                    Height="16"
+                    Child="{StaticResource LinkVariantIcon}" />
+            </Button>
 
             <Button
                 x:Name="SearchForSimilarButton"
                 Margin="{StaticResource MarginMedium}"
-                Content="S" />
+                Style="{x:Null}"
+                ToolTip="Search for similar">
+
+                <Viewbox
+                    Width="16"
+                    Height="16"
+                    Child="{StaticResource SearchIcon}" />
+            </Button>
         </StackPanel>
     </Grid>
 </rui:ReactiveUserControl>
