@@ -117,6 +117,20 @@ namespace ImageSearch.WPF.Views
                     interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);
 
+                ViewModel.DisplaySearchError.RegisterHandler(interaction =>
+                {
+                    Exception exception = interaction.Input.InnerException ?? interaction.Input;
+
+                    string message = string.Join(
+                        Environment.NewLine,
+                        $"Exception of type '{exception.GetType()}' has occurred with the following message:",
+                        exception.Message);
+
+                    MessageBox.Show(this, message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+
+                    interaction.SetOutput(Unit.Default);
+                }).DisposeWith(d);
+
                 #endregion
             });
         }

@@ -64,6 +64,10 @@ namespace ImageSearch.ViewModels
 
             SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, Unit>(SearchForSimilarImpl);
 
+            Search.ThrownExceptions.Merge(SearchForSimilar.ThrownExceptions)
+                .Throttle(TimeSpan.FromMilliseconds(100), RxApp.MainThreadScheduler)
+                .Subscribe(async ex => await DisplaySearchError.Handle(ex));
+
             OpenSource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => OpenUriInteraction.Handle(uri));
 
             CopySource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => CopyUriInteraction.Handle(uri));
@@ -158,6 +162,7 @@ namespace ImageSearch.ViewModels
 
         public Interaction<Uri, Unit> OpenUriInteraction { get; } = new Interaction<Uri, Unit>();
         public Interaction<Uri, Unit> CopyUriInteraction { get; } = new Interaction<Uri, Unit>();
+        public Interaction<Exception, Unit> DisplaySearchError { get; } = new Interaction<Exception, Unit>();
 
         #endregion
 
