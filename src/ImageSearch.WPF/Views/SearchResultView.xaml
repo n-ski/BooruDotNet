@@ -11,11 +11,10 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
 
-    <Grid>
+    <Grid
+        Margin="{StaticResource MarginSmall}">
 
         <Grid.RowDefinitions>
-            <RowDefinition
-                Height="Auto" />
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
@@ -29,29 +28,31 @@
             Grid.Row="0"
             Width="150"
             Height="150"
-            Margin="{StaticResource MarginMedium}" />
+            Margin="{StaticResource MarginSmall}" />
 
-        <TextBlock
-            x:Name="ImageSizeTextBlock"
+        <StackPanel
             Grid.Row="1"
-            Margin="{StaticResource MarginMedium}"
-            TextAlignment="Center" />
+            Margin="{StaticResource MarginSmall}"
+            Orientation="Vertical">
 
-        <TextBlock
-            x:Name="ImageSimilarityTextBlock"
-            Grid.Row="2"
-            Margin="{StaticResource MarginMedium}"
-            TextAlignment="Center" />
+            <TextBlock
+                x:Name="ImageSizeTextBlock"
+                TextAlignment="Center" />
+
+            <TextBlock
+                x:Name="ImageSimilarityTextBlock"
+                TextAlignment="Center" />
+        </StackPanel>
 
         <StackPanel
             x:Name="QuickActionButtonsPanel"
-            Grid.Row="3"
+            Grid.Row="2"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
 
             <Button
                 x:Name="OpenSourceButton"
-                Margin="{StaticResource MarginMedium}"
+                Margin="{StaticResource MarginSmall}"
                 Style="{x:Null}"
                 ToolTip="Open in browser">
 
@@ -63,7 +64,7 @@
 
             <Button
                 x:Name="CopySourceButton"
-                Margin="{StaticResource MarginMedium}"
+                Margin="{StaticResource MarginSmall}"
                 Style="{x:Null}"
                 ToolTip="Copy source URL">
 
@@ -75,7 +76,7 @@
 
             <Button
                 x:Name="SearchForSimilarButton"
-                Margin="{StaticResource MarginMedium}"
+                Margin="{StaticResource MarginSmall}"
                 Style="{x:Null}"
                 ToolTip="Search for similar">
 
