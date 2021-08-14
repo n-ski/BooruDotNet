@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using BooruDotNet.Resources;
-using Validation;
 
 namespace BooruDotNet.Helpers
 {
@@ -11,7 +11,7 @@ namespace BooruDotNet.Helpers
     {
         internal static IEnumerable<Exception> Unwrap(Exception exception)
         {
-            Assumes.NotNull(exception);
+            Debug.Assert(exception is object);
 
             for (Exception? ex = exception; ex is object; ex = ex.InnerException)
             {
@@ -21,7 +21,7 @@ namespace BooruDotNet.Helpers
 
         internal static string GetAllMessages(Exception exception)
         {
-            Requires.NotNull(exception, nameof(exception));
+            Debug.Assert(exception is object);
 
             Exception[] exceptions = Unwrap(exception).ToArray();
 

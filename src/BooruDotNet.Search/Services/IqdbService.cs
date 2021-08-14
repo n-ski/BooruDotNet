@@ -140,7 +140,7 @@ namespace BooruDotNet.Search.Services
                 Uri imageUri = GetUriFromAttribute(sourceLinkNode.FirstChild, "src");
 
                 var textNodes = tableNode.SelectNodes(@"tr/td/text()");
-                Assumes.True(textNodes.Count >= 2);
+                Debug.Assert(textNodes.Count >= 2);
 
                 Match match;
 
@@ -164,7 +164,7 @@ namespace BooruDotNet.Search.Services
         {
             string? attributeValue = node.Attributes[attribute].Value;
 
-            Assumes.NotNull(attributeValue);
+            Debug.Assert(attributeValue is object);
 
             if (attributeValue.StartsWith("//"))
             {

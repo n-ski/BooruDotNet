@@ -1,5 +1,5 @@
 ﻿using System;
-using Validation;
+using System.Diagnostics;
 
 namespace BooruDotNet.Search.Attributes
 {
@@ -7,7 +7,7 @@ namespace BooruDotNet.Search.Attributes
     {
         public IqdbImageBoardIdAttribute(string serviceId)
         {
-            Assumes.NotNullOrEmpty(serviceId);
+            Debug.Assert(string.IsNullOrWhiteSpace(serviceId) is false);
 
             ServiceId = serviceId;
         }

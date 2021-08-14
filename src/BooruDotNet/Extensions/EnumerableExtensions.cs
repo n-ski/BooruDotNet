@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Validation;
+using System.Diagnostics;
 
 namespace BooruDotNet.Extensions
 {
@@ -8,8 +8,8 @@ namespace BooruDotNet.Extensions
     {
         internal static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            Assumes.NotNull(source);
-            Assumes.NotNull(action);
+            Debug.Assert(source is object);
+            Debug.Assert(action is object);
 
             foreach (T item in source)
             {
