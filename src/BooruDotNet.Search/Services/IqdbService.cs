@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Extensions;
+using BooruDotNet.Search.Extensions;
 using BooruDotNet.Search.Resources;
 using BooruDotNet.Search.Results;
 using HtmlAgilityPack;
@@ -19,33 +21,56 @@ namespace BooruDotNet.Search.Services
             new Regex(@"^(\d+).(\d+) \[\w+\]$", RegexOptions.Compiled));
         private static readonly Lazy<Regex> _similarityRegexLazy = new Lazy<Regex>(() =>
             new Regex(@"^(\d+)% similarity$", RegexOptions.Compiled));
+        private readonly bool _enableServiceFlags;
 
         public IqdbService(HttpClient httpClient)
             : base(httpClient, HttpMethod.Post, new Uri(UploadUris.Iqdb))
         {
+            _enableServiceFlags = true;
         }
 
+        /// <remarks>
+        /// If this constructor is used, <see cref="SearchAsync(FileStream, IqdbSearchOptions, CancellationToken)"/> and
+        /// <see cref="SearchAsync(Uri, IqdbSearchOptions, CancellationToken)"/> will ignore flags that specify
+        /// which results will be included in the search.
+        /// </remarks>
         public IqdbService(HttpClient httpClient, string prefix)
             : base(httpClient, HttpMethod.Post, CreateUri(prefix))
         {
+            _enableServiceFlags = false;
         }
 
         public long FileSizeLimit => 8 << 20; // 8 MiB.
 
-        public async Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<IResult>> SearchAsync(Uri uri, CancellationToken cancellationToken = default)
+        {
+            return SearchAsync(uri, IqdbSearchOptions.Default, cancellationToken);
+        }
+
+        public async Task<IEnumerable<IResult>> SearchAsync(Uri uri, IqdbSearchOptions options, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(uri, nameof(uri));
             uri.RequireAbsolute();
 
-            using HttpContent content = new MultipartFormDataContent
+            using MultipartFormDataContent content = new MultipartFormDataContent
             {
                 { new StringContent(uri.AbsoluteUri), "url" }
             };
 
+            if (_enableServiceFlags)
+            {
+                AppendServiceFlags(content, options);
+            }
+
             return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default)
+        public Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default)
+        {
+            return SearchAsync(fileStream, IqdbSearchOptions.Default, cancellationToken);
+        }
+
+        public async Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, IqdbSearchOptions options, CancellationToken cancellationToken = default)
         {
             Requires.NotNull(fileStream, nameof(fileStream));
 
@@ -53,10 +78,15 @@ namespace BooruDotNet.Search.Services
                 fileStream.Length > FileSizeLimit,
                 fileStream.Name, fileStream.Length, FileSizeLimit);
 
-            using HttpContent content = new MultipartFormDataContent
+            using MultipartFormDataContent content = new MultipartFormDataContent
             {
                 { new StreamContent(fileStream), "file", "file" }
             };
+
+            if (_enableServiceFlags)
+            {
+                AppendServiceFlags(content, options);
+            }
 
             return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
         }
@@ -154,6 +184,22 @@ namespace BooruDotNet.Search.Services
 
             string formatted = string.Format(UploadUris.IqdbFormat, prefix);
             return new Uri(formatted);
+        }
+
+        private void AppendServiceFlags(MultipartFormDataContent formContent, IqdbSearchOptions flags)
+        {
+            Debug.Assert(_enableServiceFlags is true);
+            Debug.Assert(formContent is object);
+
+            Type flagsType = typeof(IqdbSearchOptions);
+
+            foreach (IqdbSearchOptions flag in Enum.GetValues(flagsType))
+            {
+                if (flags.HasFlag(flag) && flag.TryGetServiceId(out string? serviceId))
+                {
+                    formContent.Add(new StringContent(serviceId), "service[]");
+                }
+            }
         }
     }
 }
