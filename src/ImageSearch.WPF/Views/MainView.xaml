@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rui="http://reactiveui.net"
+    xmlns:views="clr-namespace:ImageSearch.WPF.Views"
     xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="IQDB Image Search"
@@ -63,25 +64,13 @@
 
                 <StackPanel>
 
-                    <TextBlock
-                        x:Name="BestSearchResultsTextBlock"
-                        Margin="{StaticResource MarginMedium}"
-                        Style="{StaticResource SearchResultGroupHeader}"
-                        Text="Best matches" />
+                    <views:SearchResultGroupView
+                        x:Name="BestSearchResultsGroup"
+                        Header="Best matches" />
 
-                    <ItemsControl
-                        x:Name="BestSearchResultsControl"
-                        Style="{StaticResource SearchResultItemsControl}" />
-
-                    <TextBlock
-                        x:Name="OtherSearchResultsTextBlock"
-                        Margin="{StaticResource MarginMedium}"
-                        Style="{StaticResource SearchResultGroupHeader}"
-                        Text="Other matches" />
-
-                    <ItemsControl
-                        x:Name="OtherSearchResultsControl"
-                        Style="{StaticResource SearchResultItemsControl}" />
+                    <views:SearchResultGroupView
+                        x:Name="OtherSearchResultsGroup"
+                        Header="Other matches" />
                 </StackPanel>
             </ScrollViewer>
 

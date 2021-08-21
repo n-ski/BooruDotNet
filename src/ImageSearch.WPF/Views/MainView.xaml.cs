@@ -22,34 +22,18 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
+                this.OneWayBind(ViewModel, vm => vm.BestSearchResultsViewModel, v => v.BestSearchResultsGroup.ViewModel)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.OtherSearchResultsViewModel, v => v.OtherSearchResultsGroup.ViewModel)
+                    .DisposeWith(d);
+
                 #region Status indicator
 
                 this.OneWayBind(ViewModel, vm => vm.StatusViewModel, v => v.BusyIndicator.BusyContent)
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.StatusViewModel.IsActive, v => v.BusyIndicator.IsBusy)
-                    .DisposeWith(d);
-
-                #endregion
-
-                static Visibility intToVisibility(int n) => n > 0 ? Visibility.Visible : Visibility.Collapsed;
-
-                #region Best results
-
-                this.OneWayBind(ViewModel, vm => vm.BestResults.Count, v => v.BestSearchResultsTextBlock.Visibility, intToVisibility)
-                    .DisposeWith(d);
-
-                this.OneWayBind(ViewModel, vm => vm.BestResults, v => v.BestSearchResultsControl.ItemsSource)
-                    .DisposeWith(d);
-
-                #endregion
-
-                #region Other results
-
-                this.OneWayBind(ViewModel, vm => vm.OtherResults.Count, v => v.OtherSearchResultsTextBlock.Visibility, intToVisibility)
-                    .DisposeWith(d);
-
-                this.OneWayBind(ViewModel, vm => vm.OtherResults, v => v.OtherSearchResultsControl.ItemsSource)
                     .DisposeWith(d);
 
                 #endregion
@@ -86,8 +70,8 @@ namespace ImageSearch.WPF.Views
                 UploadMethodsComboBox.SelectedIndex = 0;
                 SearchServicesComboBox.SelectedIndex = 0;
 
-                // Scroll to top when the results change.
-                this.WhenAnyValue(x => x.ViewModel.BestResults.Count, x => x.ViewModel.OtherResults.Count)
+                // Scroll to top after the search command is completed.
+                this.WhenAnyObservable(x => x.ViewModel.Search)
                     .Subscribe(_ => SearchResultsScrollViewer.ScrollToTop())
                     .DisposeWith(d);
 

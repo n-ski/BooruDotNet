@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
@@ -9,8 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Results;
 using DynamicData;
-using DynamicData.Binding;
-using ImageSearch.Helpers;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -21,15 +18,14 @@ namespace ImageSearch.ViewModels
     public class MainViewModel : ReactiveObject
     {
         private const double _bestResultThreshold = 0.8;
-        private readonly ObservableCollectionExtended<SearchResultViewModel> _searchResults;
-        private readonly ReadOnlyObservableCollection<SearchResultViewModel> _bestResults;
-        private readonly ReadOnlyObservableCollection<SearchResultViewModel> _otherResults;
         private readonly FileUploadViewModel _fileUploadViewModel;
         private readonly UriUploadViewModel _uriUploadViewModel;
 
         public MainViewModel()
         {
             StatusViewModel = new StatusViewModel();
+            BestSearchResultsViewModel = new SearchResultGroupViewModel();
+            OtherSearchResultsViewModel = new SearchResultGroupViewModel();
             _fileUploadViewModel = new FileUploadViewModel();
             _uriUploadViewModel = new UriUploadViewModel();
 
@@ -86,45 +82,48 @@ namespace ImageSearch.ViewModels
 
             #region Search results bindings
 
-            _searchResults = new ObservableCollectionExtended<SearchResultViewModel>();
+            var searchResults = Search
+                .ObserveOn(RxApp.TaskpoolScheduler)
+                .Select(results => results.AsObservableChangeSet())
+                .Switch()
+                .Filter(result => result.SourceUri is object)
+                .DisposeMany();
 
-            var searchResults = _searchResults
-                .ToObservableChangeSet()
-                .RefCount()
-                .Filter(result => result.SourceUri is object);
+            searchResults
+                .Filter(result => result.Similarity >= _bestResultThreshold)
+                .ToCollection()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .BindTo(this, x => x.BestSearchResultsViewModel.SearchResults);
 
-            // First, observe commands from search results and pipe them to main commands.
+            searchResults
+                .Filter(result => result.Similarity < _bestResultThreshold)
+                .ToCollection()
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .BindTo(this, x => x.OtherSearchResultsViewModel.SearchResults);
+
+            // Observe commands from search results and pipe them to main commands.
+            // TODO: these stop working if related command was executed once.
 
             searchResults
                 .AutoRefreshOnObservable(result => result.OpenSource)
-                .Select(_ => _searchResults.Select(result => result.OpenSource).Merge())
+                .ToCollection()
+                .Select(results => results.Select(result => result.OpenSource).Merge())
                 .Switch()
                 .InvokeCommand(this, x => x.OpenSource);
 
             searchResults
                 .AutoRefreshOnObservable(result => result.CopySource)
-                .Select(_ => _searchResults.Select(result => result.CopySource).Merge())
+                .ToCollection()
+                .Select(results => results.Select(result => result.CopySource).Merge())
                 .Switch()
                 .InvokeCommand(this, x => x.CopySource);
 
-            // TODO: stops working if the search invoked by this command is canceled or exception was thrown.
             searchResults
                 .AutoRefreshOnObservable(result => result.SearchForSimilar)
-                .Select(_ => _searchResults.Select(result => result.SearchForSimilar).Merge())
+                .ToCollection()
+                .Select(results => results.Select(result => result.SearchForSimilar).Merge())
                 .Switch()
                 .InvokeCommand(this, x => x.SearchForSimilar);
-
-            searchResults
-                .Filter(result => result.Similarity >= _bestResultThreshold)
-                .Bind(out _bestResults)
-                .DisposeMany()
-                .Subscribe();
-
-            searchResults
-                .Filter(result => result.Similarity < _bestResultThreshold)
-                .Bind(out _otherResults)
-                .DisposeMany()
-                .Subscribe();
 
             #endregion
         }
@@ -132,6 +131,10 @@ namespace ImageSearch.ViewModels
         #region Properties
 
         public StatusViewModel StatusViewModel { get; }
+
+        public SearchResultGroupViewModel BestSearchResultsViewModel { get; }
+
+        public SearchResultGroupViewModel OtherSearchResultsViewModel { get; }
 
         public IEnumerable<UploadMethod> UploadMethods { get; }
 
@@ -145,15 +148,11 @@ namespace ImageSearch.ViewModels
 
         public extern UploadViewModelBase? UploadMethod { [ObservableAsProperty] get; }
 
-        public ReadOnlyObservableCollection<SearchResultViewModel> BestResults => _bestResults;
-
-        public ReadOnlyObservableCollection<SearchResultViewModel> OtherResults => _otherResults;
-
         #endregion
 
         #region Commands
 
-        public ReactiveCommand<Unit, Unit> Search { get; }
+        public ReactiveCommand<Unit, IReadOnlyCollection<SearchResultViewModel>> Search { get; }
         public ReactiveCommand<Uri, Unit> OpenSource { get; }
         public ReactiveCommand<Uri, Unit> CopySource { get; }
         public ReactiveCommand<Uri, Unit> SearchForSimilar { get; }
@@ -170,7 +169,7 @@ namespace ImageSearch.ViewModels
 
         #region Command implementations
 
-        private async Task SearchImpl(CancellationToken cancellationToken)
+        private async Task<IReadOnlyCollection<SearchResultViewModel>> SearchImpl(CancellationToken cancellationToken)
         {
             Debug.Assert(UploadMethod is object);
             Debug.Assert(SelectedSearchService is object);
@@ -203,13 +202,7 @@ namespace ImageSearch.ViewModels
                     throw Assumes.NotReachable();
             }
 
-            var resultViewModels = results.Select(x => new SearchResultViewModel(x));
-
-            using (_searchResults.SuspendNotifications())
-            {
-                _searchResults.Clear();
-                _searchResults.AddRange(resultViewModels);
-            }
+            return results.Select(x => new SearchResultViewModel(x)).ToArray();
         }
 
         private IObservable<Unit> SearchForSimilarImpl(Uri uri)
@@ -225,7 +218,7 @@ namespace ImageSearch.ViewModels
                 throw Assumes.NotReachable();
             }
 
-            return Search.Execute();
+            return Search.Execute().Select(_ => Unit.Default);
         }
 
         #endregion
