@@ -21,6 +21,7 @@
             d:Text="Sample text" />
 
         <ProgressBar
+            x:Name="StatusProgressBar"
             Width="160"
             Height="16"
             Margin="{StaticResource MarginMedium}"

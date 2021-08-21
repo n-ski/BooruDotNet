@@ -16,6 +16,11 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
+                // Since this view never leaves visual tree, progress bar will never stop animating (and thus will waste processing power).
+                // So when we aren't active, disable the animation by changing the progress bar style.
+                this.OneWayBind(ViewModel, vm => vm.IsActive, v => v.StatusProgressBar.IsIndeterminate)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.StatusText, v => v.StatusTextBlock.Text)
                     .DisposeWith(d);
 
