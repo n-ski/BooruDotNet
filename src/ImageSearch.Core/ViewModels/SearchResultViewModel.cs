@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Reactive;
 using BooruDotNet.Search.Results;
+using ImageSearch.Helpers;
 using ReactiveUI;
 using Validation;
 
@@ -18,9 +19,9 @@ namespace ImageSearch.ViewModels
             ImageSize = result.Width.HasValue && result.Height.HasValue
                 ? new Size(result.Width.Value, result.Height.Value) : Size.Empty;
 
-            OpenSource = ReactiveCommand.Create(() => SourceUri);
-            CopySource = ReactiveCommand.Create(() => SourceUri);
-            SearchForSimilar = ReactiveCommand.Create(() => ImageUri);
+            OpenSource = ReactiveCommand.Create(MethodHelper.DoNothing);
+            CopySource = ReactiveCommand.Create(MethodHelper.DoNothing);
+            SearchForSimilar = ReactiveCommand.Create(MethodHelper.DoNothing);
         }
 
         public Uri ImageUri => _result.PreviewImageUri;
@@ -28,8 +29,8 @@ namespace ImageSearch.ViewModels
         public Uri SourceUri => _result.Source;
         public Size ImageSize { get; }
 
-        public ReactiveCommand<Unit, Uri> OpenSource { get; }
-        public ReactiveCommand<Unit, Uri> CopySource { get; }
-        public ReactiveCommand<Unit, Uri> SearchForSimilar { get; }
+        public ReactiveCommand<Unit, Unit> OpenSource { get; }
+        public ReactiveCommand<Unit, Unit> CopySource { get; }
+        public ReactiveCommand<Unit, Unit> SearchForSimilar { get; }
     }
 }

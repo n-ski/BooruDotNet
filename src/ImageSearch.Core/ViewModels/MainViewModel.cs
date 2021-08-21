@@ -101,28 +101,26 @@ namespace ImageSearch.ViewModels
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .BindTo(this, x => x.OtherSearchResultsViewModel.SearchResults);
 
-            // Observe commands from search results and pipe them to main commands.
-            // TODO: these stop working if related command was executed once.
+            // Observe commands from search results and pipe them to the main commands.
 
-            searchResults
-                .AutoRefreshOnObservable(result => result.OpenSource)
-                .ToCollection()
-                .Select(results => results.Select(result => result.OpenSource).Merge())
-                .Switch()
+            static IObservable<TOut> SelectOnObservable<TIn, TAny, TOut>(
+                IObservable<IChangeSet<TIn>> changeSet,
+                Func<TIn, IObservable<TAny>> observable,
+                Func<TIn, TOut> selector)
+            {
+                return changeSet
+                    .AutoRefreshOnObservable(observable)
+                    .Where(set => set.Refreshes is 1)
+                    .Select(set => selector(set.First().Item.Current));
+            }
+
+            SelectOnObservable(searchResults, result => result.OpenSource, result => result.SourceUri)
                 .InvokeCommand(this, x => x.OpenSource);
 
-            searchResults
-                .AutoRefreshOnObservable(result => result.CopySource)
-                .ToCollection()
-                .Select(results => results.Select(result => result.CopySource).Merge())
-                .Switch()
+            SelectOnObservable(searchResults, result => result.CopySource, result => result.SourceUri)
                 .InvokeCommand(this, x => x.CopySource);
 
-            searchResults
-                .AutoRefreshOnObservable(result => result.SearchForSimilar)
-                .ToCollection()
-                .Select(results => results.Select(result => result.SearchForSimilar).Merge())
-                .Switch()
+            SelectOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri)
                 .InvokeCommand(this, x => x.SearchForSimilar);
 
             #endregion
