@@ -11,23 +11,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
 
-    <UserControl.Resources>
-
-        <DropShadowEffect
-            x:Key="MouseOverShadow"
-            BlurRadius="8"
-            RenderingBias="Performance"
-            ShadowDepth="0"
-            Color="#7ddd" />
-
-        <DropShadowEffect
-            x:Key="FaviconShadow"
-            BlurRadius="8"
-            RenderingBias="Performance"
-            ShadowDepth="0"
-            Color="#7ddd" />
-    </UserControl.Resources>
-
     <!--
         Set solid background because IsMouseOver detection is kind of ass with transparent background.
         Required for information/button panels visibility.
