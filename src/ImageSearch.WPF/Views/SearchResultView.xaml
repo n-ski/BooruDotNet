@@ -7,9 +7,51 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rui="http://reactiveui.net"
     xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
+    Effect="{StaticResource MouseOverShadow}"
     mc:Ignorable="d"
     d:DesignHeight="450"
     d:DesignWidth="800">
+
+    <UserControl.Resources>
+
+        <Duration
+            x:Key="MouseEnterEffectDuration">
+            0:0:0.1
+        </Duration>
+    </UserControl.Resources>
+
+    <UserControl.Triggers>
+
+        <EventTrigger
+            RoutedEvent="MouseEnter">
+
+            <BeginStoryboard>
+
+                <Storyboard>
+
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Effect.Opacity"
+                        To="1"
+                        Duration="{StaticResource MouseEnterEffectDuration}" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+
+        <EventTrigger
+            RoutedEvent="MouseLeave">
+
+            <BeginStoryboard>
+
+                <Storyboard>
+
+                    <DoubleAnimation
+                        Storyboard.TargetProperty="Effect.Opacity"
+                        To="0"
+                        Duration="{StaticResource MouseEnterEffectDuration}" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
 
     <!--
         Set solid background because IsMouseOver detection is kind of ass with transparent background.

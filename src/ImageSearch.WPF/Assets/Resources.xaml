@@ -85,6 +85,7 @@
     <DropShadowEffect
         x:Key="MouseOverShadow"
         BlurRadius="8"
+        Opacity="0"
         RenderingBias="Performance"
         ShadowDepth="0"
         Color="#7ddd" />

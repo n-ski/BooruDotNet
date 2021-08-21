@@ -65,11 +65,6 @@ namespace ImageSearch.WPF.Views
                     .DisposeWith(d);
 
                 #endregion
-
-                isMouseOverObservable
-                    .Select(isMouseOver => isMouseOver ? App.Current.Resources["MouseOverShadow"] : null)
-                    .BindTo(this, v => v.Effect)
-                    .DisposeWith(d);
             });
         }
 
