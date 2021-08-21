@@ -19,6 +19,13 @@
             RenderingBias="Performance"
             ShadowDepth="0"
             Color="#7ddd" />
+
+        <DropShadowEffect
+            x:Key="FaviconShadow"
+            BlurRadius="8"
+            RenderingBias="Performance"
+            ShadowDepth="0"
+            Color="#7ddd" />
     </UserControl.Resources>
 
     <!--
@@ -42,6 +49,18 @@
             Width="150"
             Height="150"
             Margin="{StaticResource MarginSmall}" />
+
+        <Image
+            x:Name="FaviconImage"
+            Grid.Row="0"
+            DockPanel.Dock="Left"
+            Width="16"
+            Height="16"
+            Margin="{StaticResource MarginMedium}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Cursor="Help"
+            Effect="{StaticResource FaviconShadow}" />
 
         <StackPanel
             x:Name="ImageInfoPanel"

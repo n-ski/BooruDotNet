@@ -1,7 +1,11 @@
 ﻿#nullable disable
+using System;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Media.Imaging;
 using BooruDotNet.Helpers;
 using ImageSearch.ViewModels;
 using ReactiveUI;
@@ -13,12 +17,21 @@ namespace ImageSearch.WPF.Views
     /// </summary>
     public partial class SearchResultView : ReactiveUserControl<SearchResultViewModel>
     {
+        private static readonly ConcurrentDictionary<string, BitmapImage> _faviconCache =
+            new ConcurrentDictionary<string, BitmapImage>(StringComparer.OrdinalIgnoreCase);
+
         public SearchResultView()
         {
             InitializeComponent();
 
             this.WhenActivated(d =>
             {
+                this.OneWayBind(ViewModel, vm => vm.SourceUri, v => v.FaviconImage.Source, GetFaviconFromUri)
+                    .DisposeWith(d);
+
+                this.OneWayBind(ViewModel, vm => vm.SourceUri, v => v.FaviconImage.ToolTip)
+                    .DisposeWith(d);
+
                 this.OneWayBind(ViewModel, vm => vm.ImageUri, v => v.PreviewImage.Source, ImageHelper.CreateImageFromUri)
                     .DisposeWith(d);
 
@@ -57,6 +70,28 @@ namespace ImageSearch.WPF.Views
                     .Select(isMouseOver => isMouseOver ? Resources["MouseOverShadow"] : null)
                     .BindTo(this, v => v.Effect)
                     .DisposeWith(d);
+            });
+        }
+
+        private static BitmapImage GetFaviconFromUri(Uri uri)
+        {
+            if (uri is null || uri.IsAbsoluteUri is false)
+            {
+                return null;
+            }
+
+            return _faviconCache.GetOrAdd(uri.Host, host =>
+            {
+                var builder = new UriBuilder("https://www.google.com/s2/favicons")
+                {
+                    Query = $"domain={uri.Host}",
+                };
+
+                var bitmap = new BitmapImage(builder.Uri);
+
+                Debug.Assert(bitmap.CanFreeze is false);
+
+                return bitmap;
             });
         }
     }
