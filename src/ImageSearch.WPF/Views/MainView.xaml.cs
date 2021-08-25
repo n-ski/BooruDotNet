@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using GongSolutions.Wpf.DragDrop;
 using ImageSearch.ViewModels;
+using ImageSearch.WPF.Helpers;
 using ReactiveUI;
 
 namespace ImageSearch.WPF.Views
@@ -126,8 +127,18 @@ namespace ImageSearch.WPF.Views
 
         void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            bool isFileDrop = dropInfo.Data is DataObject data && data.ContainsFileDropList();
-            dropInfo.Effects = isFileDrop ? DragDropEffects.Link : DragDropEffects.None;
+            if (dropInfo.Data is DataObject data && data.ContainsFileDropList())
+            {
+                FileInfo file = DropDataHelper.GetFirstDroppedFile(data);
+
+                if (FileHelper.IsImageFile(file))
+                {
+                    dropInfo.Effects = DragDropEffects.Link;
+                    return;
+                }
+            }
+
+            dropInfo.Effects = DragDropEffects.None;
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo)
