@@ -184,7 +184,7 @@ namespace ImageSearch.ViewModels
                     Debug.Assert(fileUpload.FileToUpload is object);
 
                     using var fileStream = fileUpload.FileToUpload.OpenRead();
-                    results = await SelectedSearchService.SearchAsync(fileStream, cancellationToken);
+                    results = await SelectedSearchService.SearchAsync(fileStream, cancellationToken).ConfigureAwait(false);
                     break;
                 }
 
@@ -192,7 +192,7 @@ namespace ImageSearch.ViewModels
                 {
                     Debug.Assert(uriUpload.FileUri is object);
 
-                    results = await SelectedSearchService.SearchAsync(uriUpload.FileUri, cancellationToken);
+                    results = await SelectedSearchService.SearchAsync(uriUpload.FileUri, cancellationToken).ConfigureAwait(false);
                     break;
                 }
 
