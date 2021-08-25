@@ -1,10 +1,12 @@
 ﻿#nullable disable
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using GongSolutions.Wpf.DragDrop;
 using ImageSearch.ViewModels;
 using ReactiveUI;
 
@@ -13,12 +15,15 @@ namespace ImageSearch.WPF.Views
     /// <summary>
     /// Interaction logic for MainView.xaml
     /// </summary>
-    public partial class MainView : ReactiveWindow<MainViewModel>
+    public partial class MainView : ReactiveWindow<MainViewModel>, IDropTarget
     {
         public MainView()
         {
             InitializeComponent();
             ViewModel = new MainViewModel();
+
+            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(SearchResultsScrollViewer, this);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(SearchResultsScrollViewer, true);
 
             this.WhenActivated(d =>
             {
@@ -117,6 +122,24 @@ namespace ImageSearch.WPF.Views
 
                 #endregion
             });
+        }
+
+        void IDropTarget.DragOver(IDropInfo dropInfo)
+        {
+            bool isFileDrop = dropInfo.Data is DataObject data && data.ContainsFileDropList();
+            dropInfo.Effects = isFileDrop ? DragDropEffects.Link : DragDropEffects.None;
+        }
+
+        void IDropTarget.Drop(IDropInfo dropInfo)
+        {
+            var data = (DataObject)dropInfo.Data;
+            var files = data.GetFileDropList();
+            var firstFile = new FileInfo(files[0]);
+
+            // HACK: upload method isn't being set in the command, so set it here for now.
+            UploadMethodsComboBox.SelectedItem = UploadMethod.File;
+
+            ViewModel.SearchWithFile.Execute(firstFile).Subscribe();
         }
     }
 }

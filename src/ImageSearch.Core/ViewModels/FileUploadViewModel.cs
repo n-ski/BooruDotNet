@@ -12,18 +12,19 @@ namespace ImageSearch.ViewModels
         {
             SelectFile = ReactiveCommand.CreateFromObservable(() => ShowFileSelection.Handle(Unit.Default));
 
-            SelectFile.WhereNotNull().ToPropertyEx(this, x => x.FileToUpload);
+            SelectFile.WhereNotNull().BindTo(this, x => x.FileToUpload);
 
             // Perform search when file is selected.
             this.WhenAnyValue(x => x.FileToUpload)
-                .WhereNotNull()
+                .Where(fileInfo => fileInfo?.Exists is true)
                 .Select(_ => Unit.Default)
                 .InvokeCommand(this, x => x.Search);
         }
 
         public override UploadMethod UploadMethod => UploadMethod.File;
 
-        public extern FileInfo? FileToUpload { [ObservableAsProperty] get; }
+        [Reactive]
+        public FileInfo? FileToUpload { get; set; }
 
         public ReactiveCommand<Unit, FileInfo?> SelectFile { get; }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -59,6 +60,8 @@ namespace ImageSearch.ViewModels
             Search.IsExecuting.BindTo(this, x => x.StatusViewModel.IsActive);
 
             SearchForSimilar = ReactiveCommand.CreateFromObservable<Uri, Unit>(SearchForSimilarImpl);
+
+            SearchWithFile = ReactiveCommand.Create<FileInfo>(SearchWithFileImpl);
 
             Search.ThrownExceptions.Merge(SearchForSimilar.ThrownExceptions)
                 .Throttle(TimeSpan.FromMilliseconds(100), RxApp.MainThreadScheduler)
@@ -154,6 +157,7 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<Uri, Unit> OpenSource { get; }
         public ReactiveCommand<Uri, Unit> CopySource { get; }
         public ReactiveCommand<Uri, Unit> SearchForSimilar { get; }
+        public ReactiveCommand<FileInfo, Unit> SearchWithFile { get; }
 
         #endregion
 
@@ -217,6 +221,22 @@ namespace ImageSearch.ViewModels
             }
 
             return Search.Execute().Select(_ => Unit.Default);
+        }
+
+        private void SearchWithFileImpl(FileInfo fileInfo)
+        {
+            SelectedUploadMethod = ImageSearch.UploadMethod.File;
+
+            if (UploadMethod is FileUploadViewModel fileUpload)
+            {
+                // FileUploadViewModel invokes Search command that's observed in MainViewModel whenever the file changes,
+                // so just set the file here and forget about it.
+                fileUpload.FileToUpload = fileInfo;
+            }
+            else
+            {
+                throw Assumes.NotReachable();
+            }
         }
 
         #endregion
