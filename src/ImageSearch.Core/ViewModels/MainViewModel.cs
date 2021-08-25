@@ -64,9 +64,9 @@ namespace ImageSearch.ViewModels
                 .Throttle(TimeSpan.FromMilliseconds(100), RxApp.MainThreadScheduler)
                 .Subscribe(async ex => await DisplaySearchError.Handle(ex));
 
-            OpenSource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => OpenUriInteraction.Handle(uri));
+            OpenSource = ReactiveCommand.CreateFromObservable((Uri uri) => OpenUriInteraction.Handle(uri));
 
-            CopySource = ReactiveCommand.CreateFromObservable<Uri, Unit>(uri => CopyUriInteraction.Handle(uri));
+            CopySource = ReactiveCommand.CreateFromObservable((Uri uri) => CopyUriInteraction.Handle(uri));
 
             this.WhenAnyValue(x => x.SelectedUploadMethod)
                 .WhereNotNull()
