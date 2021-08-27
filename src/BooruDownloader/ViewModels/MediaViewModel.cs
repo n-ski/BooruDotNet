@@ -1,32 +1,26 @@
 ﻿using System;
 using BooruDownloader.Helpers;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace BooruDownloader.ViewModels
 {
     public class MediaViewModel : ReactiveObject
     {
-        private Uri? _uri;
-        private readonly ObservableAsPropertyHelper<bool> _isAnimatedMedia;
-        private readonly ObservableAsPropertyHelper<bool> _isStaticImage;
-
         public MediaViewModel()
         {
-            _isAnimatedMedia = this.WhenAnyValue(x => x.Uri, uri => uri?.IsAbsoluteUri == true && UriHelper.IsAnimatedMediaFile(uri))
-                .ToProperty(this, x => x.IsAnimatedMedia);
+            this.WhenAnyValue(x => x.Uri, uri => uri?.IsAbsoluteUri is true && UriHelper.IsAnimatedMediaFile(uri))
+                .ToPropertyEx(this, x => x.IsAnimatedMedia);
 
-            _isStaticImage = this.WhenAnyValue(x => x.Uri, uri => uri?.IsAbsoluteUri == true && !UriHelper.IsAnimatedMediaFile(uri))
-                .ToProperty(this, x => x.IsStaticImage);
+            this.WhenAnyValue(x => x.Uri, uri => uri?.IsAbsoluteUri is true && UriHelper.IsAnimatedMediaFile(uri) is false)
+                .ToPropertyEx(this, x => x.IsStaticImage);
         }
 
-        public Uri? Uri
-        {
-            get => _uri;
-            set => this.RaiseAndSetIfChanged(ref _uri, value);
-        }
+        [Reactive]
+        public Uri? Uri { get; set; }
 
-        public bool IsAnimatedMedia => _isAnimatedMedia.Value;
+        public bool IsAnimatedMedia { [ObservableAsProperty] get; }
 
-        public bool IsStaticImage => _isStaticImage.Value;
+        public bool IsStaticImage { [ObservableAsProperty] get; }
     }
 }

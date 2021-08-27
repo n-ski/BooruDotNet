@@ -6,30 +6,29 @@ using System.Reactive.Linq;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Validation;
 
 namespace BooruDownloader.ViewModels
 {
     public class PostViewModel : ReactiveObject
     {
-        private readonly ObservableAsPropertyHelper<IEnumerable<TagViewModel>> _tags = null!;
-
         public PostViewModel(IPost post, IBooruTagByName tagExtractor)
             : this(post)
         {
             Requires.NotNull(tagExtractor, nameof(tagExtractor));
 
-            _tags = Observable.Return(Post.Tags)
+            Observable.Return(Post.Tags)
                 .Select(tags => tags.Select(tag => new TagViewModel(tag, tagExtractor)))
-                .ToProperty(this, x => x.Tags);
+                .ToPropertyEx(this, x => x.Tags);
         }
 
         public PostViewModel(IPostExtendedTags post)
             : this((IPost)post)
         {
-            _tags = Observable.Return(((IPostExtendedTags)Post).ExtendedTags)
+            Observable.Return(((IPostExtendedTags)Post).ExtendedTags)
                 .Select(tags => tags.Select(tag => new TagViewModel(tag)))
-                .ToProperty(this, x => x.Tags);
+                .ToPropertyEx(this, x => x.Tags);
         }
 
         private PostViewModel(IPost post)
@@ -53,7 +52,7 @@ namespace BooruDownloader.ViewModels
 
         public IPost Post { get; }
 
-        public IEnumerable<TagViewModel> Tags => _tags.Value!;
+        public extern IEnumerable<TagViewModel> Tags { [ObservableAsProperty] get; }
 
         public ReactiveCommand<Unit, Unit> OpenInBrowser { get; }
     }

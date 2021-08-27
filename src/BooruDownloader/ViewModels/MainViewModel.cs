@@ -20,18 +20,13 @@ using DynamicData.Binding;
 using Humanizer;
 using Humanizer.Bytes;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace BooruDownloader.ViewModels
 {
     public class MainViewModel : ReactiveObject
     {
         private readonly ObservableCollectionExtended<QueueItemViewModel> _queuedItems;
-        private IEnumerable<QueueItemViewModel>? _selectedItems;
-        private readonly ObservableAsPropertyHelper<bool> _isAddingPosts;
-        private readonly ObservableAsPropertyHelper<bool> _isDownloading;
-        private readonly ObservableAsPropertyHelper<bool> _isBusy;
-        private int _progressValue;
-        private int _progressMaximum;
 
         public MainViewModel()
         {
@@ -56,14 +51,14 @@ namespace BooruDownloader.ViewModels
 
             RemoveSelection = ReactiveCommand.Create(
                 () => _queuedItems.RemoveMany(SelectedItems!),
-                this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() == true));
+                this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() is true));
 
             ClearQueue = ReactiveCommand.Create(
                 _queuedItems.Clear,
                 this.WhenAnyValue(x => x._queuedItems.Count, count => count > 0));
 
-            _isAddingPosts = Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
-                .ToProperty(this, x => x.IsAddingPosts);
+            Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
+                .ToPropertyEx(this, x => x.IsAddingPosts);
 
             CancelDownload = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
@@ -76,12 +71,12 @@ namespace BooruDownloader.ViewModels
                     x => x.QueuedItems.Count,
                     (isAdding, count) => !isAdding && count > 0));
 
-            _isDownloading = DownloadPosts.IsExecuting.ToProperty(this, x => x.IsDownloading);
+            DownloadPosts.IsExecuting.ToPropertyEx(this, x => x.IsDownloading);
 
-            _isBusy = Observable.Merge(
+            Observable.Merge(
                 this.WhenAnyValue(x => x.IsAddingPosts),
                 this.WhenAnyValue(x => x.IsDownloading))
-                .ToProperty(this, x => x.IsBusy);
+                .ToPropertyEx(this, x => x.IsBusy);
 
             DownloadPosts.ThrownExceptions.Subscribe(
                 async ex => await MessageInteractions.ShowWarning.Handle(ex));
@@ -96,29 +91,20 @@ namespace BooruDownloader.ViewModels
 
         public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
 
-        public IEnumerable<QueueItemViewModel>? SelectedItems
-        {
-            get => _selectedItems;
-            set => this.RaiseAndSetIfChanged(ref _selectedItems, value);
-        }
+        [Reactive]
+        public IEnumerable<QueueItemViewModel>? SelectedItems { get; set; }
 
-        public int ProgressValue
-        {
-            get => _progressValue;
-            private set => this.RaiseAndSetIfChanged(ref _progressValue, value);
-        }
+        [Reactive]
+        public int ProgressValue { get; set; }
 
-        public int ProgressMaximum
-        {
-            get => _progressMaximum;
-            private set => this.RaiseAndSetIfChanged(ref _progressMaximum, value);
-        }
+        [Reactive]
+        public int ProgressMaximum { get; set; }
 
-        public bool IsAddingPosts => _isAddingPosts.Value;
+        public extern bool IsAddingPosts { [ObservableAsProperty] get; }
 
-        public bool IsDownloading => _isDownloading.Value;
+        public extern bool IsDownloading { [ObservableAsProperty] get; }
 
-        public bool IsBusy => _isBusy.Value;
+        public extern bool IsBusy { [ObservableAsProperty] get; }
 
         public Interaction<Unit, IEnumerable<string>> OpenUrlInputDialog { get; }
 
@@ -144,13 +130,10 @@ namespace BooruDownloader.ViewModels
         {
             var links = await OpenUrlInputDialog.Handle(Unit.Default);
 
-            // Dialog was closed or no links specified.
-            if (links?.Any() != true)
+            if (links?.Any() is true)
             {
-                return;
+                await ResolveLinksAsync(links, cancellationToken);
             }
-
-            await ResolveLinksAsync(links, cancellationToken);
         }
 
         private async Task AddFromFileImpl(CancellationToken cancellationToken)

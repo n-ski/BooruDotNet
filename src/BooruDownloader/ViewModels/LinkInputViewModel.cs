@@ -3,40 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace BooruDownloader.ViewModels
 {
     public class LinkInputViewModel : ReactiveObject
     {
-        private string _inputText;
-        private readonly ObservableAsPropertyHelper<IEnumerable<string>> _links;
-        private readonly ObservableAsPropertyHelper<bool> _isValid;
-
         public LinkInputViewModel()
         {
-            _inputText = string.Empty;
-
-            _links = this
-                .WhenAnyValue(x => x.InputText)
+            this.WhenAnyValue(x => x.InputText)
                 .Throttle(TimeSpan.FromMilliseconds(100))
-                .Select(text => from line in text?.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
-                                where Uri.IsWellFormedUriString(line, UriKind.Absolute)
-                                select line)
+                .DistinctUntilChanged()
+                .WhereNotNull()
+                .Select(text => from line in text.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries)
+                                let trimmed = line.Trim()
+                                where Uri.IsWellFormedUriString(trimmed, UriKind.Absolute)
+                                select trimmed)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .ToProperty(this, x => x.Links);
+                .ToPropertyEx(this, x => x.Links);
 
-            _isValid = this.WhenAnyValue(x => x.Links, links => links?.Any() == true)
-                .ToProperty(this, x => x.IsValid);
+            this.WhenAnyValue(x => x.Links, links => links?.Any() is true)
+                .ToPropertyEx(this, x => x.IsValid);
         }
 
-        public string InputText
-        {
-            get => _inputText;
-            set => this.RaiseAndSetIfChanged(ref _inputText, value);
-        }
+        [Reactive]
+        public string? InputText { get; set; }
 
-        public IEnumerable<string> Links => _links.Value!;
+        public extern IEnumerable<string>? Links { [ObservableAsProperty] get; }
 
-        public bool IsValid => _isValid.Value;
+        public extern bool IsValid { [ObservableAsProperty] get; }
     }
 }
