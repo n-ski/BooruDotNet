@@ -34,9 +34,9 @@ namespace BooruDownloader.ViewModels
             Observable.Return(tag).ToPropertyEx(this, x => x.Tag);
         }
 
-        public string Name => _tagName ?? Tag.Name;
+        public string Name => _tagName ?? Tag!.Name;
 
-        public extern ITag Tag { [ObservableAsProperty] get; }
+        public extern ITag? Tag { [ObservableAsProperty] get; }
 
         private async Task<ITag?> GetTagInfo(CancellationToken cancellationToken)
         {

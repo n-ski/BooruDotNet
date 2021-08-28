@@ -22,13 +22,10 @@ namespace BooruDownloader.ViewModels
                 () => DialogInteractions.OpenFolderBrowser.Handle(Unit.Default),
                 this.WhenAnyValue(x => x.AskLocationBeforeDownload, ask => ask is false));
 
-            ChangeDownloadLocation.Subscribe(directoryInfo =>
-            {
-                if (directoryInfo is object)
-                {
-                    DownloadLocation = directoryInfo.FullName;
-                }
-            });
+            ChangeDownloadLocation
+                .WhereNotNull()
+                .Select(d => d.FullName)
+                .BindTo(this, x => x.DownloadLocation);
 
             SaveSettings = ReactiveCommand.Create(SaveSettingsImpl);
         }
@@ -62,7 +59,7 @@ namespace BooruDownloader.ViewModels
 
         public IEnumerable<FileNamingStyle> FileNamingStyles => _fileNamingStyles;
 
-        public ReactiveCommand<Unit, DirectoryInfo> ChangeDownloadLocation { get; }
+        public ReactiveCommand<Unit, DirectoryInfo?> ChangeDownloadLocation { get; }
 
         public ReactiveCommand<Unit, Unit> SaveSettings { get; }
 

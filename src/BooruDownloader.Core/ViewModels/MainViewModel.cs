@@ -80,7 +80,7 @@ namespace BooruDownloader.ViewModels
             DownloadPosts.ThrownExceptions.Subscribe(
                 async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
-            OpenUrlInputDialog = new Interaction<Unit, IEnumerable<string>>();
+            OpenUrlInputDialog = new Interaction<Unit, IEnumerable<string>?>();
 
             OpenSettingsInteraction = new Interaction<Unit, Unit>();
 
@@ -107,7 +107,7 @@ namespace BooruDownloader.ViewModels
 
         public extern bool IsBusy { [ObservableAsProperty] get; }
 
-        public Interaction<Unit, IEnumerable<string>> OpenUrlInputDialog { get; }
+        public Interaction<Unit, IEnumerable<string>?> OpenUrlInputDialog { get; }
 
         public Interaction<Unit, Unit> OpenSettingsInteraction { get; }
 
