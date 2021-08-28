@@ -2,7 +2,7 @@
 using System.Reactive;
 using ReactiveUI;
 
-namespace BooruDotNet.Reactive.Interactions
+namespace BooruDownloader.Interactions
 {
     public static class MessageInteractions
     {

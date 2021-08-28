@@ -1,8 +1,10 @@
 ﻿#nullable disable
 using System;
+using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
+using BooruDownloader.Interactions;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 
@@ -68,6 +70,21 @@ namespace BooruDownloader.Views
                     .Do(_ => DialogResult = false)
                     .Subscribe()
                     .DisposeWith(d);
+
+                DialogInteractions.OpenFolderBrowser.RegisterHandler(interaction =>
+                {
+                    var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+
+                    if (dialog.ShowDialog(this) is true)
+                    {
+                        var directoryInfo = new DirectoryInfo(dialog.SelectedPath);
+                        interaction.SetOutput(directoryInfo);
+                    }
+                    else
+                    {
+                        interaction.SetOutput(null);
+                    }
+                }).DisposeWith(d);
             });
         }
     }

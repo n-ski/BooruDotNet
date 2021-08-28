@@ -19,7 +19,6 @@
     <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
     <ProjectReference Include="..\BooruDotNet.Gelbooru\BooruDotNet.Gelbooru.csproj" />
     <ProjectReference Include="..\BooruDotNet.Konachan\BooruDotNet.Konachan.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Reactive\BooruDotNet.Reactive.csproj" />
     <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
     <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
   </ItemGroup>

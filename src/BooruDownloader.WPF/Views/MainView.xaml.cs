@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDotNet.Helpers;
-using BooruDotNet.Reactive.Interactions;
+using BooruDownloader.Interactions;
 using BooruDownloader.ViewModels;
 using Humanizer;
 using Microsoft.Win32;
@@ -116,7 +116,7 @@ namespace BooruDownloader.Views
                     count => count > 0 ? $"Download {"file".ToQuantity(count)}" : "Download")
                     .DisposeWith(d);
 
-                #region Global interactions
+                #region Message interactions
 
                 DialogInteractions.OpenFileBrowser.RegisterHandler(interaction =>
                 {
@@ -134,7 +134,7 @@ namespace BooruDownloader.Views
                         Multiselect = false,
                     };
 
-                    if (dialog.ShowDialog() == true)
+                    if (dialog.ShowDialog(this) is true)
                     {
                         var fileInfo = new FileInfo(dialog.FileName);
 
@@ -151,7 +151,7 @@ namespace BooruDownloader.Views
                 {
                     var dialog = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
 
-                    if (dialog.ShowDialog() == true)
+                    if (dialog.ShowDialog(this) is true)
                     {
                         var directoryInfo = new DirectoryInfo(dialog.SelectedPath);
                         interaction.SetOutput(directoryInfo);

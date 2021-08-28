@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using BooruDotNet.Reactive.Interactions;
+using BooruDownloader.Interactions;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 

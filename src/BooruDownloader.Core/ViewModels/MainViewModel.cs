@@ -13,7 +13,7 @@ using BooruDotNet.Downloaders;
 using BooruDotNet.Helpers;
 using BooruDotNet.Links;
 using BooruDotNet.Posts;
-using BooruDotNet.Reactive.Interactions;
+using BooruDownloader.Interactions;
 using DynamicData;
 using DynamicData.Binding;
 using Humanizer;
