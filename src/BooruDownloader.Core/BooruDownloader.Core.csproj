@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <RootNamespace>BooruDownloader</RootNamespace>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
+    <PackageReference Include="ReactiveUI" Version="14.3.1" />
+    <PackageReference Include="ReactiveUI.Fody" Version="14.3.1" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BooruDotNet.Caching\BooruDotNet.Caching.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Danbooru\BooruDotNet.Danbooru.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Gelbooru\BooruDotNet.Gelbooru.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Konachan\BooruDotNet.Konachan.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Reactive\BooruDotNet.Reactive.csproj" />
+    <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
+    <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Settings.settings">
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+    </None>
+  </ItemGroup>
+
+</Project>

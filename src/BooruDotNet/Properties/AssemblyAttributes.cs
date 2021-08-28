@@ -13,4 +13,5 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("BooruDotNet.Tests.Shared")]
 [assembly: InternalsVisibleTo("BooruDotNet.Yandere")]
 [assembly: InternalsVisibleTo("BooruDownloader")]
+[assembly: InternalsVisibleTo("BooruDownloader.Core")]
 [assembly: InternalsVisibleTo("ImageSearch")]

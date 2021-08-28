@@ -14,38 +14,14 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
     <PackageReference Include="FluentUI.Core" Version="1.0.48" />
-    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="Ookii.Dialogs.Wpf" Version="3.1.0" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="14.3.1" />
-    <PackageReference Include="ReactiveUI.Fody" Version="14.3.1" />
     <PackageReference Include="ReactiveUI.WPF" Version="14.3.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BooruDotNet.Caching\BooruDotNet.Caching.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Danbooru\BooruDotNet.Danbooru.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Gelbooru\BooruDotNet.Gelbooru.csproj" />
     <ProjectReference Include="..\BooruDotNet.Helpers.WPF\BooruDotNet.Helpers.WPF.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Konachan\BooruDotNet.Konachan.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Reactive\BooruDotNet.Reactive.csproj" />
-    <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
-    <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
+    <ProjectReference Include="..\BooruDownloader.Core\BooruDownloader.Core.csproj" />
   </ItemGroup>
 
 </Project>
