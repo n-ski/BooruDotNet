@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Media;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
@@ -85,6 +84,8 @@ namespace BooruDownloader.ViewModels
 
             OpenSettingsInteraction = new Interaction<Unit, Unit>();
 
+            PlayCompletionSound = new Interaction<Unit, Unit>();
+
             OpenSettingsCommand = ReactiveCommand.CreateFromObservable(
                 () => OpenSettingsInteraction.Handle(Unit.Default));
         }
@@ -109,6 +110,8 @@ namespace BooruDownloader.ViewModels
         public Interaction<Unit, IEnumerable<string>> OpenUrlInputDialog { get; }
 
         public Interaction<Unit, Unit> OpenSettingsInteraction { get; }
+
+        public Interaction<Unit, Unit> PlayCompletionSound { get; }
 
         public ReactiveCommand<Unit, Unit> AddFromUrls { get; }
 
@@ -323,7 +326,7 @@ namespace BooruDownloader.ViewModels
 
             if (settings.PlaySoundWhenComplete)
             {
-                SystemSounds.Asterisk.Play();
+                await PlayCompletionSound.Handle(Unit.Default);
             }
         }
     }

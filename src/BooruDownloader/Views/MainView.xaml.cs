@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -251,6 +252,12 @@ namespace BooruDownloader.Views
 
                         interaction.SetOutput(Unit.Default);
                     }, RxApp.MainThreadScheduler);
+                }).DisposeWith(d);
+
+                ViewModel.PlayCompletionSound.RegisterHandler(interaction =>
+                {
+                    SystemSounds.Asterisk.Play();
+                    interaction.SetOutput(Unit.Default);
                 }).DisposeWith(d);
             });
         }
