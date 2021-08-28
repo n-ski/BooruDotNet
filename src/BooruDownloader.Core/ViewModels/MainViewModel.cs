@@ -288,7 +288,7 @@ namespace BooruDownloader.ViewModels
                 IgnoreArchiveFiles = settings.IgnoreArchiveFiles,
             };
 
-            var downloader = App.Downloaders[settings.FileNamingStyle];
+            var downloader = Singletons.PostDownloaders.GetDownloader(settings.FileNamingStyle);
             downloader.Options = options;
 
             Logger.Debug(
