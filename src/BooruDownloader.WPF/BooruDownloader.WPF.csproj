@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <Version>0.1.0</Version>
+    <AssemblyName>BooruDownloader</AssemblyName>
     <Product>Booru Downloader</Product>
     <Description>An application for downloading images from boorus (Danbooru, Gelbooru, etc.).</Description>
     <ApplicationManifest>app.manifest</ApplicationManifest>

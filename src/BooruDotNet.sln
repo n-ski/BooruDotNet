@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Links", "BooruD
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{EBCE795C-4FAE-4098-9354-6155BB35A49F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDownloader", "BooruDownloader\BooruDownloader.csproj", "{DED5705E-5CD3-41F4-B40A-596810C5BD7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDownloader.WPF", "BooruDownloader.WPF\BooruDownloader.WPF.csproj", "{DED5705E-5CD3-41F4-B40A-596810C5BD7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BooruDotNet.Downloaders", "BooruDotNet.Downloaders\BooruDotNet.Downloaders.csproj", "{893360CE-2CCF-4518-A3C7-70A1F5250650}"
 EndProject
