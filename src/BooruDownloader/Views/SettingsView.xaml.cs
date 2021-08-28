@@ -59,10 +59,8 @@ namespace BooruDownloader.Views
                 this.BindCommand(ViewModel, vm => vm.SaveSettings, v => v.OkButton)
                     .DisposeWith(d);
 
-                OkButton
-                    .Events().Click
-                    .Do(_ => DialogResult = true)
-                    .Subscribe()
+                this.WhenAnyObservable(v => v.ViewModel.SaveSettings)
+                    .Subscribe(_ => DialogResult = true)
                     .DisposeWith(d);
 
                 CancelButton
