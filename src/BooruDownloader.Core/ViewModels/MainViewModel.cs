@@ -32,6 +32,8 @@ namespace BooruDownloader.ViewModels
             _queuedItems = new ObservableCollectionExtended<QueueItemViewModel>();
             QueuedItems = new ReadOnlyObservableCollection<QueueItemViewModel>(_queuedItems);
 
+            SelectedItems = new ObservableCollectionExtended<QueueItemViewModel>();
+
             CancelAdd = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
                 this.WhenAnyValue(x => x.IsAddingPosts));
@@ -49,8 +51,8 @@ namespace BooruDownloader.ViewModels
                 async ex => await MessageInteractions.ShowWarning.Handle(ex));
 
             RemoveSelection = ReactiveCommand.Create(
-                () => _queuedItems.RemoveMany(SelectedItems!),
-                this.WhenAnyValue(x => x.SelectedItems, items => items?.Any() is true));
+                () => _queuedItems.RemoveMany(SelectedItems),
+                this.WhenAnyValue(x => x.SelectedItems.Count, count => count > 0));
 
             ClearQueue = ReactiveCommand.Create(
                 _queuedItems.Clear,
@@ -92,8 +94,7 @@ namespace BooruDownloader.ViewModels
 
         public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
 
-        [Reactive]
-        public IEnumerable<QueueItemViewModel>? SelectedItems { get; set; }
+        public ObservableCollectionExtended<QueueItemViewModel> SelectedItems { get; }
 
         [Reactive]
         public int ProgressValue { get; set; }

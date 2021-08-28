@@ -57,11 +57,30 @@ namespace BooruDownloader.Views
                 this.OneWayBind(ViewModel, vm => vm.QueuedItems, v => v.QueuedItemsListBox.ItemsSource)
                     .DisposeWith(d);
 
-                // Since we can't observe SelectedItems directly, let's observe the event instead.
+                this.OneWayBind(ViewModel, vm => vm.SelectedItems, v => v.QueuedItemsListBox.SelectedItems)
+                    .DisposeWith(d);
+
+                // ListBox is trash and SelectedItems binding doesn't notify us about selected items changes,
+                // so handle the event and manipulate the collection manually instead.
                 QueuedItemsListBox
                     .Events().SelectionChanged
-                    .Select(_ => QueuedItemsListBox.SelectedItems.Cast<QueueItemViewModel>())
-                    .BindTo(this, v => v.ViewModel.SelectedItems)
+                    .Subscribe(args =>
+                    {
+                        var selectedItems = ViewModel.SelectedItems;
+
+                        using (selectedItems.SuspendNotifications())
+                        {
+                            foreach (QueueItemViewModel item in args.RemovedItems)
+                            {
+                                selectedItems.Remove(item);
+                            }
+
+                            foreach (QueueItemViewModel item in args.AddedItems)
+                            {
+                                selectedItems.Add(item);
+                            }
+                        }
+                    })
                     .DisposeWith(d);
 
                 QueuedItemsListBox
