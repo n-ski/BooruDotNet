@@ -7,7 +7,7 @@ using BooruDownloader.ViewModels;
 using Humanizer;
 using ReactiveUI;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for TagView.xaml

@@ -8,7 +8,7 @@ using System.Windows.Input;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for LinkInputView.xaml

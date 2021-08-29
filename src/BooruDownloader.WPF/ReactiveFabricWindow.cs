@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using ReactiveUI;
 
-namespace BooruDownloader
+namespace BooruDownloader.WPF
 {
     public class ReactiveFabricWindow<TViewModel> : FluentUI.FabricWindow, IViewFor<TViewModel> where TViewModel : class
     {

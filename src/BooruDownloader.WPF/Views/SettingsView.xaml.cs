@@ -8,7 +8,7 @@ using BooruDownloader.Interactions;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml

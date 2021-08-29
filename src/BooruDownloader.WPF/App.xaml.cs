@@ -7,11 +7,11 @@ using BooruDotNet.SankakuComplex;
 using BooruDotNet.Yandere;
 using BooruDownloader.Singletons;
 using BooruDownloader.ViewModels;
-using BooruDownloader.Views;
+using BooruDownloader.WPF.Views;
 using ReactiveUI;
 using Splat;
 
-namespace BooruDownloader
+namespace BooruDownloader.WPF
 {
     /// <summary>
     /// Interaction logic for App.xaml

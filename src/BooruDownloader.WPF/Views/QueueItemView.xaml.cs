@@ -16,7 +16,7 @@ using Humanizer;
 using ReactiveUI;
 using Validation;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for QueueItemView.xaml

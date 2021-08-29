@@ -8,7 +8,7 @@ using BooruDotNet.Helpers;
 using BooruDownloader.ViewModels;
 using ReactiveUI;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for MediaView.xaml

@@ -17,7 +17,7 @@ using Humanizer;
 using Microsoft.Win32;
 using ReactiveUI;
 
-namespace BooruDownloader.Views
+namespace BooruDownloader.WPF.Views
 {
     /// <summary>
     /// Interaction logic for MainView.xaml

@@ -1,5 +1,5 @@
 ﻿<Application
-    x:Class="BooruDownloader.App"
+    x:Class="BooruDownloader.WPF.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     StartupUri="Views/MainView.xaml">
