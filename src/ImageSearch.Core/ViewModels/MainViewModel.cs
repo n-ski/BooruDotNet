@@ -89,8 +89,7 @@ namespace ImageSearch.ViewModels
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .Select(results => results.AsObservableChangeSet())
                 .Switch()
-                .Filter(result => result.SourceUri is object)
-                .DisposeMany();
+                .Filter(result => result.SourceUri is object);
 
             searchResults
                 .Filter(result => result.Similarity >= _bestResultThreshold)
