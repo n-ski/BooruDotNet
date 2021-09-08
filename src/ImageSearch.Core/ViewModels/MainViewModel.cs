@@ -105,25 +105,20 @@ namespace ImageSearch.ViewModels
 
             // Observe commands from search results and pipe them to the main commands.
 
-            static IObservable<TOut> SelectOnObservable<TIn, TAny, TOut>(
+            static IDisposable SelectAndSubscribeOnObservable<TIn, TAny, TOut>(
                 IObservable<IChangeSet<TIn>> changeSet,
                 Func<TIn, IObservable<TAny>> observable,
-                Func<TIn, TOut> selector)
+                Func<TIn, TOut> selector,
+                Func<IObservable<TOut>, IDisposable> subscriptionFactory)
             {
-                return changeSet
-                    .AutoRefreshOnObservable(observable)
-                    .Where(set => set.Refreshes is 1)
-                    .Select(set => selector(set.First().Item.Current));
+                return changeSet.SubscribeMany(item => subscriptionFactory(observable(item).Select(_ => selector(item)))).Subscribe();
             }
 
-            SelectOnObservable(searchResults, result => result.OpenSource, result => result.SourceUri)
-                .InvokeCommand(this, x => x.OpenSource);
+            SelectAndSubscribeOnObservable(searchResults, result => result.OpenSource, result => result.SourceUri, uri => uri.InvokeCommand(this, x => x.OpenSource));
 
-            SelectOnObservable(searchResults, result => result.CopySource, result => result.SourceUri)
-                .InvokeCommand(this, x => x.CopySource);
+            SelectAndSubscribeOnObservable(searchResults, result => result.CopySource, result => result.SourceUri, uri => uri.InvokeCommand(this, x => x.CopySource));
 
-            SelectOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri)
-                .InvokeCommand(this, x => x.SearchForSimilar);
+            SelectAndSubscribeOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri, uri => uri.InvokeCommand(this, x => x.SearchForSimilar));
 
             #endregion
         }
