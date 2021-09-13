@@ -58,7 +58,10 @@ namespace BooruDownloader.ViewModels
                 _queuedItems.Clear,
                 this.WhenAnyValue(x => x._queuedItems.Count, count => count > 0));
 
-            Observable.Merge(AddFromUrls.IsExecuting, AddFromFile.IsExecuting)
+            this.WhenAnyObservable(
+                x => x.AddFromUrls.IsExecuting,
+                x => x.AddFromFile.IsExecuting,
+                (fromUrls, fromFile) => fromUrls || fromFile)
                 .ToPropertyEx(this, x => x.IsAddingPosts);
 
             CancelDownload = ReactiveCommand.Create(
@@ -74,9 +77,10 @@ namespace BooruDownloader.ViewModels
 
             DownloadPosts.IsExecuting.ToPropertyEx(this, x => x.IsDownloading);
 
-            Observable.Merge(
-                this.WhenAnyValue(x => x.IsAddingPosts),
-                this.WhenAnyValue(x => x.IsDownloading))
+            this.WhenAnyValue(
+                x => x.IsAddingPosts,
+                x => x.IsDownloading,
+                (isAdding, isDownloading) => isAdding || isDownloading)
                 .ToPropertyEx(this, x => x.IsBusy);
 
             DownloadPosts.ThrownExceptions.Subscribe(
