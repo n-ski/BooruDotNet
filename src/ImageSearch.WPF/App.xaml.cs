@@ -13,6 +13,7 @@ namespace ImageSearch.WPF
     {
         static App()
         {
+            PresentationTheme.Aero.AeroTheme.SetAsCurrentTheme();
 
             HttpClient = new HttpClient(new SocketsHttpHandler
             {
