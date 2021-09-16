@@ -27,14 +27,16 @@ namespace ImageSearch.ViewModels
             this.WhenAnyValue(x => x.SelectedUploadMethod, selector: method => method?.Search)
                 .ToPropertyEx(this, x => x.Search);
 
+            var search = this.WhenAnyValue(x => x.Search)
+                .WhereNotNull();
+
             this.WhenAnyValue(x => x.SelectedUploadMethod)
                 .WhereNotNull()
                 .Select(method => method.CurrentStatus)
                 .Switch()
                 .BindTo(this, x => x.StatusViewModel.StatusText);
 
-            this.WhenAnyValue(x => x.Search)
-                .WhereNotNull()
+            search
                 .Select(search => search.IsExecuting)
                 .Switch()
                 .BindTo(this, x => x.StatusViewModel.IsActive);
@@ -51,8 +53,7 @@ namespace ImageSearch.ViewModels
             SearchWithFile = ReactiveCommand.CreateFromObservable((FileInfo file) => SearchWithFileImpl(file));
 
             // Assume that we can't switch methods while searching.
-            this.WhenAnyValue(x => x.Search)
-                .WhereNotNull()
+            search
                 .Select(search => search.ThrownExceptions)
                 .Switch()
                 .Merge(SearchWithUri.ThrownExceptions)
@@ -76,9 +77,8 @@ namespace ImageSearch.ViewModels
 
             #region Search results bindings
 
-            var searchResults = this.WhenAnyValue(x => x.Search)
+            var searchResults = search
                 .ObserveOn(RxApp.TaskpoolScheduler)
-                .WhereNotNull()
                 .Switch()
                 .Select(results => results.AsObservableChangeSet())
                 .Switch()
