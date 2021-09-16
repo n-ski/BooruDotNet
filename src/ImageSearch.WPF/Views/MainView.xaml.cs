@@ -53,7 +53,7 @@ namespace ImageSearch.WPF.Views
                 this.Bind(ViewModel, vm => vm.SelectedUploadMethod, v => v.UploadMethodsComboBox.SelectedItem)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.UploadMethod, v => v.UploadMethodHost.ViewModel)
+                this.OneWayBind(ViewModel, vm => vm.SelectedUploadMethod, v => v.UploadMethodHost.ViewModel)
                     .DisposeWith(d);
 
                 #endregion
@@ -63,18 +63,17 @@ namespace ImageSearch.WPF.Views
                 this.OneWayBind(ViewModel, vm => vm.SearchServices, v => v.SearchServicesComboBox.ItemsSource)
                     .DisposeWith(d);
 
-                this.WhenAnyValue(v => v.SearchServicesComboBox.SelectedItem)
-                    .BindTo(this, v => v.ViewModel.SelectedSearchService)
+                this.Bind(ViewModel, vm => vm.SelectedSearchService, v => v.SearchServicesComboBox.SelectedItem)
                     .DisposeWith(d);
 
                 #endregion
 
-                this.BindCommand(ViewModel, vm => vm.Search, v => v.SearchButton)
+                this.BindCommand(
+                    ViewModel,
+                    vm => vm.Search,
+                    v => v.SearchButton,
+                    this.WhenAnyValue(v => v.ViewModel.SelectedSearchService))
                     .DisposeWith(d);
-
-                // Because selection is bound from view to view model, initialize default selection after we're done binding here.
-                UploadMethodsComboBox.SelectedIndex = 0;
-                SearchServicesComboBox.SelectedIndex = 0;
 
                 // Scroll to top after the search command is completed.
                 this.WhenAnyObservable(x => x.ViewModel.Search)
@@ -149,9 +148,6 @@ namespace ImageSearch.WPF.Views
             var data = (DataObject)dropInfo.Data;
             var files = data.GetFileDropList();
             var firstFile = new FileInfo(files[0]);
-
-            // HACK: upload method isn't being set in the command, so set it here for now.
-            UploadMethodsComboBox.SelectedItem = UploadMethod.File;
 
             ViewModel.SearchWithFile.Execute(firstFile).Subscribe();
         }

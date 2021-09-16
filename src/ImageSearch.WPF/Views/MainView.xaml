@@ -85,7 +85,7 @@
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="{StaticResource MarginMedium}"
-                DisplayMemberPath="." />
+                DisplayMemberPath="UploadMethod" />
 
             <rui:ViewModelViewHost
                 x:Name="UploadMethodHost"
