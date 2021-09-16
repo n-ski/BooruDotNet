@@ -83,7 +83,7 @@ namespace ImageSearch.WPF.Views
 
                 #region Interactions
 
-                ViewModel.OpenUriInteraction.RegisterHandler(interaction =>
+                this.BindInteraction(ViewModel, vm => vm.OpenUriInteraction, interaction =>
                 {
                     Uri uri = interaction.Input;
                     Debug.Assert(uri.IsAbsoluteUri);
@@ -95,9 +95,10 @@ namespace ImageSearch.WPF.Views
                     });
 
                     interaction.SetOutput(Unit.Default);
+                    return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
 
-                ViewModel.CopyUriInteraction.RegisterHandler(interaction =>
+                this.BindInteraction(ViewModel, vm => vm.CopyUriInteraction, interaction =>
                 {
                     Uri uri = interaction.Input;
                     Debug.Assert(uri.IsAbsoluteUri);
@@ -105,9 +106,10 @@ namespace ImageSearch.WPF.Views
                     Clipboard.SetText(uri.AbsoluteUri);
 
                     interaction.SetOutput(Unit.Default);
+                    return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
 
-                ViewModel.DisplaySearchError.RegisterHandler(interaction =>
+                this.BindInteraction(ViewModel, vm => vm.DisplaySearchError, interaction =>
                 {
                     Exception exception = interaction.Input.InnerException ?? interaction.Input;
 
@@ -119,6 +121,7 @@ namespace ImageSearch.WPF.Views
                     MessageBox.Show(this, message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     interaction.SetOutput(Unit.Default);
+                    return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
 
                 #endregion

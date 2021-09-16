@@ -1,7 +1,9 @@
 ﻿#nullable disable
 using System;
 using System.IO;
+using System.Reactive;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Windows;
 using ImageSearch.ViewModels;
 using ImageSearch.WPF.Helpers;
@@ -29,7 +31,7 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.SelectFile, v => v.SelectFileButton)
                     .DisposeWith(d);
 
-                ViewModel.ShowFileSelection.RegisterHandler(interaction =>
+                this.BindInteraction(ViewModel, vm => vm.ShowFileSelection, interaction =>
                 {
                     var dialog = new VistaOpenFileDialog
                     {
@@ -45,6 +47,8 @@ namespace ImageSearch.WPF.Views
                     {
                         interaction.SetOutput(null);
                     }
+
+                    return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
             });
         }
