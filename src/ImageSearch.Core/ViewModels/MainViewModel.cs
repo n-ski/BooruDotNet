@@ -46,7 +46,7 @@ namespace ImageSearch.ViewModels
                     .BindTo(method, m => m.CancelSearch))
                 .Subscribe();
 
-            SearchForSimilar = ReactiveCommand.CreateFromObservable((Uri uri) => SearchForSimilarImpl(uri));
+            SearchWithUri = ReactiveCommand.CreateFromObservable((Uri uri) => SearchWithUriImpl(uri));
 
             SearchWithFile = ReactiveCommand.CreateFromObservable((FileInfo file) => SearchWithFileImpl(file));
 
@@ -111,7 +111,7 @@ namespace ImageSearch.ViewModels
 
             SelectAndSubscribeOnObservable(searchResults, result => result.CopySource, result => result.SourceUri, uri => uri.InvokeCommand(this, x => x.CopySource));
 
-            SelectAndSubscribeOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri, uri => uri.InvokeCommand(this, x => x.SearchForSimilar));
+            SelectAndSubscribeOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri, uri => uri.InvokeCommand(this, x => x.SearchWithUri));
 
             #endregion
         }
@@ -144,7 +144,7 @@ namespace ImageSearch.ViewModels
 
         public ReactiveCommand<Uri, Unit> OpenSource { get; }
         public ReactiveCommand<Uri, Unit> CopySource { get; }
-        public ReactiveCommand<Uri, Unit> SearchForSimilar { get; }
+        public ReactiveCommand<Uri, Unit> SearchWithUri { get; }
         public ReactiveCommand<FileInfo, Unit> SearchWithFile { get; }
         public extern ReactiveCommand<SearchServiceViewModel, IReadOnlyCollection<SearchResultViewModel>>? Search { [ObservableAsProperty] get; }
 
@@ -160,7 +160,7 @@ namespace ImageSearch.ViewModels
 
         #region Command implementations
 
-        private IObservable<Unit> SearchForSimilarImpl(Uri uri)
+        private IObservable<Unit> SearchWithUriImpl(Uri uri)
         {
             var uriUpload = UploadMethods.OfType<UriUploadViewModel>().Single();
             uriUpload.FileUri = uri;
