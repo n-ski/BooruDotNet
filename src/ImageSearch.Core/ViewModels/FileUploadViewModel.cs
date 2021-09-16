@@ -25,7 +25,7 @@ namespace ImageSearch.ViewModels
 
         #region Properties
 
-        public override UploadMethod UploadMethod => UploadMethod.File;
+        public override UploadInputKind UploadInputKind => UploadInputKind.File;
 
         [Reactive]
         public FileInfo? FileToUpload { get; set; }

@@ -21,7 +21,7 @@ namespace ImageSearch.ViewModels
 
         #region Properties
 
-        public override UploadMethod UploadMethod => UploadMethod.Uri;
+        public override UploadInputKind UploadInputKind => UploadInputKind.Uri;
 
         [Reactive]
         public Uri? FileUri { get; set; }

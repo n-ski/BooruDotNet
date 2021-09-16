@@ -1,6 +1,6 @@
 ﻿namespace ImageSearch
 {
-    public enum UploadMethod
+    public enum UploadInputKind
     {
         Uri = 1,
         File,

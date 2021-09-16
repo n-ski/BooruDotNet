@@ -49,7 +49,6 @@ namespace ImageSearch.WPF.Views
                 this.OneWayBind(ViewModel, vm => vm.UploadMethods, v => v.UploadMethodsComboBox.ItemsSource)
                     .DisposeWith(d);
 
-                // This has to be a 2-way binding because view model can also change selected method (see SearchForSimilarImpl).
                 this.Bind(ViewModel, vm => vm.SelectedUploadMethod, v => v.UploadMethodsComboBox.SelectedItem)
                     .DisposeWith(d);
 

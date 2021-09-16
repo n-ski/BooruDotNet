@@ -19,9 +19,9 @@ namespace ImageSearch.ViewModels
         }
 
         /// <summary>
-        /// Gets an identifier of the upload method.
+        /// Gets the kind of the search input.
         /// </summary>
-        public abstract UploadMethod UploadMethod { get; }
+        public abstract UploadInputKind UploadInputKind { get; }
 
         /// <summary>
         /// Perform search with specified search service.
