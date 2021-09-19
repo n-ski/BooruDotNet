@@ -12,6 +12,8 @@
             <ResourceDictionary.MergedDictionaries>
 
                 <ResourceDictionary
+                    Source="./Assets/Styles/Path.xaml" />
+                <ResourceDictionary
                     Source="./Assets/Resources.xaml" />
                 <ResourceDictionary
                     Source="./Assets/Styles/Button.xaml" />
