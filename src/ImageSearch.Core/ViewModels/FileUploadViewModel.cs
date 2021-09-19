@@ -30,11 +30,11 @@ namespace ImageSearch.ViewModels
         [Reactive]
         public FileInfo? FileToUpload { get; set; }
 
-        public ReactiveCommand<Unit, FileInfo?> SelectFile { get; }
-
         #endregion
 
         #region Commands
+
+        public ReactiveCommand<Unit, FileInfo?> SelectFile { get; }
 
         public override ReactiveCommand<SearchServiceViewModel, IReadOnlyCollection<SearchResultViewModel>> Search { get; }
 
