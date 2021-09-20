@@ -6,6 +6,9 @@ using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using BooruDotNet.Helpers;
 using GongSolutions.Wpf.DragDrop;
 using ImageSearch.ViewModels;
 using ImageSearch.WPF.Helpers;
@@ -121,6 +124,89 @@ namespace ImageSearch.WPF.Views
                     interaction.SetOutput(Unit.Default);
                     return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
+
+                #endregion
+
+                #region Pasted data handlers
+
+                var pasteEvent = this.Events()
+                    .KeyDown
+                    .Where(args => args.KeyboardDevice.Modifiers is ModifierKeys.Control && args.Key is Key.V);
+
+                // Pasted text.
+                pasteEvent
+                    .Where(_ => Clipboard.ContainsText())
+                    .Select(_ => Clipboard.GetText())
+                    .Select(text => Uri.TryCreate(text, UriKind.Absolute, out Uri uri) ? uri : null)
+                    .WhereNotNull()
+                    .InvokeCommand(this, v => v.ViewModel.SearchWithUri)
+                    .DisposeWith(d);
+
+                // Pasted file.
+                pasteEvent
+                    .Where(_ => Clipboard.ContainsFileDropList())
+                    .Select(_ => Clipboard.GetFileDropList())
+                    .Select(files => new FileInfo(files[0]))
+                    .InvokeCommand(this, v => v.ViewModel.SearchWithFile)
+                    .DisposeWith(d);
+
+                // Pasted image.
+                pasteEvent
+                    .Where(_ => Clipboard.ContainsImage())
+                    .Select(_ => Clipboard.GetImage())
+                    .Catch((Exception ex) =>
+                    {
+                        Debug.WriteLine(ex, nameof(MainView));
+
+                        MessageBoxResult result = MessageBox.Show(
+                            this,
+                            string.Join(
+                                Environment.NewLine,
+                                "An error has occured while reading the image from clipboard:",
+                                ex.Message,
+                                "Display stack trace?"),
+                            "Error",
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Error);
+
+                        if (result is MessageBoxResult.Yes)
+                        {
+                            MessageBox.Show(
+                                this,
+                                ex.ToString(),
+                                "Exception stack trace",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                        }
+
+                        return Observable.Empty<BitmapSource>();
+                    })
+                    .Select(image =>
+                    {
+                        // Scale image down if one of its sides is larger than this.
+                        const double threshold = 1000;
+                        double scale = threshold / Math.Max(image.PixelWidth, image.PixelHeight);
+
+                        if (scale >= 1.0)
+                        {
+                            return image;
+                        }
+
+                        return ImageHelper.ScaleImage(image, scale);
+                    })
+                    .Select(image =>
+                    {
+                        var fileInfo = new FileInfo(Path.GetTempFileName());
+
+                        using (Stream stream = fileInfo.OpenWrite())
+                        {
+                            ImageHelper.SaveImage(image, stream);
+                        }
+
+                        return fileInfo;
+                    })
+                    .InvokeCommand(this, v => v.ViewModel.SearchWithFile)
+                    .DisposeWith(d);
 
                 #endregion
             });
