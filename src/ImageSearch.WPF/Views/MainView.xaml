@@ -76,6 +76,16 @@
                 </ComboBox>
             </DockPanel>
 
+            <TextBlock
+                DockPanel.Dock="Bottom"
+                MaxHeight="48"
+                Margin="{StaticResource MarginMedium}"
+                FontSize="11"
+                FontStyle="Italic"
+                Text="Tip: Use Ctrl+V to upload files, image buffers, and URLs from clipboard."
+                TextTrimming="CharacterEllipsis"
+                TextWrapping="Wrap" />
+
             <ListBox
                 x:Name="QueueItemsListBox"
                 Margin="{StaticResource MarginMedium}"
