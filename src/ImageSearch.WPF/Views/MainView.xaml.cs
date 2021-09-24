@@ -9,6 +9,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using BooruDotNet.Helpers;
+using DynamicData;
+using DynamicData.Binding;
 using GongSolutions.Wpf.DragDrop;
 using ImageSearch.ViewModels;
 using ImageSearch.WPF.Helpers;
@@ -66,6 +68,13 @@ namespace ImageSearch.WPF.Views
                 this.WhenAnyObservable(v => v.ViewModel.AddUri)
                     .Select(_ => string.Empty)
                     .BindTo(this, v => v.ImageUriTextBox.Text)
+                    .DisposeWith(d);
+
+                // Scroll the queue list to bottom whenever a new item is added.
+                this.WhenAnyValue(v => v.ViewModel.QueuedItems, items => items.ToObservableChangeSet())
+                    .Switch()
+                    .OnItemAdded(item => QueueItemsListBox.ScrollIntoView(item))
+                    .Subscribe()
                     .DisposeWith(d);
 
                 this.BindCommand(ViewModel, vm => vm.ClearQueue, v => v.ClearQueueButton)
