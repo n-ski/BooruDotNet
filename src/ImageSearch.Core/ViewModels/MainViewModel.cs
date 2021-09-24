@@ -45,10 +45,6 @@ namespace ImageSearch.ViewModels
                     .LoadThumbnail
                     .Execute()
                     .Subscribe())
-                // Remove the item when its context menu option is clicked.
-                .SubscribeMany(item => item
-                    .RemoveItem
-                    .Subscribe(_ => _itemsQueue.Remove(item)))
                 .Bind(out var queuedItems)
                 .Subscribe();
 
@@ -85,6 +81,10 @@ namespace ImageSearch.ViewModels
 
             AddUri
                 .InvokeCommand(this, x => x.SearchWithUri);
+
+            ClearQueue = ReactiveCommand.Create(
+                () => _itemsQueue.Clear(),
+                _itemsQueue.CountChanged.Select(count => count > 0));
         }
 
         #region Properties
@@ -112,6 +112,7 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<FileInfo, Unit> SearchWithFile { get; }
         public ReactiveCommand<Unit, FileInfo> AddFile { get; }
         public ReactiveCommand<Unit, Uri> AddUri { get; }
+        public ReactiveCommand<Unit, Unit> ClearQueue { get; }
 
         #endregion
 

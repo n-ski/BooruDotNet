@@ -68,6 +68,9 @@ namespace ImageSearch.WPF.Views
                     .BindTo(this, v => v.ImageUriTextBox.Text)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.ClearQueue, v => v.ClearQueueButton)
+                    .DisposeWith(d);
+
                 #region Search services
 
                 this.OneWayBind(ViewModel, vm => vm.SearchServices, v => v.SearchServicesComboBox.ItemsSource)

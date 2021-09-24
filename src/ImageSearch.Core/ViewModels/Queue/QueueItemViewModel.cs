@@ -60,8 +60,6 @@ namespace ImageSearch.ViewModels
             LoadThumbnail = ReactiveCommand.CreateFromTask(LoadThumbnailImpl);
 
             LoadThumbnail.ToPropertyEx(this, x => x.Thumbnail);
-
-            RemoveItem = ReactiveCommand.Create(MethodHelper.DoNothing);
         }
 
         #region Properties
@@ -81,8 +79,6 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<IFileAndUriSearchService, IEnumerable<SearchResultViewModel>> Search { get; }
 
         public ReactiveCommand<Unit, Unit> CancelSearch { get; }
-
-        public ReactiveCommand<Unit, Unit> RemoveItem { get; }
 
         #endregion
 

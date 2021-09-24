@@ -86,6 +86,12 @@
                 TextTrimming="CharacterEllipsis"
                 TextWrapping="Wrap" />
 
+            <Button
+                x:Name="ClearQueueButton"
+                DockPanel.Dock="Bottom"
+                Margin="{StaticResource MarginMedium}"
+                Content="Clear Queue" />
+
             <ListBox
                 x:Name="QueueItemsListBox"
                 Margin="{StaticResource MarginMedium}"

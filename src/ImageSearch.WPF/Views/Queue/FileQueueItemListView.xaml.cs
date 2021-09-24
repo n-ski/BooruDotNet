@@ -18,9 +18,6 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
-                this.BindCommand(ViewModel, vm => vm.RemoveItem, v => v.RemoveMenuItem)
-                    .DisposeWith(d);
-
                 this.OneWayBind(ViewModel, vm => vm.Thumbnail, v => v.ThumbnailImage.Source, bitmap => bitmap?.ToNative())
                     .DisposeWith(d);
 

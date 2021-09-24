@@ -12,16 +12,6 @@
     d:DesignHeight="450"
     d:DesignWidth="800">
 
-    <UserControl.ContextMenu>
-
-        <ContextMenu>
-
-            <MenuItem
-                x:Name="RemoveMenuItem"
-                Header="Remove" />
-        </ContextMenu>
-    </UserControl.ContextMenu>
-
     <Grid>
 
         <Grid.RowDefinitions>
