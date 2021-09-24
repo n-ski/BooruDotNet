@@ -18,14 +18,14 @@ namespace ImageSearch.WPF
             var builder = ImmutableArray.CreateBuilder<SearchServiceViewModel>();
 
             builder.Add(new SearchServiceViewModel(
-                new IqdbService(httpClient),
-                "IQDB (multi-service)",
-                BitmapFromResource("IqdbIcon")));
-
-            builder.Add(new SearchServiceViewModel(
                 new DanbooruService(httpClient),
                 "Danbooru",
                 BitmapFromResource("DanbooruIcon")));
+
+            builder.Add(new SearchServiceViewModel(
+                new IqdbService(httpClient),
+                "IQDB (multi-service)",
+                BitmapFromResource("IqdbIcon")));
 
             builder.Add(new SearchServiceViewModel(
                 new IqdbService(httpClient, "gelbooru"),
