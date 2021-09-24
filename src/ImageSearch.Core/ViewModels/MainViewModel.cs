@@ -44,7 +44,6 @@ namespace ImageSearch.ViewModels
                 .SubscribeMany(item => item
                     .LoadThumbnail
                     .Execute()
-                    .Catch(Observable.Empty<IBitmap>())
                     .Subscribe())
                 // Remove the item when its context menu option is clicked.
                 .SubscribeMany(item => item

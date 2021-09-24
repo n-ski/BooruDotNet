@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Services;
+using ImageSearch.Helpers;
 using Splat;
 using Validation;
 
@@ -22,18 +21,9 @@ namespace ImageSearch.ViewModels
 
         public Uri ImageUri { get; }
 
-        protected override async Task<IBitmap?> LoadThumbnailImpl()
+        protected override Task<IBitmap> LoadThumbnailImpl()
         {
-            using var wc = new WebClient();
-            using Stream stream = wc.OpenRead(ImageUri);
-
-            // Splat has a bug with unfreezable images so copy the stream to memory first.
-            Stream memory = new MemoryStream();
-            await stream.CopyToAsync(memory);
-            memory.Position = 0;
-
-            return await BitmapLoader.Current.Load(memory, default, DesiredThumbnailHeight);
-
+            return BitmapHelper.LoadBitmapAsync(ImageUri, default, DesiredThumbnailHeight);
         }
 
         protected override async Task<IEnumerable<SearchResultViewModel>> SearchImpl(IFileAndUriSearchService service, CancellationToken ct)

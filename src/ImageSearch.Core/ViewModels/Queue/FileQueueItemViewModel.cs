@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Services;
+using ImageSearch.Helpers;
 using Splat;
 using Validation;
 
@@ -22,10 +23,9 @@ namespace ImageSearch.ViewModels
 
         public string ImageFilePath => _imageFileInfo.FullName;
 
-        protected override async Task<IBitmap?> LoadThumbnailImpl()
+        protected override Task<IBitmap> LoadThumbnailImpl()
         {
-            using Stream stream = _imageFileInfo.OpenRead();
-            return await BitmapLoader.Current.Load(stream, default, DesiredThumbnailHeight);
+            return BitmapHelper.LoadBitmapAsync(_imageFileInfo, default, DesiredThumbnailHeight);
         }
 
         protected override async Task<IEnumerable<SearchResultViewModel>> SearchImpl(IFileAndUriSearchService service, CancellationToken ct)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
@@ -54,14 +53,7 @@ namespace ImageSearch.ViewModels
 
             LoadThumbnail = ReactiveCommand.CreateFromTask(LoadThumbnailImpl);
 
-            Observable.Merge(
-                LoadThumbnail,
-                LoadThumbnail.ThrownExceptions.SelectMany(_ =>
-                {
-                    Stream memory = new MemoryStream(Resources.ImageError);
-                    return BitmapLoader.Current.Load(memory, default, default);
-                }))
-                .ToPropertyEx(this, x => x.Thumbnail);
+            LoadThumbnail.ToPropertyEx(this, x => x.Thumbnail);
 
             RemoveItem = ReactiveCommand.Create(MethodHelper.DoNothing);
         }
@@ -80,7 +72,7 @@ namespace ImageSearch.ViewModels
 
         #region Commands
 
-        public ReactiveCommand<Unit, IBitmap?> LoadThumbnail { get; }
+        public ReactiveCommand<Unit, IBitmap> LoadThumbnail { get; }
 
         public ReactiveCommand<IFileAndUriSearchService, IEnumerable<SearchResultViewModel>> Search { get; }
 
@@ -90,7 +82,7 @@ namespace ImageSearch.ViewModels
 
         #endregion
 
-        protected abstract Task<IBitmap?> LoadThumbnailImpl();
+        protected abstract Task<IBitmap> LoadThumbnailImpl();
 
         protected abstract Task<IEnumerable<SearchResultViewModel>> SearchImpl(IFileAndUriSearchService service, CancellationToken ct);
     }
