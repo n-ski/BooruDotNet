@@ -30,7 +30,7 @@ namespace ImageSearch.ViewModels
         {
             Debug.Assert(service is object);
 
-            CurrentStatusSubject.OnNext("Please wait\u2026");
+            StatusViewModel.Text = "Please wait\u2026";
 
             var results = await service.SearchAsync(ImageUri, ct);
 

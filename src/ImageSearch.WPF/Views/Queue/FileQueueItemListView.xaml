@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rui="http://reactiveui.net"
+    xmlns:views="clr-namespace:ImageSearch.WPF.Views"
     xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
     mc:Ignorable="d"
     d:DesignHeight="450"
@@ -56,12 +57,9 @@
             Margin="{StaticResource MarginMedium}"
             TextTrimming="CharacterEllipsis" />
 
-        <TextBlock
-            x:Name="CurrentStatusTextBlock"
+        <views:QueueItemStatusView
+            x:Name="StatusView"
             Grid.Row="1"
-            Grid.Column="1"
-            Margin="{StaticResource MarginMedium}"
-            FontStyle="Italic"
-            TextTrimming="CharacterEllipsis" />
+            Grid.Column="1" />
     </Grid>
 </rui:ReactiveUserControl>

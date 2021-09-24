@@ -29,7 +29,7 @@ namespace ImageSearch.WPF.Views
                 this.OneWayBind(ViewModel, vm => vm.ImageUri, v => v.ImageUriTextBlock.ToolTip)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.CurrentStatus, v => v.CurrentStatusTextBlock.Text)
+                this.OneWayBind(ViewModel, vm => vm.StatusViewModel, v => v.StatusView.ViewModel)
                     .DisposeWith(d);
             });
         }

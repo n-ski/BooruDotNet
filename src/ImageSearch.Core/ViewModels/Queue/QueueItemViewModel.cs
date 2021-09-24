@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Search.Services;
@@ -22,19 +21,26 @@ namespace ImageSearch.ViewModels
 
         protected QueueItemViewModel()
         {
-            CurrentStatusSubject = new Subject<string>();
-            CurrentStatusSubject.ToPropertyEx(this, x => x.CurrentStatus);
+            StatusViewModel = new QueueItemStatusViewModel();
 
             Search = ReactiveCommand.CreateFromObservable(
                 (IFileAndUriSearchService service) => Observable.StartAsync(ct => SearchImpl(service, ct)).TakeUntil(CancelSearch!));
 
+            Search.IsExecuting
+                .Where(isExecuting => isExecuting is true)
+                .Select(_ => QueueItemStatus.Processing)
+                .BindTo(StatusViewModel, s => s.Status);
+
             Search
-                .Where(items => items.Any())
                 .Select(items => $"Found {items.Count()} results.")
-                .Subscribe(text => CurrentStatusSubject.OnNext(text));
+                .BindTo(StatusViewModel, s => s.Text);
+
+            Search
+                .Select(_ => QueueItemStatus.Complete)
+                .BindTo(StatusViewModel, s => s.Status);
 
             Search.ThrownExceptions
-                .Subscribe(ex => CurrentStatusSubject.OnNext(ex.Message));
+                .BindTo(StatusViewModel, s => s.Exception);
 
             CancelSearch = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
@@ -60,13 +66,11 @@ namespace ImageSearch.ViewModels
 
         #region Properties
 
+        public QueueItemStatusViewModel StatusViewModel { get; }
+
         public extern IBitmap? Thumbnail { [ObservableAsProperty] get; }
 
-        public extern string? CurrentStatus { [ObservableAsProperty] get; }
-
         public ReadOnlyObservableCollection<SearchResultViewModel> SearchResults { get; }
-
-        protected Subject<string> CurrentStatusSubject { get; }
 
         #endregion
 
