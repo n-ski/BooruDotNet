@@ -10,122 +10,103 @@
     xmlns:vm="clr-namespace:ImageSearch.ViewModels;assembly=ImageSearch.Core"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="IQDB Image Search"
-    Width="800"
-    Height="450"
+    Width="1000"
+    Height="600"
     Icon="{StaticResource IqdbIcon}"
     UseLayoutRounding="True"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <xctk:BusyIndicator
-        x:Name="BusyIndicator"
-        DisplayAfter="0"
-        ProgressBarStyle="{StaticResource CollapsedProgressBar}">
+    <Window.Resources>
 
-        <xctk:BusyIndicator.BusyContentTemplate>
+        <SolidColorBrush
+            x:Key="SeparatorBrush"
+            Color="#ddd" />
+    </Window.Resources>
 
-            <DataTemplate>
+    <Grid>
 
-                <rui:ViewModelViewHost
-                    ViewModel="{Binding Mode=OneWay}" />
-            </DataTemplate>
-        </xctk:BusyIndicator.BusyContentTemplate>
+        <Grid.ColumnDefinitions>
 
-        <Grid
+            <ColumnDefinition
+                Width="1*" />
+            <ColumnDefinition
+                Width="4" />
+            <ColumnDefinition
+                Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel
+            Grid.Column="0"
             Margin="{StaticResource MarginMedium}">
 
-            <Grid.RowDefinitions>
-                <RowDefinition
-                    Height="1*" />
-                <RowDefinition
-                    Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    Width="Auto" />
-                <ColumnDefinition
-                    Width="100" />
-                <ColumnDefinition
-                    Width="1*" />
-                <ColumnDefinition
-                    Width="200" />
-                <ColumnDefinition
-                    Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <ScrollViewer
-                x:Name="SearchResultsScrollViewer"
-                Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="5"
-                HorizontalScrollBarVisibility="Disabled"
-                VerticalScrollBarVisibility="Auto">
-
-                <StackPanel>
-
-                    <views:SearchResultGroupView
-                        x:Name="BestSearchResultsGroup"
-                        Header="Best matches" />
-
-                    <views:SearchResultGroupView
-                        x:Name="OtherSearchResultsGroup"
-                        Header="Other matches" />
-                </StackPanel>
-            </ScrollViewer>
-
-            <TextBlock
-                Grid.Row="1"
-                Grid.Column="0"
+            <Button
+                x:Name="AddFileButton"
+                DockPanel.Dock="Top"
                 Margin="{StaticResource MarginMedium}"
-                Text="Upload:" />
+                Content="Add File&#x2026;" />
 
-            <ComboBox
-                x:Name="UploadMethodsComboBox"
-                Grid.Row="1"
-                Grid.Column="1"
+            <xctk:WatermarkTextBox
+                x:Name="ImageUriTextBox"
+                DockPanel.Dock="Top"
                 Margin="{StaticResource MarginMedium}"
-                DisplayMemberPath="UploadInputKind" />
+                Watermark="Type URL and press Enter to search" />
 
-            <rui:ViewModelViewHost
-                x:Name="UploadMethodHost"
-                Grid.Row="1"
-                Grid.Column="2"
-                HorizontalContentAlignment="Stretch"
-                VerticalContentAlignment="Stretch" />
+            <DockPanel
+                DockPanel.Dock="Top">
 
-            <ComboBox
-                x:Name="SearchServicesComboBox"
-                Grid.Row="1"
-                Grid.Column="3"
-                Margin="{StaticResource MarginMedium}">
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource MarginMedium}"
+                    Text="Service:" />
 
-                <ComboBox.ItemTemplate>
+                <ComboBox
+                    x:Name="SearchServicesComboBox"
+                    Margin="{StaticResource MarginMedium}">
+
+                    <!-- Use template because view location causes some funky stuff while the item is fading. -->
+                    <ComboBox.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <views:SearchServiceView
+                                ViewModel="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </DockPanel>
+
+            <ListBox
+                x:Name="QueueItemsListBox"
+                Margin="{StaticResource MarginMedium}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                <ListBox.ItemTemplate>
 
                     <DataTemplate>
 
-                        <DockPanel>
-
-                            <Image
-                                DockPanel.Dock="Left"
-                                Width="16"
-                                Height="16"
-                                Margin="0,0,4,0"
-                                Source="{Binding Icon, Mode=OneWay, Converter={StaticResource BitmapToNativeConverter}}" />
-
-                            <TextBlock
-                                Text="{Binding Name, Mode=OneWay}" />
-                        </DockPanel>
+                        <rui:ViewModelViewHost
+                            ViewContract="{x:Static views:ViewContracts.QueueList}"
+                            ViewModel="{Binding}" />
                     </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </DockPanel>
 
-            <Button
-                x:Name="SearchButton"
-                Grid.Row="1"
-                Grid.Column="4"
-                Margin="{StaticResource MarginMedium}"
-                Content="Search" />
-        </Grid>
-    </xctk:BusyIndicator>
+        <GridSplitter
+            Grid.Column="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Background="{StaticResource SeparatorBrush}" />
+
+        <ScrollViewer
+            x:Name="SearchResultsScrollViewer"
+            Grid.Column="2"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+
+            <views:QueueItemView
+                x:Name="SelectedQueueItemView" />
+        </ScrollViewer>
+    </Grid>
 </rui:ReactiveWindow>

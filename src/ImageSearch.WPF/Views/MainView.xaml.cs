@@ -21,44 +21,52 @@ namespace ImageSearch.WPF.Views
     /// </summary>
     public partial class MainView : ReactiveWindow<MainViewModel>, IDropTarget
     {
+        private static readonly Lazy<string> _fileFilterLazy = new Lazy<string>(() => "Images|*" + string.Join(";*", FileHelper.ImageFileExtensions));
+
         public MainView()
         {
             InitializeComponent();
             ViewModel = new MainViewModel();
 
-            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(SearchResultsScrollViewer, this);
-            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(SearchResultsScrollViewer, true);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(QueueItemsListBox, this);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(QueueItemsListBox, true);
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.BestSearchResultsViewModel, v => v.BestSearchResultsGroup.ViewModel)
+                this.OneWayBind(ViewModel, vm => vm.QueuedItems, v => v.QueueItemsListBox.ItemsSource)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.OtherSearchResultsViewModel, v => v.OtherSearchResultsGroup.ViewModel)
+                this.Bind(ViewModel, vm => vm.SelectedQueueItem, v => v.QueueItemsListBox.SelectedItem)
                     .DisposeWith(d);
 
-                #region Status indicator
-
-                this.OneWayBind(ViewModel, vm => vm.StatusViewModel, v => v.BusyIndicator.BusyContent)
+                this.OneWayBind(ViewModel, vm => vm.SelectedQueueItem, v => v.SelectedQueueItemView.ViewModel)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.StatusViewModel.IsActive, v => v.BusyIndicator.IsBusy)
+                // Scroll to top whenever the selected queue item is changed.
+                this.WhenAnyValue(v => v.ViewModel.SelectedQueueItem)
+                    .Subscribe(_ => SearchResultsScrollViewer.ScrollToTop())
                     .DisposeWith(d);
 
-                #endregion
-
-                #region Upload methods
-
-                this.OneWayBind(ViewModel, vm => vm.UploadMethods, v => v.UploadMethodsComboBox.ItemsSource)
+                this.BindCommand(ViewModel, vm => vm.AddFile, v => v.AddFileButton)
                     .DisposeWith(d);
 
-                this.Bind(ViewModel, vm => vm.SelectedUploadMethod, v => v.UploadMethodsComboBox.SelectedItem)
+                this.Bind(ViewModel, vm => vm.ImageUri, v => v.ImageUriTextBox.Text)
                     .DisposeWith(d);
 
-                this.OneWayBind(ViewModel, vm => vm.SelectedUploadMethod, v => v.UploadMethodHost.ViewModel)
+                ImageUriTextBox
+                    .Events()
+                    .KeyDown
+                    .Where(args => args.Key is Key.Enter)
+                    .Select(_ => Unit.Default)
+                    .InvokeCommand(this, v => v.ViewModel.AddUri)
                     .DisposeWith(d);
 
-                #endregion
+                // Clear the URL text box when a new item was added. Do it here instead of doing it in
+                // the block above because we want to clear the box only when the command was executed.
+                this.WhenAnyObservable(v => v.ViewModel.AddUri)
+                    .Select(_ => string.Empty)
+                    .BindTo(this, v => v.ImageUriTextBox.Text)
+                    .DisposeWith(d);
 
                 #region Search services
 
@@ -70,19 +78,20 @@ namespace ImageSearch.WPF.Views
 
                 #endregion
 
-                this.BindCommand(
-                    ViewModel,
-                    vm => vm.Search,
-                    v => v.SearchButton,
-                    this.WhenAnyValue(v => v.ViewModel.SelectedSearchService))
-                    .DisposeWith(d);
-
-                // Scroll to top after the search command is completed.
-                this.WhenAnyObservable(x => x.ViewModel.Search)
-                    .Subscribe(_ => SearchResultsScrollViewer.ScrollToTop())
-                    .DisposeWith(d);
-
                 #region Interactions
+
+                this.BindInteraction(ViewModel, vm => vm.SelectFileInteraction, interaction =>
+                {
+                    var dialog = new Microsoft.Win32.OpenFileDialog
+                    {
+                        Filter = _fileFilterLazy.Value,
+                    };
+
+                    FileInfo fileInfo = dialog.ShowDialog() is true ? new FileInfo(dialog.FileName) : null;
+
+                    interaction.SetOutput(fileInfo);
+                    return Observable.Return(Unit.Default);
+                }).DisposeWith(d);
 
                 this.BindInteraction(ViewModel, vm => vm.OpenUriInteraction, interaction =>
                 {
@@ -105,21 +114,6 @@ namespace ImageSearch.WPF.Views
                     Debug.Assert(uri.IsAbsoluteUri);
 
                     Clipboard.SetText(uri.AbsoluteUri);
-
-                    interaction.SetOutput(Unit.Default);
-                    return Observable.Return(Unit.Default);
-                }).DisposeWith(d);
-
-                this.BindInteraction(ViewModel, vm => vm.DisplaySearchError, interaction =>
-                {
-                    Exception exception = interaction.Input.InnerException ?? interaction.Input;
-
-                    string message = string.Join(
-                        Environment.NewLine,
-                        $"Exception of type '{exception.GetType()}' has occurred with the following message:",
-                        exception.Message);
-
-                    MessageBox.Show(this, message, "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
 
                     interaction.SetOutput(Unit.Default);
                     return Observable.Return(Unit.Default);

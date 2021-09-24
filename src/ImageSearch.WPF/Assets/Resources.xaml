@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:ImageSearch.WPF.Converters">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--#region Margins-->
 
@@ -19,9 +18,6 @@
         Right="4"
         Top="4" />
     <!--#endregion-->
-
-    <converters:BitmapToNativeConverter
-        x:Key="BitmapToNativeConverter" />
 
     <!--#region Bitmap icons-->
 

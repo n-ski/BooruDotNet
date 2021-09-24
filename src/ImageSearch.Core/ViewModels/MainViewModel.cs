@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -13,130 +15,93 @@ namespace ImageSearch.ViewModels
 {
     public class MainViewModel : ReactiveObject
     {
-        private const double _bestResultThreshold = 0.8;
+        private readonly SourceList<QueueItemViewModel> _itemsQueue;
 
         public MainViewModel()
         {
-            StatusViewModel = new StatusViewModel();
-            BestSearchResultsViewModel = new SearchResultGroupViewModel();
-            OtherSearchResultsViewModel = new SearchResultGroupViewModel();
+            _itemsQueue = new SourceList<QueueItemViewModel>();
 
             SelectedSearchService = SearchServices.First();
-            SelectedUploadMethod = UploadMethods.First();
-
-            this.WhenAnyValue(x => x.SelectedUploadMethod, selector: method => method?.Search)
-                .ToPropertyEx(this, x => x.Search);
-
-            var search = this.WhenAnyValue(x => x.Search)
-                .WhereNotNull();
-
-            this.WhenAnyValue(x => x.SelectedUploadMethod)
-                .WhereNotNull()
-                .Select(method => method.CurrentStatus)
-                .Switch()
-                .BindTo(this, x => x.StatusViewModel.StatusText);
-
-            search
-                .Select(search => search.IsExecuting)
-                .Switch()
-                .BindTo(this, x => x.StatusViewModel.IsActive);
-
-            UploadMethods
-                .AsObservableChangeSet()
-                .SubscribeMany(method => Observable
-                    .Return(StatusViewModel.CancelOperation)
-                    .BindTo(method, m => m.CancelSearch))
-                .Subscribe();
 
             SearchWithUri = ReactiveCommand.CreateFromObservable((Uri uri) => SearchWithUriImpl(uri));
 
             SearchWithFile = ReactiveCommand.CreateFromObservable((FileInfo file) => SearchWithFileImpl(file));
 
-            // Assume that we can't switch methods while searching.
-            search
-                .Select(search => search.ThrownExceptions)
-                .Switch()
-                .Merge(SearchWithUri.ThrownExceptions)
-                .Merge(SearchWithFile.ThrownExceptions)
-                .Throttle(TimeSpan.FromMilliseconds(100), RxApp.MainThreadScheduler)
-                .SelectMany(DisplaySearchError.Handle)
-                .Subscribe();
-
-            // Whenever file upload is selected, observe the file selection and search with the newly selected file.
-            this.WhenAnyValue(x => x.SelectedUploadMethod)
-                .WhereNotNull()
-                .OfType<FileUploadViewModel>()
-                .Select(fileUpload => fileUpload.WhenAnyObservable(f => f.SelectFile))
-                .Switch()
-                .WhereNotNull()
-                .InvokeCommand(this, x => x.SearchWithFile);
-
             OpenSource = ReactiveCommand.CreateFromObservable((Uri uri) => OpenUriInteraction.Handle(uri));
 
             CopySource = ReactiveCommand.CreateFromObservable((Uri uri) => CopyUriInteraction.Handle(uri));
 
-            #region Search results bindings
+            _itemsQueue
+                .Connect()
+                .OnItemAdded(item => SelectedQueueItem = item)
+                // Start search when items is added.
+                .SubscribeMany(item => item
+                    .Search
+                    .Execute(SelectedSearchService!)
+                    .Catch(Observable.Empty<IEnumerable<SearchResultViewModel>>())
+                    .Subscribe())
+                // Load the item's thumbnail.
+                .SubscribeMany(item => item
+                    .LoadThumbnail
+                    .Execute()
+                    .Catch(Observable.Empty<IBitmap>())
+                    .Subscribe())
+                // Remove the item when its context menu option is clicked.
+                .SubscribeMany(item => item
+                    .RemoveItem
+                    .Subscribe(_ => _itemsQueue.Remove(item)))
+                .Bind(out var queuedItems)
+                .Subscribe();
 
-            var searchResults = search
-                .ObserveOn(RxApp.TaskpoolScheduler)
+            this.WhenAnyValue(x => x.SelectedQueueItem)
+                .WhereNotNull()
+                .Select(item => item.SearchResults.ToObservableChangeSet())
                 .Switch()
-                .Select(results => results.AsObservableChangeSet())
-                .Switch()
-                .Filter(result => result.SourceUri is object);
+                // Observe commands on the selected search result and pipe their execution to the main commands.
+                .SubscribeMany(result => result
+                    .OpenSource
+                    .Select(_ => result.SourceUri)
+                    .InvokeCommand(this, x => x.OpenSource))
+                .SubscribeMany(result => result
+                    .CopySource
+                    .Select(_ => result.SourceUri)
+                    .InvokeCommand(this, x => x.CopySource))
+                .SubscribeMany(result => result
+                    .SearchForSimilar
+                    .Select(_ => result.ImageUri)
+                    .InvokeCommand(this, x => x.SearchWithUri))
+                .Subscribe();
 
-            searchResults
-                .Filter(result => result.Similarity >= _bestResultThreshold)
-                .ToCollection()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .BindTo(this, x => x.BestSearchResultsViewModel.SearchResults);
+            QueuedItems = queuedItems;
 
-            searchResults
-                .Filter(result => result.Similarity < _bestResultThreshold)
-                .ToCollection()
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .BindTo(this, x => x.OtherSearchResultsViewModel.SearchResults);
+            AddFile = ReactiveCommand.CreateFromObservable(
+                () => SelectFileInteraction.Handle(Unit.Default).WhereNotNull());
 
-            // Observe commands from search results and pipe them to the main commands.
+            AddFile
+                .InvokeCommand(this, x => x.SearchWithFile);
 
-            static IDisposable SelectAndSubscribeOnObservable<TIn, TAny, TOut>(
-                IObservable<IChangeSet<TIn>> changeSet,
-                Func<TIn, IObservable<TAny>> observable,
-                Func<TIn, TOut> selector,
-                Func<IObservable<TOut>, IDisposable> subscriptionFactory)
-            {
-                return changeSet.SubscribeMany(item => subscriptionFactory(observable(item).Select(_ => selector(item)))).Subscribe();
-            }
+            AddUri = ReactiveCommand.Create(
+                () => new Uri(ImageUri),
+                this.WhenAnyValue(x => x.ImageUri, text => Uri.TryCreate(text, UriKind.Absolute, out _)));
 
-            SelectAndSubscribeOnObservable(searchResults, result => result.OpenSource, result => result.SourceUri, uri => uri.InvokeCommand(this, x => x.OpenSource));
-
-            SelectAndSubscribeOnObservable(searchResults, result => result.CopySource, result => result.SourceUri, uri => uri.InvokeCommand(this, x => x.CopySource));
-
-            SelectAndSubscribeOnObservable(searchResults, result => result.SearchForSimilar, result => result.ImageUri, uri => uri.InvokeCommand(this, x => x.SearchWithUri));
-
-            #endregion
+            AddUri
+                .InvokeCommand(this, x => x.SearchWithUri);
         }
 
         #region Properties
 
-        public StatusViewModel StatusViewModel { get; }
-
-        public SearchResultGroupViewModel BestSearchResultsViewModel { get; }
-
-        public SearchResultGroupViewModel OtherSearchResultsViewModel { get; }
-
-        public IReadOnlyCollection<UploadViewModelBase> UploadMethods { get; } = new UploadViewModelBase[]
-        {
-            new FileUploadViewModel(),
-            new UriUploadViewModel(),
-        };
+        [Reactive]
+        public SearchServiceViewModel? SelectedSearchService { get; set; }
 
         [Reactive]
-        public UploadViewModelBase? SelectedUploadMethod { get; set; }
+        public QueueItemViewModel? SelectedQueueItem { get; set; }
 
         public IEnumerable<SearchServiceViewModel>? SearchServices { get; } = Locator.Current.GetService<IEnumerable<SearchServiceViewModel>>();
 
+        public ReadOnlyObservableCollection<QueueItemViewModel> QueuedItems { get; }
+
         [Reactive]
-        public SearchServiceViewModel? SelectedSearchService { get; set; }
+        public string? ImageUri { get; set; }
 
         #endregion
 
@@ -146,7 +111,8 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<Uri, Unit> CopySource { get; }
         public ReactiveCommand<Uri, Unit> SearchWithUri { get; }
         public ReactiveCommand<FileInfo, Unit> SearchWithFile { get; }
-        public extern ReactiveCommand<SearchServiceViewModel, IReadOnlyCollection<SearchResultViewModel>>? Search { [ObservableAsProperty] get; }
+        public ReactiveCommand<Unit, FileInfo> AddFile { get; }
+        public ReactiveCommand<Unit, Uri> AddUri { get; }
 
         #endregion
 
@@ -154,7 +120,7 @@ namespace ImageSearch.ViewModels
 
         public Interaction<Uri, Unit> OpenUriInteraction { get; } = new Interaction<Uri, Unit>();
         public Interaction<Uri, Unit> CopyUriInteraction { get; } = new Interaction<Uri, Unit>();
-        public Interaction<Exception, Unit> DisplaySearchError { get; } = new Interaction<Exception, Unit>();
+        public Interaction<Unit, FileInfo?> SelectFileInteraction { get; } = new Interaction<Unit, FileInfo?>();
 
         #endregion
 
@@ -162,22 +128,21 @@ namespace ImageSearch.ViewModels
 
         private IObservable<Unit> SearchWithUriImpl(Uri uri)
         {
-            var uriUpload = UploadMethods.OfType<UriUploadViewModel>().Single();
-            uriUpload.FileUri = uri;
+            var item = new UriQueueItemViewModel(uri);
 
-            SelectedUploadMethod = uriUpload;
+            _itemsQueue.Add(item);
 
-            return uriUpload.Search.Execute(SelectedSearchService!).Select(_ => Unit.Default);
+            return Observable.Return(Unit.Default);
+
         }
 
         private IObservable<Unit> SearchWithFileImpl(FileInfo fileInfo)
         {
-            var fileUpload = UploadMethods.OfType<FileUploadViewModel>().Single();
-            fileUpload.FileToUpload = fileInfo;
+            var item = new FileQueueItemViewModel(fileInfo);
 
-            SelectedUploadMethod = fileUpload;
+            _itemsQueue.Add(item);
 
-            return fileUpload.Search.Execute(SelectedSearchService!).Select(_ => Unit.Default);
+            return Observable.Return(Unit.Default);
         }
 
         #endregion
