@@ -1,4 +1,5 @@
 ﻿#nullable disable
+using System.Linq;
 using System.Reactive.Disposables;
 using ImageSearch.ViewModels;
 using ReactiveUI;
@@ -16,7 +17,11 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.SearchResults, v => v.SearchResultsItemsControl.ItemsSource)
+                this.WhenAnyValue(
+                    v => v.ViewModel,
+                    v => v.ViewModel.SearchResults,
+                    (vm, results) => vm is object ? results : Enumerable.Empty<SearchResultViewModel>())
+                    .BindTo(this, v => v.SearchResultsItemsControl.ItemsSource)
                     .DisposeWith(d);
             });
         }
