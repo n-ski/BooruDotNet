@@ -68,13 +68,15 @@ namespace ImageSearch.WPF.Views
                     ex => ex is object ? Cursors.Help : null)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.Retry, v => v.RetryButton)
+                    .DisposeWith(d);
+
                 // Show Retry button when we've got an exception
                 this.OneWayBind(
                     ViewModel,
                     vm => vm.Exception,
                     v => v.RetryButton.Visibility,
-                    // TODO: Uncomment once I figure out how to pass the selected service.
-                    ex => Visibility.Collapsed /*ex is object ? Visibility.Visible : Visibility.Collapsed*/)
+                    ex => ex is object ? Visibility.Visible : Visibility.Collapsed)
                     .DisposeWith(d);
             });
         }

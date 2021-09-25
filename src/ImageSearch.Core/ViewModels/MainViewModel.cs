@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using BooruDotNet.Search.Services;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -46,6 +47,12 @@ namespace ImageSearch.ViewModels
                     .LoadThumbnail
                     .Execute()
                     .Subscribe())
+                // Search again when the retry button is pressed.
+                .SubscribeMany(item => item.StatusViewModel
+                    .Retry
+                    .Select(_ => SelectedSearchService)
+                    .Cast<IFileAndUriSearchService>()
+                    .InvokeCommand(item, i => i.Search))
                 .Bind(out var queuedItems)
                 .Subscribe();
 
