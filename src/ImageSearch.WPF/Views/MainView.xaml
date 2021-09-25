@@ -86,11 +86,29 @@
                 TextTrimming="CharacterEllipsis"
                 TextWrapping="Wrap" />
 
-            <Button
-                x:Name="ClearQueueButton"
-                DockPanel.Dock="Bottom"
-                Margin="{StaticResource MarginMedium}"
-                Content="Clear Queue" />
+            <Grid
+                DockPanel.Dock="Bottom">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition
+                        Width="1*" />
+                    <ColumnDefinition
+                        Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <Button
+                    x:Name="ClearQueueButton"
+                    Grid.Column="0"
+                    Margin="{StaticResource MarginMedium}"
+                    Content="Clear Queue" />
+
+                <Button
+                    x:Name="OpenSettingsButton"
+                    Grid.Column="1"
+                    Margin="{StaticResource MarginMedium}"
+                    Content="Settings&#x2026;" />
+            </Grid>
 
             <ListBox
                 x:Name="QueueItemsListBox"

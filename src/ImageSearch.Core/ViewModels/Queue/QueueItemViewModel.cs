@@ -32,10 +32,6 @@ namespace ImageSearch.ViewModels
                 .BindTo(StatusViewModel, s => s.Status);
 
             Search
-                .Select(items => $"Found {items.Count()} results.")
-                .BindTo(StatusViewModel, s => s.Text);
-
-            Search
                 .Select(_ => QueueItemStatus.Complete)
                 .BindTo(StatusViewModel, s => s.Status);
 
@@ -46,16 +42,26 @@ namespace ImageSearch.ViewModels
                 MethodHelper.DoNothing,
                 this.WhenAnyObservable(x => x.Search.IsExecuting));
 
-            var searchResults = Search
+            Search
                 .ObserveOn(RxApp.TaskpoolScheduler)
                 .Select(results => results.AsObservableChangeSet())
                 .Switch()
+                // If enabled, filter results based on their similarity.
+                .Filter(result => ApplicationSettings.Default.EnableFiltering is false
+                    || result.Similarity >= ApplicationSettings.Default.MinSimilarity)
                 .Filter(result => result.SourceUri is object)
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Bind(out var bestResults)
+                .Bind(out var searchResults)
                 .Subscribe();
 
-            SearchResults = bestResults;
+            SearchResults = searchResults;
+
+            this.WhenAnyValue(
+                x => x.StatusViewModel.Status,
+                x => x.SearchResults.Count)
+                .Where(tuple => tuple.Item1 is QueueItemStatus.Complete)
+                .Select(tuple => $"Found {tuple.Item2} results.")
+                .BindTo(StatusViewModel, s => s.Text);
 
             LoadThumbnail = ReactiveCommand.CreateFromTask(LoadThumbnailImpl);
 

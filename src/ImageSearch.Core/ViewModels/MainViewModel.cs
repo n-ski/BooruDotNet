@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using DynamicData;
 using DynamicData.Binding;
 using ReactiveUI;
@@ -85,6 +86,8 @@ namespace ImageSearch.ViewModels
             ClearQueue = ReactiveCommand.Create(
                 () => _itemsQueue.Clear(),
                 _itemsQueue.CountChanged.Select(count => count > 0));
+
+            OpenSettings = ReactiveCommand.CreateFromTask(OpenSettingsImpl);
         }
 
         #region Properties
@@ -113,6 +116,7 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<Unit, FileInfo> AddFile { get; }
         public ReactiveCommand<Unit, Uri> AddUri { get; }
         public ReactiveCommand<Unit, Unit> ClearQueue { get; }
+        public ReactiveCommand<Unit, Unit> OpenSettings { get; }
 
         #endregion
 
@@ -121,6 +125,7 @@ namespace ImageSearch.ViewModels
         public Interaction<Uri, Unit> OpenUriInteraction { get; } = new Interaction<Uri, Unit>();
         public Interaction<Uri, Unit> CopyUriInteraction { get; } = new Interaction<Uri, Unit>();
         public Interaction<Unit, FileInfo?> SelectFileInteraction { get; } = new Interaction<Unit, FileInfo?>();
+        public Interaction<SettingsViewModel, bool> ShowSettingsDialog { get; } = new Interaction<SettingsViewModel, bool>();
 
         #endregion
 
@@ -143,6 +148,24 @@ namespace ImageSearch.ViewModels
             _itemsQueue.Add(item);
 
             return Observable.Return(Unit.Default);
+        }
+
+        private async Task OpenSettingsImpl()
+        {
+            var settings = ApplicationSettings.Default;
+            var settingsViewModel = new SettingsViewModel(settings);
+
+            bool result = await ShowSettingsDialog.Handle(settingsViewModel);
+
+            if (result is false)
+            {
+                return;
+            }
+
+            settings.EnableFiltering = settingsViewModel.EnableFiltering;
+            settings.MinSimilarity = settingsViewModel.MinSimilarity;
+
+            settings.Save();
         }
 
         #endregion

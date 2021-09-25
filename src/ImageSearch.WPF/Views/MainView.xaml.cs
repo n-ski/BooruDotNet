@@ -80,6 +80,9 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.ClearQueue, v => v.ClearQueueButton)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.OpenSettings, v => v.OpenSettingsButton)
+                    .DisposeWith(d);
+
                 #region Search services
 
                 this.OneWayBind(ViewModel, vm => vm.SearchServices, v => v.SearchServicesComboBox.ItemsSource)
@@ -130,6 +133,23 @@ namespace ImageSearch.WPF.Views
                     interaction.SetOutput(Unit.Default);
                     return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
+
+                this.BindInteraction(ViewModel, vm => vm.ShowSettingsDialog, interaction =>
+                {
+                    return Observable.Start(() =>
+                    {
+                        var dialog = new SettingsView
+                        {
+                            ViewModel = interaction.Input,
+                            Owner = this,
+                            Title = $"Settings - {Title}",
+                        };
+
+                        bool? result = dialog.ShowDialog();
+
+                        interaction.SetOutput(result is true);
+                    }, RxApp.MainThreadScheduler);
+                });
 
                 #endregion
 
