@@ -15,6 +15,8 @@ namespace ImageSearch.ViewModels
     public class FileQueueItemViewModel : QueueItemViewModel
     {
         private readonly FileInfo _imageFileInfo;
+        private const long _validSizeForCompression = 2 << 20; // 2 MiB.
+        private const float _compressedImageHeight = 400;
 
         public FileQueueItemViewModel(FileInfo imageFileInfo)
         {
@@ -32,13 +34,44 @@ namespace ImageSearch.ViewModels
         {
             Debug.Assert(service is object);
 
-            StatusViewModel.Text = "Please wait\u2026";
+            FileStream? fileToUpload = null;
 
-            using FileStream fileStream = _imageFileInfo.OpenRead();
+            try
+            {
+                if (ApplicationSettings.Default.EnableImageCompression
+                    && _imageFileInfo.Length > _validSizeForCompression) // 2 MiB
+                {
+                    StatusViewModel.Text = "Compressing image\u2026";
 
-            var results = await service.SearchAsync(fileStream, ct);
+                    IBitmap? bitmap;
 
-            return results.Select(x => new SearchResultViewModel(x));
+                    using (Stream fileStream = _imageFileInfo.OpenRead())
+                    {
+                        bitmap = await BitmapLoader.Current.Load(fileStream, default, _compressedImageHeight);
+                    }
+
+                    if (bitmap is object)
+                    {
+                        fileToUpload = File.Create(Path.GetTempFileName(), 0x1000, FileOptions.DeleteOnClose);
+
+                        await bitmap.Save(CompressedBitmapFormat.Png, 1.0f, fileToUpload);
+
+                        fileToUpload.Position = 0;
+                    }
+                }
+
+                fileToUpload ??= _imageFileInfo.OpenRead();
+
+                StatusViewModel.Text = "Please wait\u2026";
+
+                var results = await service.SearchAsync(fileToUpload, ct);
+
+                return results.Select(x => new SearchResultViewModel(x));
+            }
+            finally
+            {
+                fileToUpload?.Dispose();
+            }
         }
     }
 }

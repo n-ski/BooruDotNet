@@ -12,6 +12,7 @@ namespace ImageSearch.ViewModels
 
             EnableFiltering = settings.EnableFiltering;
             MinSimilarity = settings.MinSimilarity;
+            EnableImageCompression = settings.EnableImageCompression;
         }
 
         [Reactive]
@@ -19,5 +20,8 @@ namespace ImageSearch.ViewModels
 
         [Reactive]
         public double MinSimilarity { get; set; }
+
+        [Reactive]
+        public bool EnableImageCompression { get; set; }
     }
 }

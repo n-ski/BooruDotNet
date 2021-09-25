@@ -23,6 +23,8 @@
             <RowDefinition
                 Height="Auto" />
             <RowDefinition
+                Height="Auto" />
+            <RowDefinition
                 Height="20" />
             <RowDefinition
                 Height="Auto" />
@@ -62,8 +64,14 @@
                 Minimum="0.01" />
         </Grid>
 
+        <CheckBox
+            x:Name="EnableCompressionCheckBox"
+            Grid.Row="1"
+            Margin="{StaticResource MarginMedium}"
+            Content="Compress images before uploading" />
+
         <StackPanel
-            Grid.Row="2"
+            Grid.Row="3"
             DockPanel.Dock="Bottom"
             HorizontalAlignment="Right"
             Orientation="Horizontal">

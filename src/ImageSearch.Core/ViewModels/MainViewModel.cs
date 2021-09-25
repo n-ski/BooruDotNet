@@ -171,6 +171,7 @@ namespace ImageSearch.ViewModels
 
             settings.EnableFiltering = settingsViewModel.EnableFiltering;
             settings.MinSimilarity = settingsViewModel.MinSimilarity;
+            settings.EnableImageCompression = settingsViewModel.EnableImageCompression;
 
             settings.Save();
         }

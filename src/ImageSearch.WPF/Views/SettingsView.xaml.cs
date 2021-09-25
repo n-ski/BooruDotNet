@@ -27,6 +27,9 @@ namespace ImageSearch.WPF.Views
                 this.Bind(ViewModel, vm => vm.MinSimilarity, v => v.MinSimilarityUpDown.Value)
                     .DisposeWith(d);
 
+                this.Bind(ViewModel, vm => vm.EnableImageCompression, v => v.EnableCompressionCheckBox.IsChecked)
+                    .DisposeWith(d);
+
                 OkButton.Events()
                     .Click
                     .Select(_ => true)
