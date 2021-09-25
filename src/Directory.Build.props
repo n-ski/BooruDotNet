@@ -1,4 +1,5 @@
 <Project>
+
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <Authors>Sergey Volkov</Authors>
@@ -6,4 +7,10 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
+
 </Project>
