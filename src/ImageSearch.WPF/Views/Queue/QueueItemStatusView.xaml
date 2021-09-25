@@ -23,32 +23,13 @@
                 Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <!-- Progress -->
         <Viewbox
-            x:Name="ProcessingIcon"
+            x:Name="StatusIcon"
             Grid.Column="0"
             Width="16"
             Height="16"
             Margin="{StaticResource MarginMedium}"
             Child="{StaticResource StatusProcessingIcon}" />
-
-        <!-- Complete icon -->
-        <Viewbox
-            x:Name="CompleteIcon"
-            Grid.Column="0"
-            Width="16"
-            Height="16"
-            Margin="{StaticResource MarginMedium}"
-            Child="{StaticResource StatusCompleteIcon}" />
-
-        <!-- Error -->
-        <Viewbox
-            x:Name="ErrorIcon"
-            Grid.Column="0"
-            Width="16"
-            Height="16"
-            Margin="{StaticResource MarginMedium}"
-            Child="{StaticResource StatusErrorIcon}" />
 
         <TextBlock
             x:Name="StatusText"

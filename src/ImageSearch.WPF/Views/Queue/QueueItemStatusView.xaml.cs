@@ -19,30 +19,17 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
-                static Visibility statusToVisibility(QueueItemStatus value, QueueItemStatus visibleStatus)
-                {
-                    return value == visibleStatus ? Visibility.Visible : Visibility.Collapsed;
-                }
-
                 this.OneWayBind(
                     ViewModel,
                     vm => vm.Status,
-                    v => v.ProcessingIcon.Visibility,
-                    status => statusToVisibility(status, QueueItemStatus.Processing))
-                    .DisposeWith(d);
-
-                this.OneWayBind(
-                    ViewModel,
-                    vm => vm.Status,
-                    v => v.CompleteIcon.Visibility,
-                    status => statusToVisibility(status, QueueItemStatus.Complete))
-                    .DisposeWith(d);
-
-                this.OneWayBind(
-                    ViewModel,
-                    vm => vm.Status,
-                    v => v.ErrorIcon.Visibility,
-                    status => statusToVisibility(status, QueueItemStatus.Error))
+                    v => v.StatusIcon.Child,
+                    status => status switch
+                    {
+                        QueueItemStatus.Processing => App.Current.Resources["StatusProcessingIcon"],
+                        QueueItemStatus.Complete => App.Current.Resources["StatusCompleteIcon"],
+                        QueueItemStatus.Error => App.Current.Resources["StatusErrorIcon"],
+                        _ => null,
+                    })
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.Text, v => v.StatusText.Text)
