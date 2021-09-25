@@ -2,9 +2,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -24,6 +26,7 @@ namespace ImageSearch.WPF.Views
     public partial class MainView : ReactiveWindow<MainViewModel>, IDropTarget
     {
         private static readonly Lazy<string> _fileFilterLazy = new Lazy<string>(() => "Images|*" + string.Join(";*", FileHelper.ImageFileExtensions));
+        private static readonly TimeSpan _dragDropDelayBetweenUploads = TimeSpan.FromMilliseconds(100);
 
         public MainView()
         {
@@ -242,12 +245,15 @@ namespace ImageSearch.WPF.Views
         {
             if (dropInfo.Data is DataObject data && data.ContainsFileDropList())
             {
-                FileInfo file = DropDataHelper.GetFirstDroppedFile(data);
+                var collection = data.GetFileDropList();
 
-                if (FileHelper.IsImageFile(file))
+                for (int i = 0; i < collection.Count; i++)
                 {
-                    dropInfo.Effects = DragDropEffects.Link;
-                    return;
+                    if (FileHelper.IsImageFile(collection[i]))
+                    {
+                        dropInfo.Effects = DragDropEffects.Link;
+                        return;
+                    }
                 }
             }
 
@@ -256,11 +262,26 @@ namespace ImageSearch.WPF.Views
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            var data = (DataObject)dropInfo.Data;
-            var files = data.GetFileDropList();
-            var firstFile = new FileInfo(files[0]);
+            var subject = new ScheduledSubject<FileInfo>(RxApp.MainThreadScheduler);
+            subject.Subscribe(file => ViewModel.SearchWithFile.Execute(file).Subscribe());
 
-            ViewModel.SearchWithFile.Execute(firstFile).Subscribe();
+            var data = (DataObject)dropInfo.Data;
+            var collection = data.GetFileDropList();
+
+            Task.Run(async () =>
+            {
+                foreach (string path in collection)
+                {
+                    if (FileHelper.IsImageFile(path))
+                    {
+                        var fileInfo = new FileInfo(path);
+
+                        subject.OnNext(fileInfo);
+
+                        await Task.Delay(_dragDropDelayBetweenUploads);
+                    }
+                }
+            });
         }
     }
 }
