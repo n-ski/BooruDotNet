@@ -9,6 +9,15 @@ namespace ImageSearch.Helpers
 {
     internal static class BitmapHelper
     {
+        private static readonly Lazy<Task<IBitmap>> _errorBitmap = new Lazy<Task<IBitmap>>(async () =>
+        {
+            Stream memory = new MemoryStream(Resources.ImageError);
+
+            IBitmap? bitmap = await BitmapLoader.Current.Load(memory, default, default);
+
+            return bitmap!;
+        });
+
         public static async Task<IBitmap> LoadBitmapAsync(FileInfo file, float? width, float? height)
         {
             Debug.Assert(file is object);
@@ -26,7 +35,7 @@ namespace ImageSearch.Helpers
                 bitmap = null;
             }
 
-            return bitmap ?? await LoadErrorBitmap();
+            return bitmap ?? await _errorBitmap.Value;
         }
 
         public static async Task<IBitmap> LoadBitmapAsync(Uri uri, float? width, float? height)
@@ -52,16 +61,7 @@ namespace ImageSearch.Helpers
                 bitmap = null;
             }
 
-            return bitmap ?? await LoadErrorBitmap();
-        }
-
-        private static async Task<IBitmap> LoadErrorBitmap()
-        {
-            Stream memory = new MemoryStream(Resources.ImageError);
-
-            IBitmap? bitmap = await BitmapLoader.Current.Load(memory, default, default);
-
-            return bitmap!;
+            return bitmap ?? await _errorBitmap.Value;
         }
     }
 }
