@@ -19,8 +19,6 @@
                 Width="Auto" />
             <ColumnDefinition
                 Width="1*" />
-            <ColumnDefinition
-                Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <Viewbox
@@ -39,16 +37,23 @@
             FontStyle="Italic"
             TextTrimming="CharacterEllipsis" />
 
-        <Button
-            x:Name="RetryButton"
-            Grid.Column="2"
-            Margin="{StaticResource MarginMedium}"
-            Style="{x:Null}">
+        <StackPanel
+            x:Name="ButtonsPanel"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal">
 
-            <Viewbox
-                Width="16"
-                Height="16"
-                Child="{StaticResource RetryIcon}" />
-        </Button>
+            <Button
+                x:Name="RetryButton"
+                Margin="{StaticResource MarginSmall}"
+                Style="{x:Null}"
+                ToolTip="Search again">
+
+                <Viewbox
+                    Width="16"
+                    Height="16"
+                    Child="{StaticResource RetryIcon}" />
+            </Button>
+        </StackPanel>
     </Grid>
 </rui:ReactiveUserControl>

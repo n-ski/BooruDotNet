@@ -2,9 +2,11 @@
 using System;
 using System.Reactive.Disposables;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ImageSearch.ViewModels;
 using ReactiveUI;
+using Xceed.Wpf.Toolkit.Core.Utilities;
 
 namespace ImageSearch.WPF.Views
 {
@@ -58,13 +60,22 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.Retry, v => v.RetryButton)
                     .DisposeWith(d);
 
-                // Show Retry button when we've got an exception
-                this.OneWayBind(
-                    ViewModel,
-                    vm => vm.Exception,
-                    v => v.RetryButton.Visibility,
-                    ex => ex is object ? Visibility.Visible : Visibility.Collapsed)
-                    .DisposeWith(d);
+                var parentListBoxItem = VisualTreeHelperEx.FindAncestorByType<ListBoxItem>(this);
+
+                if (parentListBoxItem is object)
+                {
+                    // Hide status text when hovered over.
+                    parentListBoxItem
+                        .WhenAnyValue(v => v.IsMouseOver, isMouseOver => isMouseOver ? Visibility.Collapsed : Visibility.Visible)
+                        .BindTo(this, v => v.StatusText.Visibility)
+                        .DisposeWith(d);
+
+                    // Show buttons when hovered over.
+                    parentListBoxItem
+                        .WhenAnyValue(v => v.IsMouseOver, isMouseOver => isMouseOver ? Visibility.Visible : Visibility.Collapsed)
+                        .BindTo(this, v => v.ButtonsPanel.Visibility)
+                        .DisposeWith(d);
+                }
             });
         }
     }

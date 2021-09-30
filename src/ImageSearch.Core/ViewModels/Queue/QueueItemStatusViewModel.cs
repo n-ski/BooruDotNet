@@ -28,7 +28,7 @@ namespace ImageSearch.ViewModels
 
             Retry = ReactiveCommand.Create(
                 MethodHelper.DoNothing,
-                this.WhenAnyValue(x => x.Status, status => status is QueueItemStatus.Error));
+                this.WhenAnyValue(x => x.Status, status => status != QueueItemStatus.Processing));
 
             // Due to a bug in System.Reactive, when the search is processing after it has errored,
             // IsExecuting observable will never tick 'true', so override status value here as a hack.
