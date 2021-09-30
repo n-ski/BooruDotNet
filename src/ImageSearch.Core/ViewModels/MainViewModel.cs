@@ -18,6 +18,7 @@ namespace ImageSearch.ViewModels
     public class MainViewModel : ReactiveObject
     {
         private readonly SourceList<QueueItemViewModel> _itemsQueue;
+        private static readonly TimeSpan _delayBetweenMultipleSearches = TimeSpan.FromMilliseconds(100);
 
         public MainViewModel()
         {
@@ -28,6 +29,8 @@ namespace ImageSearch.ViewModels
             SearchWithUri = ReactiveCommand.CreateFromObservable((Uri uri) => SearchWithUriImpl(uri));
 
             SearchWithFile = ReactiveCommand.CreateFromObservable((FileInfo file) => SearchWithFileImpl(file));
+
+            SearchWithManyFiles = ReactiveCommand.CreateFromTask((IEnumerable<FileInfo> files) => SearchWithManyFilesImpl(files));
 
             OpenSource = ReactiveCommand.CreateFromObservable((Uri uri) => OpenUriInteraction.Handle(uri));
 
@@ -77,11 +80,11 @@ namespace ImageSearch.ViewModels
 
             QueuedItems = queuedItems;
 
-            AddFile = ReactiveCommand.CreateFromObservable(
-                () => SelectFileInteraction.Handle(Unit.Default).WhereNotNull());
+            AddFiles = ReactiveCommand.CreateFromObservable(
+                () => SelectFilesInteraction.Handle(Unit.Default).WhereNotNull());
 
-            AddFile
-                .InvokeCommand(this, x => x.SearchWithFile);
+            AddFiles
+                .InvokeCommand(this, x => x.SearchWithManyFiles);
 
             AddUri = ReactiveCommand.Create(
                 () => new Uri(ImageUri),
@@ -120,7 +123,8 @@ namespace ImageSearch.ViewModels
         public ReactiveCommand<Uri, Unit> CopySource { get; }
         public ReactiveCommand<Uri, Unit> SearchWithUri { get; }
         public ReactiveCommand<FileInfo, Unit> SearchWithFile { get; }
-        public ReactiveCommand<Unit, FileInfo> AddFile { get; }
+        public ReactiveCommand<IEnumerable<FileInfo>, Unit> SearchWithManyFiles { get; }
+        public ReactiveCommand<Unit, IEnumerable<FileInfo>> AddFiles { get; }
         public ReactiveCommand<Unit, Uri> AddUri { get; }
         public ReactiveCommand<Unit, Unit> ClearQueue { get; }
         public ReactiveCommand<Unit, Unit> OpenSettings { get; }
@@ -131,7 +135,7 @@ namespace ImageSearch.ViewModels
 
         public Interaction<Uri, Unit> OpenUriInteraction { get; } = new Interaction<Uri, Unit>();
         public Interaction<Uri, Unit> CopyUriInteraction { get; } = new Interaction<Uri, Unit>();
-        public Interaction<Unit, FileInfo?> SelectFileInteraction { get; } = new Interaction<Unit, FileInfo?>();
+        public Interaction<Unit, IEnumerable<FileInfo>?> SelectFilesInteraction { get; } = new Interaction<Unit, IEnumerable<FileInfo>?>();
         public Interaction<SettingsViewModel, bool> ShowSettingsDialog { get; } = new Interaction<SettingsViewModel, bool>();
 
         #endregion
@@ -155,6 +159,16 @@ namespace ImageSearch.ViewModels
             _itemsQueue.Add(item);
 
             return Observable.Return(Unit.Default);
+        }
+
+        private async Task SearchWithManyFilesImpl(IEnumerable<FileInfo> files)
+        {
+            foreach (FileInfo fileInfo in files)
+            {
+                await SearchWithFile.Execute(fileInfo);
+
+                await Task.Delay(_delayBetweenMultipleSearches);
+            }
         }
 
         private async Task OpenSettingsImpl()

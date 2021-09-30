@@ -41,10 +41,10 @@
             Margin="{StaticResource MarginMedium}">
 
             <Button
-                x:Name="AddFileButton"
+                x:Name="AddFilesButton"
                 DockPanel.Dock="Top"
                 Margin="{StaticResource MarginMedium}"
-                Content="Add File&#x2026;" />
+                Content="Add Files&#x2026;" />
 
             <xctk:WatermarkTextBox
                 x:Name="ImageUriTextBox"

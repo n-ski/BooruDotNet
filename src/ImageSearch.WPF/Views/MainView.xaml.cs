@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -26,7 +25,6 @@ namespace ImageSearch.WPF.Views
     public partial class MainView : ReactiveWindow<MainViewModel>, IDropTarget
     {
         private static readonly Lazy<string> _fileFilterLazy = new Lazy<string>(() => "Images|*" + string.Join(";*", FileHelper.ImageFileExtensions));
-        private static readonly TimeSpan _dragDropDelayBetweenUploads = TimeSpan.FromMilliseconds(100);
 
         public MainView()
         {
@@ -52,7 +50,7 @@ namespace ImageSearch.WPF.Views
                     .Subscribe(_ => SearchResultsScrollViewer.ScrollToTop())
                     .DisposeWith(d);
 
-                this.BindCommand(ViewModel, vm => vm.AddFile, v => v.AddFileButton)
+                this.BindCommand(ViewModel, vm => vm.AddFiles, v => v.AddFilesButton)
                     .DisposeWith(d);
 
                 this.Bind(ViewModel, vm => vm.ImageUri, v => v.ImageUriTextBox.Text)
@@ -98,16 +96,19 @@ namespace ImageSearch.WPF.Views
 
                 #region Interactions
 
-                this.BindInteraction(ViewModel, vm => vm.SelectFileInteraction, interaction =>
+                this.BindInteraction(ViewModel, vm => vm.SelectFilesInteraction, interaction =>
                 {
                     var dialog = new Microsoft.Win32.OpenFileDialog
                     {
                         Filter = _fileFilterLazy.Value,
+                        Multiselect = true,
                     };
 
-                    FileInfo fileInfo = dialog.ShowDialog() is true ? new FileInfo(dialog.FileName) : null;
+                    FileInfo[] files = dialog.ShowDialog() is true
+                        ? Array.ConvertAll(dialog.FileNames, path => new FileInfo(path))
+                        : null;
 
-                    interaction.SetOutput(fileInfo);
+                    interaction.SetOutput(files);
                     return Observable.Return(Unit.Default);
                 }).DisposeWith(d);
 
@@ -262,26 +263,13 @@ namespace ImageSearch.WPF.Views
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            var subject = new ScheduledSubject<FileInfo>(RxApp.MainThreadScheduler);
-            subject.Subscribe(file => ViewModel.SearchWithFile.Execute(file).Subscribe());
+            var files = ((DataObject)dropInfo.Data)
+                .GetFileDropList()
+                .Cast<string>()
+                .Where(FileHelper.IsImageFile)
+                .Select(path => new FileInfo(path));
 
-            var data = (DataObject)dropInfo.Data;
-            var collection = data.GetFileDropList();
-
-            Task.Run(async () =>
-            {
-                foreach (string path in collection)
-                {
-                    if (FileHelper.IsImageFile(path))
-                    {
-                        var fileInfo = new FileInfo(path);
-
-                        subject.OnNext(fileInfo);
-
-                        await Task.Delay(_dragDropDelayBetweenUploads);
-                    }
-                }
-            });
+            ViewModel.SearchWithManyFiles.Execute(files).Subscribe();
         }
     }
 }
