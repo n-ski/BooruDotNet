@@ -17,13 +17,6 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Window.Resources>
-
-        <SolidColorBrush
-            x:Key="SeparatorBrush"
-            Color="#ddd" />
-    </Window.Resources>
-
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -131,7 +124,7 @@
             Grid.Column="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="{StaticResource SeparatorBrush}" />
+            Background="{x:Static SystemColors.ControlLightBrush}" />
 
         <ScrollViewer
             x:Name="SearchResultsScrollViewer"

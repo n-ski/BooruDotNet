@@ -59,7 +59,7 @@
     -->
     <Grid
         Margin="{StaticResource MarginSmall}"
-        Background="White">
+        Background="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Background, Mode=OneWay}">
 
         <Grid.RowDefinitions>
             <RowDefinition
