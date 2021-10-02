@@ -1,10 +1,6 @@
 ﻿using System.Windows;
-using BooruDotNet.Danbooru;
-using BooruDotNet.Gelbooru;
-using BooruDotNet.Konachan;
+using BooruDotNet.Boorus;
 using BooruDotNet.Links;
-using BooruDotNet.SankakuComplex;
-using BooruDotNet.Yandere;
 using BooruDownloader.Singletons;
 using BooruDownloader.ViewModels;
 using BooruDownloader.WPF.Views;

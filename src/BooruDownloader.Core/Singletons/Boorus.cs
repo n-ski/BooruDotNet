@@ -1,9 +1,5 @@
 ﻿using System;
-using BooruDotNet.Danbooru;
-using BooruDotNet.Gelbooru;
-using BooruDotNet.Konachan;
-using BooruDotNet.SankakuComplex;
-using BooruDotNet.Yandere;
+using BooruDotNet.Boorus;
 
 namespace BooruDownloader.Singletons
 {

@@ -5,14 +5,14 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Extensions;
-using BooruDotNet.Gelbooru.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Validation;
 
-namespace BooruDotNet.Gelbooru
+namespace BooruDotNet.Boorus
 {
     public class Gelbooru : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {

@@ -7,7 +7,7 @@ using BooruDotNet.Links;
 using BooruDotNet.Posts;
 using Validation;
 
-namespace BooruDotNet.Konachan
+namespace BooruDotNet.Boorus
 {
     public class KonachanResolver : ResolverBase, IIdResolver
     {

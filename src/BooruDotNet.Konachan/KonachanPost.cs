@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Json;
-using BooruDotNet.Konachan.Resources;
 using BooruDotNet.Posts;
 
-namespace BooruDotNet.Konachan
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     internal sealed class KonachanPost : IPost

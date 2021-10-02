@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Gelbooru.Json
+namespace BooruDotNet.Boorus.Json
 {
     internal sealed class GelbooruTagKindConverter : JsonConverter<TagKind>
     {

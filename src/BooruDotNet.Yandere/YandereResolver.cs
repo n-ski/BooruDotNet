@@ -7,7 +7,7 @@ using BooruDotNet.Links;
 using BooruDotNet.Posts;
 using Validation;
 
-namespace BooruDotNet.Yandere
+namespace BooruDotNet.Boorus
 {
     public class YandereResolver : ResolverBase, IIdResolver
     {

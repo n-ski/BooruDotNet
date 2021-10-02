@@ -7,7 +7,7 @@ using BooruDotNet.Links;
 using BooruDotNet.Posts;
 using Validation;
 
-namespace BooruDotNet.SankakuComplex
+namespace BooruDotNet.Boorus
 {
     public class SankakuComplexResolver : ResolverBase, IIdResolver
     {

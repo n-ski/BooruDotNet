@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Json;
 using BooruDotNet.Posts;
-using BooruDotNet.SankakuComplex.Resources;
 using BooruDotNet.Tags;
 
-namespace BooruDotNet.SankakuComplex
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     internal sealed class SankakuComplexPost : IPost, IPostExtendedTags

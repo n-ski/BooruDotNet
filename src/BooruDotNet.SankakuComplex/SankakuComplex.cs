@@ -3,11 +3,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
-using BooruDotNet.SankakuComplex.Resources;
 
-namespace BooruDotNet.SankakuComplex
+namespace BooruDotNet.Boorus
 {
     // Note: Sankaku Complex requires user agent, even if it contains some garbage data,
     // otherwise response will contain 500 error.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Boorus;
 using BooruDotNet.Tags;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
@@ -10,10 +11,10 @@ namespace BooruDotNet.Tests
     public class Tags
     {
         [Test]
-        [TestCase(typeof(Danbooru.Danbooru))]
-        [TestCase(typeof(Gelbooru.Gelbooru))]
-        [TestCase(typeof(Konachan.Konachan))]
-        [TestCase(typeof(Yandere.Yandere))]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Konachan))]
+        [TestCase(typeof(Yandere))]
         public async Task GetByName_Success(Type booruType, string name = "kantai_collection")
         {
             var booru = BooruHelper.TagCaches[booruType];
@@ -25,10 +26,10 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru.Danbooru))]
-        [TestCase(typeof(Gelbooru.Gelbooru))]
-        [TestCase(typeof(Konachan.Konachan))]
-        [TestCase(typeof(Yandere.Yandere))]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Konachan))]
+        [TestCase(typeof(Yandere))]
         public void GetByName_Cancellation(Type booruType, string name = "kantai_collection")
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
@@ -42,13 +43,13 @@ namespace BooruDotNet.Tests
         }
 
         [Test]
-        [TestCase(typeof(Danbooru.Danbooru))]
-        [TestCase(typeof(Gelbooru.Gelbooru))]
-        [TestCase(typeof(Konachan.Konachan))]
-        [TestCase(typeof(Yandere.Yandere))]
+        [TestCase(typeof(Danbooru))]
+        [TestCase(typeof(Gelbooru))]
+        [TestCase(typeof(Konachan))]
+        [TestCase(typeof(Yandere))]
         // Case-sensitive search.
-        [TestCase(typeof(Konachan.Konachan), "Pantyhose")]
-        [TestCase(typeof(Yandere.Yandere), "Kantai_Collection")]
+        [TestCase(typeof(Konachan), "Pantyhose")]
+        [TestCase(typeof(Yandere), "Kantai_Collection")]
         public void GetByName_Fail(Type booruType, string name = "ThisDoesNotExist")
         {
             var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);

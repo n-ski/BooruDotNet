@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Net;
 using System.Net.Http;
+using BooruDotNet.Boorus;
 using BooruDotNet.Caching;
 
 namespace BooruDotNet.Tests.Shared
@@ -16,27 +17,27 @@ namespace BooruDotNet.Tests.Shared
                 AutomaticDecompression = DecompressionMethods.All,
             });
 
-            Danbooru = new Danbooru.Danbooru(HttpClient);
-            Gelbooru = new Gelbooru.Gelbooru(HttpClient);
-            Konachan = new Konachan.Konachan(HttpClient);
-            SankakuComplex = new SankakuComplex.SankakuComplex(HttpClient);
-            Yandere = new Yandere.Yandere(HttpClient);
+            Danbooru = new Danbooru(HttpClient);
+            Gelbooru = new Gelbooru(HttpClient);
+            Konachan = new Konachan(HttpClient);
+            SankakuComplex = new SankakuComplex(HttpClient);
+            Yandere = new Yandere(HttpClient);
 
             PostCaches = new Dictionary<Type, PostCache>
             {
-                [typeof(Danbooru.Danbooru)] = new PostCache(Danbooru),
-                [typeof(Gelbooru.Gelbooru)] = new PostCache(Gelbooru),
-                [typeof(Konachan.Konachan)] = new PostCache(Konachan),
-                [typeof(SankakuComplex.SankakuComplex)] = new PostCache(SankakuComplex),
-                [typeof(Yandere.Yandere)] = new PostCache(Yandere),
+                [typeof(Danbooru)] = new PostCache(Danbooru),
+                [typeof(Gelbooru)] = new PostCache(Gelbooru),
+                [typeof(Konachan)] = new PostCache(Konachan),
+                [typeof(SankakuComplex)] = new PostCache(SankakuComplex),
+                [typeof(Yandere)] = new PostCache(Yandere),
             }.ToImmutableDictionary();
 
             TagCaches = new Dictionary<Type, TagCache>
             {
-                [typeof(Danbooru.Danbooru)] = new TagCache(Danbooru),
-                [typeof(Gelbooru.Gelbooru)] = new TagCache(Gelbooru),
-                [typeof(Konachan.Konachan)] = new TagCache(Konachan),
-                [typeof(Yandere.Yandere)] = new TagCache(Yandere),
+                [typeof(Danbooru)] = new TagCache(Danbooru),
+                [typeof(Gelbooru)] = new TagCache(Gelbooru),
+                [typeof(Konachan)] = new TagCache(Konachan),
+                [typeof(Yandere)] = new TagCache(Yandere),
             }.ToImmutableDictionary();
 
             TaskCancellationDelay = TimeSpan.FromMilliseconds(50);
@@ -44,15 +45,15 @@ namespace BooruDotNet.Tests.Shared
 
         internal static HttpClient HttpClient { get; }
 
-        internal static Danbooru.Danbooru Danbooru { get; }
+        internal static Danbooru Danbooru { get; }
 
-        internal static Gelbooru.Gelbooru Gelbooru { get; }
+        internal static Gelbooru Gelbooru { get; }
 
-        internal static Konachan.Konachan Konachan { get; }
+        internal static Konachan Konachan { get; }
 
-        internal static SankakuComplex.SankakuComplex SankakuComplex { get; }
+        internal static SankakuComplex SankakuComplex { get; }
 
-        internal static Yandere.Yandere Yandere { get; }
+        internal static Yandere Yandere { get; }
 
         internal static IReadOnlyDictionary<Type, PostCache> PostCaches { get; } 
 

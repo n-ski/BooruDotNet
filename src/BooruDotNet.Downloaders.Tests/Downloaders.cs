@@ -12,7 +12,7 @@ namespace BooruDotNet.Downloaders.Tests
 {
     public class Downloaders
     {
-        private static readonly PostCache _postCache = BooruHelper.PostCaches[typeof(Danbooru.Danbooru)];
+        private static readonly PostCache _postCache = BooruHelper.PostCaches[typeof(Boorus.Danbooru)];
         private static readonly IPostNamer _namer = new HashNamer();
         private static readonly PostDownloader _downloader = new PostDownloader(BooruHelper.HttpClient, _namer);
         private static readonly MD5 _md5 = MD5.Create();

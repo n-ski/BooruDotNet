@@ -8,7 +8,7 @@ using BooruDotNet.Links;
 using BooruDotNet.Posts;
 using Validation;
 
-namespace BooruDotNet.Gelbooru
+namespace BooruDotNet.Boorus
 {
     public class GelbooruResolver : ResolverBase, IIdResolver, IHashResolver
     {

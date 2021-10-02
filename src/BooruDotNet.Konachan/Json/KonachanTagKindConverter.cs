@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Validation;
 
-namespace BooruDotNet.Konachan.Json
+namespace BooruDotNet.Boorus.Json
 {
     // Tag values are assumed to be the same as Yande.re's.
     internal sealed class KonachanTagKindConverter : JsonConverter<TagKind>

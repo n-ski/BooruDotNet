@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Validation;
 
-namespace BooruDotNet.SankakuComplex.Json
+namespace BooruDotNet.Boorus.Json
 {
     internal sealed class SankakuComplexTagKindConverter : JsonConverter<TagKind>
     {

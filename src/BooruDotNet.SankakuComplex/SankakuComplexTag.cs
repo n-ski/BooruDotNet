@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
-using BooruDotNet.SankakuComplex.Json;
+using BooruDotNet.Boorus.Json;
 using BooruDotNet.Tags;
 
-namespace BooruDotNet.SankakuComplex
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class SankakuComplexTag : ITag

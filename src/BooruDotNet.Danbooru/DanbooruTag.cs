@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
-using BooruDotNet.Danbooru.Json;
+using BooruDotNet.Boorus.Json;
 using BooruDotNet.Tags;
 
-namespace BooruDotNet.Danbooru
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class DanbooruTag : ITag

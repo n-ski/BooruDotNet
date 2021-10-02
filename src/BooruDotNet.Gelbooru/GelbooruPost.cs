@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
-using BooruDotNet.Gelbooru.Json;
-using BooruDotNet.Gelbooru.Resources;
+using BooruDotNet.Boorus.Json;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Json;
 using BooruDotNet.Posts;
 
-namespace BooruDotNet.Gelbooru
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     internal sealed class GelbooruPost : IPost

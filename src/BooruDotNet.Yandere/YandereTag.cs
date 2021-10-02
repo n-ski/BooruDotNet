@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Text.Json.Serialization;
+using BooruDotNet.Boorus.Json;
 using BooruDotNet.Tags;
-using BooruDotNet.Yandere.Json;
 
-namespace BooruDotNet.Yandere
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class YandereTag : ITag

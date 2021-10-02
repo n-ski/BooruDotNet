@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BooruDotNet.Konachan.Resources {
+namespace BooruDotNet.Boorus.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace BooruDotNet.Konachan.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Konachan.Resources.Uris", typeof(Uris).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BooruDotNet.Boorus.Resources.Uris", typeof(Uris).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

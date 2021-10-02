@@ -3,13 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
-using BooruDotNet.Konachan.Resources;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Validation;
 
-namespace BooruDotNet.Konachan
+namespace BooruDotNet.Boorus
 {
     public class Konachan : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {

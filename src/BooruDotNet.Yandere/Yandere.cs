@@ -3,13 +3,13 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
-using BooruDotNet.Yandere.Resources;
 using Validation;
 
-namespace BooruDotNet.Yandere
+namespace BooruDotNet.Boorus
 {
     public class Yandere : BooruBase, IBooruPostById, IBooruPostByHash, IBooruTagByName
     {

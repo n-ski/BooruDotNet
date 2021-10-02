@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
-using BooruDotNet.Danbooru.Resources;
+using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
 using BooruDotNet.Json;
 using BooruDotNet.Posts;
 
-namespace BooruDotNet.Danbooru
+namespace BooruDotNet.Boorus
 {
     [DebuggerDisplay(IPost.DebuggerDisplayString)]
     internal sealed class DanbooruPost : IPost, IPostExtraTags
