@@ -3,9 +3,9 @@ using System;
 using System.IO;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Controls.Primitives;
 using BooruDownloader.Interactions;
 using BooruDownloader.ViewModels;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace BooruDownloader.WPF.Views

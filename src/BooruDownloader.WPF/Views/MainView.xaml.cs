@@ -8,13 +8,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using BooruDotNet.Helpers;
 using BooruDownloader.Interactions;
 using BooruDownloader.ViewModels;
 using Humanizer;
 using Microsoft.Win32;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace BooruDownloader.WPF.Views

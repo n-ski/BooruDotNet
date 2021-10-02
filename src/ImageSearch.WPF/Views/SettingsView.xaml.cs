@@ -1,8 +1,8 @@
 ﻿#nullable disable
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Windows.Controls.Primitives;
 using ImageSearch.ViewModels;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace ImageSearch.WPF.Views

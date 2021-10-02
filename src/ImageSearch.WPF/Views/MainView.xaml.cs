@@ -15,6 +15,7 @@ using DynamicData.Binding;
 using GongSolutions.Wpf.DragDrop;
 using ImageSearch.ViewModels;
 using ImageSearch.WPF.Helpers;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
 namespace ImageSearch.WPF.Views

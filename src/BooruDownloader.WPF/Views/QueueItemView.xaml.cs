@@ -4,15 +4,13 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using BooruDownloader.ViewModels;
 using Humanizer;
+using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 using Validation;
 
