@@ -46,7 +46,7 @@
             <Button
                 x:Name="RetryButton"
                 Margin="{StaticResource MarginSmall}"
-                Style="{x:Null}"
+                Style="{StaticResource IconButton}"
                 ToolTip="Search again">
 
                 <Viewbox

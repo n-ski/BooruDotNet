@@ -27,12 +27,12 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.Extended.Wpf.Toolkit" Version="4.6.97" />
     <PackageReference Include="gong-wpf-dragdrop" Version="2.3.2" />
-    <PackageReference Include="PresentationTheme.Aero" Version="0.6.3" />
     <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.1.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ReactiveUI.WPF" Version="16.2.6" />
+    <PackageReference Include="TomsToolbox.Wpf.Styles" Version="2.7.3" />
   </ItemGroup>
 
   <ItemGroup>

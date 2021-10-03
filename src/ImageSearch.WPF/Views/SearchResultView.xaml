@@ -113,7 +113,7 @@
             <Button
                 x:Name="OpenSourceButton"
                 Margin="{StaticResource MarginSmall}"
-                Style="{x:Null}"
+                Style="{StaticResource IconButton}"
                 ToolTip="Open in browser">
 
                 <Viewbox
@@ -125,7 +125,7 @@
             <Button
                 x:Name="CopySourceButton"
                 Margin="{StaticResource MarginSmall}"
-                Style="{x:Null}"
+                Style="{StaticResource IconButton}"
                 ToolTip="Copy source URL">
 
                 <Viewbox
@@ -137,7 +137,7 @@
             <Button
                 x:Name="SearchForSimilarButton"
                 Margin="{StaticResource MarginSmall}"
-                Style="{x:Null}"
+                Style="{StaticResource IconButton}"
                 ToolTip="Search for similar">
 
                 <Viewbox

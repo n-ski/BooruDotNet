@@ -5,6 +5,7 @@ using ImageSearch.ViewModels;
 using ImageSearch.WPF.Views;
 using ReactiveUI;
 using Splat;
+using TomsToolbox.Wpf.Styles;
 
 namespace ImageSearch.WPF
 {
@@ -15,8 +16,6 @@ namespace ImageSearch.WPF
     {
         static App()
         {
-            PresentationTheme.Aero.AeroTheme.SetAsCurrentTheme();
-
             HttpClient = new HttpClient(new SocketsHttpHandler
             {
                 AutomaticDecompression = DecompressionMethods.All,
@@ -32,8 +31,12 @@ namespace ImageSearch.WPF
 
         internal static HttpClient HttpClient { get; }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
+            base.OnStartup(e);
+
+            WpfStyles.RegisterDefaultStyles(Resources).RegisterDefaultWindowStyle();
+
             // This must be called here because resources aren't initialized yet in static ctor.
             Locator.CurrentMutable.RegisterConstant(SearchServices.Initialize(HttpClient));
         }
