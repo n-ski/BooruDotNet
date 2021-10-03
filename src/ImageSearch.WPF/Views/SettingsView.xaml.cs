@@ -18,6 +18,13 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
+                ColorThemeComboBox.SelectedIndex = settings.ColorThemeIndex;
+
+                this.WhenAnyValue(v => v.ColorThemeComboBox.SelectedIndex)
+                    .Where(index => index > -1)
+                    .BindTo(ViewSettings.Default, s => s.ColorThemeIndex)
+                    .DisposeWith(d);
+
                 this.Bind(ViewModel, vm => vm.EnableFiltering, v => v.EnableFilteringCheckBox.IsChecked)
                     .DisposeWith(d);
 

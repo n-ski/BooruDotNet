@@ -124,7 +124,7 @@
             Grid.Column="1"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
-            Background="{x:Static SystemColors.ControlLightBrush}" />
+            Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}" />
 
         <ScrollViewer
             x:Name="SearchResultsScrollViewer"

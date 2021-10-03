@@ -30,45 +30,63 @@
                 Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid
-            Grid.Row="0">
+        <GroupBox
+            Grid.Row="0"
+            Header="Application Settings">
 
-            <Grid.ColumnDefinitions>
+            <DockPanel
+                LastChildFill="False">
 
-                <ColumnDefinition
-                    Width="1*" />
-                <ColumnDefinition
-                    Width="200" />
-            </Grid.ColumnDefinitions>
+                <TextBlock
+                    DockPanel.Dock="Left"
+                    Margin="{StaticResource MarginMedium}"
+                    Text="Color theme:" />
 
-            <Grid.RowDefinitions>
+                <ComboBox
+                    x:Name="ColorThemeComboBox"
+                    DockPanel.Dock="Right"
+                    Width="200"
+                    Margin="{StaticResource MarginMedium}">
 
-                <RowDefinition
-                    Height="Auto" />
-            </Grid.RowDefinitions>
+                    <ComboBoxItem>Light</ComboBoxItem>
+                    <ComboBoxItem>Dark</ComboBoxItem>
+                </ComboBox>
+            </DockPanel>
+        </GroupBox>
 
-            <CheckBox
-                x:Name="EnableFilteringCheckBox"
-                Grid.Column="0"
-                Margin="{StaticResource MarginMedium}"
-                VerticalAlignment="Center"
-                Content="Do not show results that aren't at least this similar" />
-
-            <xctk:DoubleUpDown
-                x:Name="MinSimilarityUpDown"
-                Grid.Column="1"
-                Margin="{StaticResource MarginMedium}"
-                FormatString="P0"
-                Increment="0.1"
-                Maximum="0.99"
-                Minimum="0.01" />
-        </Grid>
-
-        <CheckBox
-            x:Name="EnableCompressionCheckBox"
+        <GroupBox
             Grid.Row="1"
-            Margin="{StaticResource MarginMedium}"
-            Content="Compress images before uploading" />
+            Header="Search Settings">
+
+            <StackPanel>
+
+                <DockPanel
+                    LastChildFill="False">
+
+                    <CheckBox
+                        x:Name="EnableFilteringCheckBox"
+                        DockPanel.Dock="Left"
+                        Margin="{StaticResource MarginMedium}"
+                        VerticalAlignment="Center"
+                        Content="Do not show results that aren't at least this similar" />
+
+                    <xctk:DoubleUpDown
+                        x:Name="MinSimilarityUpDown"
+                        DockPanel.Dock="Right"
+                        Width="200"
+                        Margin="{StaticResource MarginMedium}"
+                        FormatString="P0"
+                        Increment="0.1"
+                        Maximum="0.99"
+                        Minimum="0.01" />
+                </DockPanel>
+
+                <CheckBox
+                    x:Name="EnableCompressionCheckBox"
+                    Margin="{StaticResource MarginMedium}"
+                    Content="Compress images before uploading" />
+            </StackPanel>
+        </GroupBox>
 
         <StackPanel
             Grid.Row="3"
