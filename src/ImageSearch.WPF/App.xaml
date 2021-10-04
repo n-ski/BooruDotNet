@@ -17,11 +17,19 @@
                 <ResourceDictionary
                     Source="./Assets/Styles/Button.xaml" />
                 <ResourceDictionary
+                    Source="./Assets/Styles/ButtonSpinner.xaml" />
+                <ResourceDictionary
                     Source="./Assets/Styles/ItemsControl.xaml" />
                 <ResourceDictionary
                     Source="./Assets/Styles/ProgressBar.xaml" />
                 <ResourceDictionary
+                    Source="./Assets/Styles/RepeatButton.xaml" />
+                <ResourceDictionary
                     Source="./Assets/Styles/TextBlock.xaml" />
+                <ResourceDictionary
+                    Source="./Assets/Styles/WatermarkTextBox.xaml" />
+                <ResourceDictionary
+                    Source="./Assets/Styles/NumericUpDown.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
