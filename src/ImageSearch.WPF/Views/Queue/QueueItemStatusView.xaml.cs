@@ -46,14 +46,14 @@ namespace ImageSearch.WPF.Views
                             $"An exception of type '{ex.GetType()}' has occurred with the following message:",
                             ex.Message)
                         : null)
-                    .BindTo(this, v => v.StatusText.ToolTip)
+                    .BindTo(this, v => v.StatusIcon.ToolTip)
                     .DisposeWith(d);
 
                 // Also set "help" cursor if we've got an exception.
                 this.OneWayBind(
                     ViewModel,
                     vm => vm.Exception,
-                    v => v.StatusText.Cursor,
+                    v => v.StatusIcon.Cursor,
                     ex => ex is object ? Cursors.Help : null)
                     .DisposeWith(d);
 
