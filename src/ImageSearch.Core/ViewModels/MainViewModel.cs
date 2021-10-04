@@ -56,6 +56,10 @@ namespace ImageSearch.ViewModels
                     .Select(_ => SelectedSearchService)
                     .Cast<IFileAndUriSearchService>()
                     .InvokeCommand(item, i => i.Search))
+                // Remove the item.
+                .SubscribeMany(item => item.StatusViewModel
+                    .Remove
+                    .Subscribe(_ => _itemsQueue.Remove(item)))
                 .Bind(out var queuedItems)
                 .Subscribe();
 

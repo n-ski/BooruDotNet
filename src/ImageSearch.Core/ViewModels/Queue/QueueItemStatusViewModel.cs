@@ -36,6 +36,8 @@ namespace ImageSearch.ViewModels
             Retry
                 .Select(_ => QueueItemStatus.Processing)
                 .BindTo(this, x => x.Status);
+
+            Remove = ReactiveCommand.Create(MethodHelper.DoNothing);
         }
 
         #region Properties
@@ -54,6 +56,8 @@ namespace ImageSearch.ViewModels
         #region Commands
 
         public ReactiveCommand<Unit, Unit> Retry { get; }
+
+        public ReactiveCommand<Unit, Unit> Remove { get; }
 
         #endregion
     }

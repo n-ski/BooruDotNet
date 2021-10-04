@@ -60,6 +60,9 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.Retry, v => v.RetryButton)
                     .DisposeWith(d);
 
+                this.BindCommand(ViewModel, vm => vm.Remove, v => v.RemoveButton)
+                    .DisposeWith(d);
+
                 var parentListBoxItem = VisualTreeHelperEx.FindAncestorByType<ListBoxItem>(this);
 
                 if (parentListBoxItem is object)

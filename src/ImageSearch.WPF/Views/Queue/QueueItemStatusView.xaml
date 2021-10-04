@@ -54,6 +54,18 @@
                     Height="16"
                     Child="{StaticResource RetryIcon}" />
             </Button>
+
+            <Button
+                x:Name="RemoveButton"
+                Margin="{StaticResource MarginSmall}"
+                Style="{StaticResource IconButton}"
+                ToolTip="Remove">
+
+                <Viewbox
+                    Width="16"
+                    Height="16"
+                    Child="{StaticResource RemoveIcon}" />
+            </Button>
         </StackPanel>
     </Grid>
 </rui:ReactiveUserControl>
