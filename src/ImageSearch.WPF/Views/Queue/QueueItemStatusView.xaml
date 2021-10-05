@@ -46,6 +46,7 @@
             <Button
                 x:Name="RetryButton"
                 Margin="{StaticResource MarginSmall}"
+                VerticalAlignment="Center"
                 Style="{StaticResource IconButton}"
                 ToolTip="Search again">
 
@@ -58,6 +59,7 @@
             <Button
                 x:Name="RemoveButton"
                 Margin="{StaticResource MarginSmall}"
+                VerticalAlignment="Center"
                 Style="{StaticResource IconButton}"
                 ToolTip="Remove">
 
