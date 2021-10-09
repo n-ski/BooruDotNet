@@ -34,5 +34,17 @@ namespace ImageSearch.WPF {
                 this["ColorThemeIndex"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowUploadTooltip {
+            get {
+                return ((bool)(this["ShowUploadTooltip"]));
+            }
+            set {
+                this["ShowUploadTooltip"] = value;
+            }
+        }
     }
 }

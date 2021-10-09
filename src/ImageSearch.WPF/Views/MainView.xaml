@@ -70,6 +70,7 @@
             </DockPanel>
 
             <TextBlock
+                x:Name="UploadTipTextBlock"
                 DockPanel.Dock="Bottom"
                 MaxHeight="48"
                 Margin="{StaticResource MarginMedium}"

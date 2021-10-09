@@ -34,24 +34,32 @@
             Grid.Row="0"
             Header="Application Settings">
 
-            <DockPanel
-                LastChildFill="False">
+            <StackPanel>
 
-                <TextBlock
-                    DockPanel.Dock="Left"
+                <DockPanel
+                    LastChildFill="False">
+
+                    <TextBlock
+                        DockPanel.Dock="Left"
+                        Margin="{StaticResource MarginMedium}"
+                        Text="Color theme:" />
+
+                    <ComboBox
+                        x:Name="ColorThemeComboBox"
+                        DockPanel.Dock="Right"
+                        Width="200"
+                        Margin="{StaticResource MarginMedium}">
+
+                        <ComboBoxItem>Light</ComboBoxItem>
+                        <ComboBoxItem>Dark</ComboBoxItem>
+                    </ComboBox>
+                </DockPanel>
+
+                <CheckBox
+                    x:Name="ShowUploadTipCheckBox"
                     Margin="{StaticResource MarginMedium}"
-                    Text="Color theme:" />
-
-                <ComboBox
-                    x:Name="ColorThemeComboBox"
-                    DockPanel.Dock="Right"
-                    Width="200"
-                    Margin="{StaticResource MarginMedium}">
-
-                    <ComboBoxItem>Light</ComboBoxItem>
-                    <ComboBoxItem>Dark</ComboBoxItem>
-                </ComboBox>
-            </DockPanel>
+                    Content="Show upload tip" />
+            </StackPanel>
         </GroupBox>
 
         <GroupBox

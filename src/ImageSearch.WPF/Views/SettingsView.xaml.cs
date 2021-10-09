@@ -18,7 +18,9 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
+                var settings = ViewSettings.Default;
                 ColorThemeComboBox.SelectedIndex = settings.ColorThemeIndex;
+                ShowUploadTipCheckBox.IsChecked = settings.ShowUploadTooltip;
 
                 this.WhenAnyValue(v => v.ColorThemeComboBox.SelectedIndex)
                     .Where(index => index > -1)
@@ -40,6 +42,10 @@ namespace ImageSearch.WPF.Views
                 OkButton.Events()
                     .Click
                     .Select(_ => true)
+                    .Do(_=>
+                    {
+                        settings.ShowUploadTooltip = ShowUploadTipCheckBox.IsChecked is true;
+                    })
                     .BindTo(this, v => v.DialogResult)
                     .DisposeWith(d);
             });

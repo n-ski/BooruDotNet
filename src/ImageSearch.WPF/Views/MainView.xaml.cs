@@ -91,6 +91,10 @@ namespace ImageSearch.WPF.Views
                 this.BindCommand(ViewModel, vm => vm.OpenSettings, v => v.OpenSettingsButton)
                     .DisposeWith(d);
 
+                ViewSettings.Default.WhenAnyValue(x => x.ShowUploadTooltip)
+                    .BindTo(this, v => v.UploadTipTextBlock.Visibility)
+                    .DisposeWith(d);
+
                 #region Search services
 
                 this.OneWayBind(ViewModel, vm => vm.SearchServices, v => v.SearchServicesComboBox.ItemsSource)
