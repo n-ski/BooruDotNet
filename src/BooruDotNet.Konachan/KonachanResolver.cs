@@ -33,7 +33,7 @@ namespace BooruDotNet.Boorus
                 string value = match.Groups[1].Value;
                 int id = int.Parse(value);
 
-                return await Konachan.GetPostAsync(id, cancellationToken).ConfigureAwait(false);
+                return await Konachan.GetPostAsync(id, cancellationToken).CAF();
             }
 
             return null;

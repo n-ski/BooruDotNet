@@ -23,7 +23,7 @@ namespace BooruDotNet
             HttpResponseMessage response = await HttpClient.SendAsync(
                 request,
                 HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken).CAF();
 
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
@@ -34,7 +34,7 @@ namespace BooruDotNet
             HttpResponseMessage response = await HttpClient.GetAsync(
                 requestUri,
                 HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken).CAF();
 
             return ensureSuccess ? response.EnsureSuccessStatusCode() : response;
         }
@@ -42,23 +42,20 @@ namespace BooruDotNet
         protected async Task<T> GetResponseAndDeserializeAsync<T>(Uri requestUri, CancellationToken cancellationToken,
             JsonSerializerOptions? options = null)
         {
-            using HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(requestUri, cancellationToken).CAF();
 
-            return await DeserializeAsync<T>(response, cancellationToken, options)
-                .ConfigureAwait(false);
+            return await DeserializeAsync<T>(response, cancellationToken, options).CAF();
         }
 
         protected async static Task<T> DeserializeAsync<T>(HttpResponseMessage response, CancellationToken cancellationToken,
             JsonSerializerOptions? options = null)
         {
-            using Stream jsonStream = await response.Content.ReadAsStreamAsync()
-                .ConfigureAwait(false);
+            using Stream jsonStream = await response.Content.ReadAsStreamAsync().CAF();
 
             T deserialized = await JsonSerializer.DeserializeAsync<T>(
                 jsonStream,
                 options,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken).CAF();
 
             return deserialized!;
         }

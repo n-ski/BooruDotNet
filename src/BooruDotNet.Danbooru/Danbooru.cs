@@ -22,14 +22,12 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_PostId_Format, id);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken)
-                .ConfigureAwait(false);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken).CAF();
         }
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
@@ -38,14 +36,12 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_PostHash_Format, hash);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
 
             Error.If<InvalidPostHashException>(response.StatusCode == HttpStatusCode.NotFound, hash);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken)
-                .ConfigureAwait(false);
+            return await DeserializeAsync<DanbooruPost>(response, cancellationToken).CAF();
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
@@ -54,8 +50,7 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_TagName_Format, tagName);
 
-            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken)
-                .ConfigureAwait(false);
+            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken).CAF();
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 

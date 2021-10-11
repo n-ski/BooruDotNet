@@ -21,14 +21,12 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_PostId_Format, id);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken)
-                .ConfigureAwait(false);
+            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken).CAF();
 
             Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
 
@@ -41,11 +39,9 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_PostHash_Format, hash);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken).CAF();
 
-            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken)
-                .ConfigureAwait(false);
+            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken).CAF();
 
             Error.IfNot<InvalidPostHashException>(posts.Length == 1, hash);
 
@@ -58,8 +54,7 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_TagName_Format, tagName);
 
-            KonachanTag[] tags = await GetResponseAndDeserializeAsync<KonachanTag[]>(uri, cancellationToken)
-                .ConfigureAwait(false);
+            KonachanTag[] tags = await GetResponseAndDeserializeAsync<KonachanTag[]>(uri, cancellationToken).CAF();
 
             foreach (KonachanTag tag in tags)
             {

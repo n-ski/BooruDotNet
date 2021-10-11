@@ -35,7 +35,7 @@ namespace BooruDotNet.Boorus
                 {
                     int id = int.Parse(value);
 
-                    return await Gelbooru.GetPostAsync(id, cancellationToken).ConfigureAwait(false);
+                    return await Gelbooru.GetPostAsync(id, cancellationToken).CAF();
                 }
             }
 
@@ -53,7 +53,7 @@ namespace BooruDotNet.Boorus
 
                 if (query["md5"] is string md5)
                 {
-                    return await Gelbooru.GetPostAsync(md5, cancellationToken).ConfigureAwait(false);
+                    return await Gelbooru.GetPostAsync(md5, cancellationToken).CAF();
                 }
             }
 

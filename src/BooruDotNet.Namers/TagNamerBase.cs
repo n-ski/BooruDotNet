@@ -72,7 +72,7 @@ namespace BooruDotNet.Namers
                     {
                         try
                         {
-                            return await _tagExtractorFunc(tagName).ConfigureAwait(false);
+                            return await _tagExtractorFunc(tagName).CAF();
                         }
                         catch (InvalidTagNameException)
                         {

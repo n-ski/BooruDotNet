@@ -53,12 +53,12 @@ namespace BooruDotNet.Downloaders
                 using (HttpResponseMessage response = await HttpClient.GetAsync(
                     downloadUri,
                     HttpCompletionOption.ResponseHeadersRead,
-                    cancellationToken).ConfigureAwait(false))
+                    cancellationToken).CAF())
                 {
                     response.EnsureSuccessStatusCode();
 
                     using Stream tempFileStream = File.Create(tempFilePath);
-                    await response.Content.CopyToAsync(tempFileStream).ConfigureAwait(false);
+                    await response.Content.CopyToAsync(tempFileStream).CAF();
                 }
 
                 MoveFileSafe(tempFilePath, targetFilePath);
@@ -86,7 +86,7 @@ namespace BooruDotNet.Downloaders
                 {
                     try
                     {
-                        return await DownloadAsync(item, targetDirectory, cancellationToken).ConfigureAwait(false);
+                        return await DownloadAsync(item, targetDirectory, cancellationToken).CAF();
                     }
                     // Ignore all errors except task cancellation. Use "when" clause to
                     // match both TaskCanceled and OperationCanceled exceptions.
@@ -116,9 +116,9 @@ namespace BooruDotNet.Downloaders
 
                 transformBlock.Complete();
 
-                while (await transformBlock.OutputAvailableAsync(cancellationToken).ConfigureAwait(false))
+                while (await transformBlock.OutputAvailableAsync(cancellationToken).CAF())
                 {
-                    FileInfo? file = await transformBlock.ReceiveAsync(cancellationToken).ConfigureAwait(false);
+                    FileInfo? file = await transformBlock.ReceiveAsync(cancellationToken).CAF();
 
                     if (file is object)
                     {
@@ -130,7 +130,7 @@ namespace BooruDotNet.Downloaders
             {
                 foreach (T item in items)
                 {
-                    FileInfo? file = await downloadItemAsync(item).ConfigureAwait(false);
+                    FileInfo? file = await downloadItemAsync(item).CAF();
 
                     if (file is object)
                     {

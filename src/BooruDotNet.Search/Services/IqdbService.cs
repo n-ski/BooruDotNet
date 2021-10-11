@@ -62,7 +62,7 @@ namespace BooruDotNet.Search.Services
                 AppendServiceFlags(content, options);
             }
 
-            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
+            return await UploadAndDeserializeAsync(content, cancellationToken).CAF();
         }
 
         public Task<IEnumerable<IResult>> SearchAsync(FileStream fileStream, CancellationToken cancellationToken = default)
@@ -88,7 +88,7 @@ namespace BooruDotNet.Search.Services
                 AppendServiceFlags(content, options);
             }
 
-            return await UploadAndDeserializeAsync(content, cancellationToken).ConfigureAwait(false);
+            return await UploadAndDeserializeAsync(content, cancellationToken).CAF();
         }
 
         protected override async Task<IEnumerable<IResult>> DeserializeResponseAsync(

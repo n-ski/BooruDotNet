@@ -35,7 +35,7 @@ namespace BooruDotNet.Links
 
             foreach (var idResolver in _idResolvers)
             {
-                post = await idResolver.ResolveFromIdLinkAsync(uri, cancellationToken).ConfigureAwait(false);
+                post = await idResolver.ResolveFromIdLinkAsync(uri, cancellationToken).CAF();
 
                 if (post is object)
                 {
@@ -45,7 +45,7 @@ namespace BooruDotNet.Links
 
             foreach (var hashResolver in _hashResolvers)
             {
-                post = await hashResolver.ResolveFromHashLinkAsync(uri, cancellationToken).ConfigureAwait(false);
+                post = await hashResolver.ResolveFromHashLinkAsync(uri, cancellationToken).CAF();
 
                 if (post is object)
                 {

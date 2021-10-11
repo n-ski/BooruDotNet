@@ -21,14 +21,12 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Yandere_PostId_Format, id);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            YanderePost[] posts = await DeserializeAsync<YanderePost[]>(response, cancellationToken)
-                .ConfigureAwait(false);
+            YanderePost[] posts = await DeserializeAsync<YanderePost[]>(response, cancellationToken).CAF();
 
             Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
 
@@ -41,11 +39,9 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Yandere_PostHash_Format, hash);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken).CAF();
 
-            YanderePost[] posts = await DeserializeAsync<YanderePost[]>(response, cancellationToken)
-                .ConfigureAwait(false);
+            YanderePost[] posts = await DeserializeAsync<YanderePost[]>(response, cancellationToken).CAF();
 
             Error.IfNot<InvalidPostHashException>(posts.Length == 1, hash);
 
@@ -58,8 +54,7 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Yandere_TagName_Format, tagName);
 
-            YandereTag[] tags = await GetResponseAndDeserializeAsync<YandereTag[]>(uri, cancellationToken)
-                .ConfigureAwait(false);
+            YandereTag[] tags = await GetResponseAndDeserializeAsync<YandereTag[]>(uri, cancellationToken).CAF();
 
             foreach (YandereTag tag in tags)
             {

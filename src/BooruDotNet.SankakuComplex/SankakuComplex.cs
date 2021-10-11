@@ -23,14 +23,12 @@ namespace BooruDotNet.Boorus
             Uri uri = UriHelper.CreateFormat(Uris.SankakuComplex_PostId_Format, id);
 
             using HttpRequestMessage request = PrepareRequest(HttpMethod.Get, uri);
-            using HttpResponseMessage response = await GetResponseAsync(request, cancellationToken, false)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await GetResponseAsync(request, cancellationToken, false).CAF();
 
             Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
             response.EnsureSuccessStatusCode();
 
-            return await DeserializeAsync<SankakuComplexPost>(response, cancellationToken)
-                .ConfigureAwait(false);
+            return await DeserializeAsync<SankakuComplexPost>(response, cancellationToken).CAF();
         }
 
         private HttpRequestMessage PrepareRequest(HttpMethod httpMethod, Uri uri)

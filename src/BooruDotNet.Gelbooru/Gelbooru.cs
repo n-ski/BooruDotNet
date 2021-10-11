@@ -39,8 +39,7 @@ namespace BooruDotNet.Boorus
 
             // Gelbooru doesn't respond with JSON directly, but it does
             // redirect us to the actual post.
-            using HttpResponseMessage response = await HttpClient.HeadAsync(uri, cancellationToken)
-                .ConfigureAwait(false);
+            using HttpResponseMessage response = await HttpClient.HeadAsync(uri, cancellationToken).CAF();
 
             response.EnsureSuccessStatusCode();
 
@@ -52,7 +51,7 @@ namespace BooruDotNet.Boorus
 
             try
             {
-                return await GetPostAsync(postId, cancellationToken, false).ConfigureAwait(false);
+                return await GetPostAsync(postId, cancellationToken, false).CAF();
             }
             catch (JsonException)
             {
@@ -69,7 +68,7 @@ namespace BooruDotNet.Boorus
             GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(
                 uri,
                 cancellationToken,
-                TagSerializerOptions).ConfigureAwait(false);
+                TagSerializerOptions).CAF();
 
             Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
 
@@ -86,8 +85,7 @@ namespace BooruDotNet.Boorus
 
             try
             {
-                posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken)
-                    .ConfigureAwait(false);
+                posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken).CAF();
             }
             catch (JsonException) when (handleJsonException)
             {
