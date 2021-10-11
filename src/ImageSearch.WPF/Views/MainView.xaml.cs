@@ -13,8 +13,8 @@ using BooruDotNet.Helpers;
 using DynamicData;
 using DynamicData.Binding;
 using GongSolutions.Wpf.DragDrop;
+using ImageSearch.Helpers;
 using ImageSearch.ViewModels;
-using ImageSearch.WPF.Helpers;
 using ReactiveMarbles.ObservableEvents;
 using ReactiveUI;
 
@@ -25,7 +25,13 @@ namespace ImageSearch.WPF.Views
     /// </summary>
     public partial class MainView : ReactiveWindow<MainViewModel>, IDropTarget
     {
-        private static readonly Lazy<string> _fileFilterLazy = new Lazy<string>(() => "Images|*" + string.Join(";*", FileHelper.ImageFileExtensions));
+        private static readonly FileHelper.FileType[] _droppableFileTypes =
+        {
+            FileHelper.FileType.Bmp,
+            FileHelper.FileType.Gif,
+            FileHelper.FileType.Jpeg,
+            FileHelper.FileType.Png,
+        };
 
         public MainView()
         {
@@ -101,7 +107,7 @@ namespace ImageSearch.WPF.Views
                 {
                     var dialog = new Microsoft.Win32.OpenFileDialog
                     {
-                        Filter = _fileFilterLazy.Value,
+                        Filter = "Images|*.gif;*.jpg;*.jpeg;*.png",
                         Multiselect = true,
                     };
 
@@ -247,11 +253,9 @@ namespace ImageSearch.WPF.Views
         {
             if (dropInfo.Data is DataObject data && data.ContainsFileDropList())
             {
-                var collection = data.GetFileDropList();
-
-                for (int i = 0; i < collection.Count; i++)
+                foreach (string filePath in data.GetFileDropList())
                 {
-                    if (FileHelper.IsImageFile(collection[i]))
+                    if (FileHelper.IsAnyFileType(filePath, _droppableFileTypes))
                     {
                         dropInfo.Effects = DragDropEffects.Link;
                         return;
@@ -267,7 +271,7 @@ namespace ImageSearch.WPF.Views
             var files = ((DataObject)dropInfo.Data)
                 .GetFileDropList()
                 .Cast<string>()
-                .Where(FileHelper.IsImageFile)
+                .Where(filePath => FileHelper.IsAnyFileType(filePath, _droppableFileTypes))
                 .Select(path => new FileInfo(path));
 
             ViewModel.SearchWithManyFiles.Execute(files).Subscribe();
