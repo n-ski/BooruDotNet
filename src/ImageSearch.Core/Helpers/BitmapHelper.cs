@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Splat;
 
@@ -17,6 +17,7 @@ namespace ImageSearch.Helpers
 
             return bitmap!;
         });
+        private static readonly Lazy<HttpClient> _client = new Lazy<HttpClient>(() => new HttpClient());
 
         public static async Task<IBitmap> LoadBitmapAsync(FileInfo file, float? width, float? height)
         {
@@ -46,8 +47,7 @@ namespace ImageSearch.Helpers
 
             try
             {
-                using var wc = new WebClient();
-                using Stream stream = wc.OpenRead(uri);
+                using Stream stream = await _client.Value.GetStreamAsync(uri);
 
                 // Splat has a bug with unfreezable images so copy the stream to memory first.
                 Stream memory = new MemoryStream();
