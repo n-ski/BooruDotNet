@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Windows;
@@ -50,9 +49,6 @@ namespace ImageSearch.WPF
             WpfStyles.RegisterDefaultStyles(Resources).RegisterDefaultWindowStyle();
 
             RegisterThemes();
-
-            // This must be called here because resources aren't initialized yet in static ctor.
-            Locator.CurrentMutable.RegisterConstant(SearchServices.Initialize(HttpClient));
         }
 
         private void RegisterThemes()

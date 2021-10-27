@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,8 +15,11 @@ namespace ImageSearch.ViewModels
 {
     public class UriQueueItemViewModel : QueueItemViewModel
     {
-        public UriQueueItemViewModel(Uri imageUri)
+        private readonly HttpClient _httpClient;
+
+        public UriQueueItemViewModel(Uri imageUri, HttpClient httpClient)
         {
+            _httpClient = Requires.NotNull(httpClient, nameof(httpClient));
             ImageUri = Requires.NotNull(imageUri, nameof(imageUri));
         }
 
@@ -23,7 +27,7 @@ namespace ImageSearch.ViewModels
 
         protected override Task<IBitmap> LoadThumbnailImpl()
         {
-            return BitmapHelper.LoadBitmapAsync(ImageUri, default, DesiredThumbnailHeight);
+            return BitmapHelper.LoadBitmapAsync(ImageUri, _httpClient, default, DesiredThumbnailHeight);
         }
 
         protected override async Task<IEnumerable<SearchResultViewModel>> SearchImpl(IFileAndUriSearchService service, CancellationToken ct)

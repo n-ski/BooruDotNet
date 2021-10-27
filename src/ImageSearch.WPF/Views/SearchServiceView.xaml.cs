@@ -17,7 +17,7 @@ namespace ImageSearch.WPF.Views
 
             this.WhenActivated(d =>
             {
-                this.OneWayBind(ViewModel, vm => vm.Icon, v => v.ServiceIcon.Source, bitmap => bitmap.ToNative())
+                this.OneWayBind(ViewModel, vm => vm.Icon, v => v.ServiceIcon.Source, bitmap => bitmap?.ToNative())
                     .DisposeWith(d);
 
                 this.OneWayBind(ViewModel, vm => vm.Name, v => v.ServiceName.Text)
