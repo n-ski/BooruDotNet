@@ -16,23 +16,4 @@ This project was initially inspired by [BooruSharp](https://github.com/Xwilarg/B
 
 ## Application support
 
-- BooruDownloader: download files from these sites
-  - Danbooru
-  - Gelbooru
-  - Konachan
-  - Sankaku Complex
-  - Yande.re
-- ImageSearch: reverse image search using one of these services
-  - IQDB (multi-service)
-  - Danbooru
-  - Gelbooru
-
-## TODO
-
-- CLI application for automated reverse image search
-- XML documentation
-- NuGet packages for libraries
-- Binaries for applications
-- Proper todo/how-to/wiki ???
-- Russian localization (exception messages, application UI)
-- Make code less garbage (right now there's a lot of copypasta involved when implementing new boorus).
+BooruDownloader has been moved [here](https://github.com/n-ski/BooruDownloader) and ImageSearch has been moved [here](https://github.com/n-ski/BooruImageSearch).
