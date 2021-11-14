@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Version>0.1.0</Version>
     <Product>Booru .NET Image Search (.NET Standard 2.1)</Product>
     <Description>A simple library for reverse image searching (Danbooru, Gelbooru, etc.).</Description>
   </PropertyGroup>
