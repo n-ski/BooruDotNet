@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFrameworks>netstandard2.1;net5.0</TargetFrameworks>
     <Product>Booru .NET Image Search (.NET Standard 2.1)</Product>
     <Description>A simple library for reverse image searching (Danbooru, Gelbooru, etc.).</Description>
   </PropertyGroup>
