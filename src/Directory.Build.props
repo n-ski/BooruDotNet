@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Sergey Volkov</Authors>
     <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
