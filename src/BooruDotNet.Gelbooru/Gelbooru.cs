@@ -43,9 +43,18 @@ namespace BooruDotNet.Boorus
 
             response.EnsureSuccessStatusCode();
 
-            Uri redirectUri = response.RequestMessage.RequestUri;
-            // If redirect wasn't successful, then the redirect URI will stay the same.
-            string id = HttpUtility.ParseQueryString(redirectUri.Query).Get("id");
+            Uri? redirectUri = response.RequestMessage?.RequestUri;
+            string? id;
+
+            if (redirectUri is object)
+            {
+                // If redirect wasn't successful, then the redirect URI will stay the same.
+                id = HttpUtility.ParseQueryString(redirectUri.Query).Get("id");
+            }
+            else
+            {
+                id = null;
+            }
 
             Error.IfNot<InvalidPostHashException>(int.TryParse(id, out int postId), hash);
 

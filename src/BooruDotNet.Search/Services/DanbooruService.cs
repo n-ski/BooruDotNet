@@ -29,7 +29,7 @@ namespace BooruDotNet.Search.Services
             using HttpContent content = new FormUrlEncodedContent(new Dictionary<string, string>
             {
                 ["url"] = uri.AbsoluteUri,
-            });
+            }!);
 
             return await UploadAndDeserializeAsync(content, cancellationToken).CAF();
         }

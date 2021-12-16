@@ -52,7 +52,7 @@ namespace BooruDotNet
         {
             using Stream jsonStream = await response.Content.ReadAsStreamAsync().CAF();
 
-            T deserialized = await JsonSerializer.DeserializeAsync<T>(
+            var deserialized = await JsonSerializer.DeserializeAsync<T>(
                 jsonStream,
                 options,
                 cancellationToken).CAF();
