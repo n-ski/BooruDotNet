@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -10,6 +10,10 @@
     <ProjectReference Include="..\BooruDotNet.Konachan\BooruDotNet.Konachan.csproj" />
     <ProjectReference Include="..\BooruDotNet.SankakuComplex\BooruDotNet.SankakuComplex.csproj" />
     <ProjectReference Include="..\BooruDotNet.Yandere\BooruDotNet.Yandere.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Splat" Version="13.1.*" />
   </ItemGroup>
 
 </Project>
