@@ -66,6 +66,10 @@ namespace BooruDotNet.Boorus
             {
                 throw new InvalidPostHashException(hash);
             }
+            catch (InvalidPostIdException)
+            {
+                throw new InvalidPostHashException(hash);
+            }
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
