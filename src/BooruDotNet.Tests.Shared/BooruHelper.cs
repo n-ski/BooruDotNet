@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Net;
 using System.Net.Http;
 using BooruDotNet.Boorus;
-using BooruDotNet.Caching;
 
 namespace BooruDotNet.Tests.Shared
 {
@@ -23,23 +20,6 @@ namespace BooruDotNet.Tests.Shared
             SankakuComplex = new SankakuComplex(HttpClient);
             Yandere = new Yandere(HttpClient);
 
-            PostCaches = new Dictionary<Type, PostCache>
-            {
-                [typeof(Danbooru)] = new PostCache(Danbooru),
-                [typeof(Gelbooru)] = new PostCache(Gelbooru),
-                [typeof(Konachan)] = new PostCache(Konachan),
-                [typeof(SankakuComplex)] = new PostCache(SankakuComplex),
-                [typeof(Yandere)] = new PostCache(Yandere),
-            }.ToImmutableDictionary();
-
-            TagCaches = new Dictionary<Type, TagCache>
-            {
-                [typeof(Danbooru)] = new TagCache(Danbooru),
-                [typeof(Gelbooru)] = new TagCache(Gelbooru),
-                [typeof(Konachan)] = new TagCache(Konachan),
-                [typeof(Yandere)] = new TagCache(Yandere),
-            }.ToImmutableDictionary();
-
             TaskCancellationDelay = TimeSpan.FromMilliseconds(50);
         }
 
@@ -54,10 +34,6 @@ namespace BooruDotNet.Tests.Shared
         internal static SankakuComplex SankakuComplex { get; }
 
         internal static Yandere Yandere { get; }
-
-        internal static IReadOnlyDictionary<Type, PostCache> PostCaches { get; } 
-
-        internal static IReadOnlyDictionary<Type, TagCache> TagCaches { get; } 
 
         internal static TimeSpan TaskCancellationDelay { get; }
 

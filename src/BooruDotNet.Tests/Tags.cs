@@ -27,7 +27,7 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(Yandere), _weirdTag, TagKind.General)]
             public async Task GetByName_Success(Type booruType, string name, TagKind kind)
             {
-                var booru = BooruHelper.TagCaches[booruType];
+                var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
 
                 var tag = await booru.GetTagAsync(name);
 

@@ -1,23 +1,28 @@
 ﻿using System.Threading.Tasks;
-using BooruDotNet.Boorus;
-using BooruDotNet.Caching;
+using BooruDotNet.Posts;
+using BooruDotNet.Tags;
 using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
+using Splat;
 
 namespace BooruDotNet.Namers.Tests
 {
     public class Namers
     {
-        private static readonly PostCache _postCache = BooruHelper.PostCaches[typeof(Danbooru)];
-        private static readonly TagCache _tagCache = BooruHelper.TagCaches[typeof(Danbooru)];
+        private static readonly MemoizingMRUCache<int, Task<IPost>> _postCache =
+            new MemoizingMRUCache<int, Task<IPost>>((postId, _) => BooruHelper.Danbooru.GetPostAsync(postId), int.MaxValue);
+
+        private static readonly MemoizingMRUCache<string, Task<ITag>> _tagCache =
+            new MemoizingMRUCache<string, Task<ITag>>((tagName, _) => BooruHelper.Danbooru.GetTagAsync(tagName), int.MaxValue);
+
         private static readonly IPostNamer _hashNamer = new HashNamer();
-        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(_tagCache);
-        private static readonly IPostNamer _fancyNamer = new DanbooruFancyNamer(_tagCache);
+        private static readonly IPostNamer _danbooruNamer = new DanbooruNamer(tagName => _tagCache.Get(tagName));
+        private static readonly IPostNamer _fancyNamer = new DanbooruFancyNamer(tagName => _tagCache.Get(tagName));
 
         [Test]
         public async Task CreateHashName_Success()
         {
-            var post = await _postCache.GetPostAsync(123456);
+            var post = await _postCache.Get(123456);
             var expectedName = post.Hash ?? "";
 
             var actualName = _hashNamer.Name(post);
@@ -41,7 +46,7 @@ namespace BooruDotNet.Namers.Tests
         [TestCase(4166623, "__lumine_and_paimon_genshin_impact_drawn_by_ichijiku_suisei__bbc70109203a07c913a2a0f8e418391e")]
         public async Task CreateDanbooruName_Success(int postId, string expectedName)
         {
-            var post = await _postCache.GetPostAsync(postId);
+            var post = await _postCache.Get(postId);
 
             var actualName = _danbooruNamer.Name(post);
 
@@ -66,7 +71,7 @@ namespace BooruDotNet.Namers.Tests
         // TODO: case with a character but no copyrights.
         public async Task CreateFancyName_Success(int postId, string expectedName)
         {
-            var post = await _postCache.GetPostAsync(postId);
+            var post = await _postCache.Get(postId);
 
             var actualName = _fancyNamer.Name(post);
 
