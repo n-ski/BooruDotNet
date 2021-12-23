@@ -48,7 +48,9 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelper.CreateFormat(Uris.Danbooru_TagName_Format, tagName);
+            string escapedName = Uri.EscapeDataString(tagName);
+
+            Uri uri = UriHelper.CreateFormat(Uris.Danbooru_TagName_Format, escapedName);
 
             DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken).CAF();
 

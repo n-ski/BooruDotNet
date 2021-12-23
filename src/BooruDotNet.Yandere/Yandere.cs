@@ -52,7 +52,9 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelper.CreateFormat(Uris.Yandere_TagName_Format, tagName);
+            string escapedName = Uri.EscapeDataString(tagName);
+
+            Uri uri = UriHelper.CreateFormat(Uris.Yandere_TagName_Format, escapedName);
 
             YandereTag[] tags = await GetResponseAndDeserializeAsync<YandereTag[]>(uri, cancellationToken).CAF();
 
