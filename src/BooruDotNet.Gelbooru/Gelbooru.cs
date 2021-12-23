@@ -72,7 +72,9 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelper.CreateFormat(Uris.Gelbooru_TagName_Format, tagName);
+            string escapedName = Uri.EscapeDataString(tagName);
+
+            Uri uri = UriHelper.CreateFormat(Uris.Gelbooru_TagName_Format, escapedName);
 
             GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(
                 uri,

@@ -52,7 +52,9 @@ namespace BooruDotNet.Boorus
         {
             Requires.NotNullOrWhiteSpace(tagName, nameof(tagName));
 
-            Uri uri = UriHelper.CreateFormat(Uris.Konachan_TagName_Format, tagName);
+            string escapedName = Uri.EscapeDataString(tagName);
+
+            Uri uri = UriHelper.CreateFormat(Uris.Konachan_TagName_Format, escapedName);
 
             KonachanTag[] tags = await GetResponseAndDeserializeAsync<KonachanTag[]>(uri, cancellationToken).CAF();
 
