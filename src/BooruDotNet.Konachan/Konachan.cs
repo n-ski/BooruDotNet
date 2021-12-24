@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus.Resources;
@@ -8,6 +8,10 @@ using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Validation;
+
+#if NET5_0_OR_GREATER
+using System.Net;
+#endif
 
 namespace BooruDotNet.Boorus
 {
@@ -21,16 +25,22 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_PostId_Format, id);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
+            KonachanPost[]? posts;
 
-            Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                posts = await HttpClient.GetFromJsonAsync<KonachanPost[]>(uri, cancellationToken).CAF();
+            }
+#if NET5_0_OR_GREATER
+            catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.NotFound)
+#else
+            catch (HttpRequestException exception) when (exception.Message.Contains("404"))
+#endif
+            {
+                posts = null;
+            }
 
-            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken).CAF();
-
-            Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
-
-            return posts[0];
+            return posts?.Length is 1 ? posts[0] : throw new InvalidPostIdException(id);
         }
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
@@ -38,14 +48,22 @@ namespace BooruDotNet.Boorus
             Requires.NotNullOrWhiteSpace(hash, nameof(hash));
 
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_PostHash_Format, hash);
+            KonachanPost[]? posts;
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken).CAF();
+            try
+            {
+                posts = await HttpClient.GetFromJsonAsync<KonachanPost[]>(uri, cancellationToken).CAF();
+            }
+#if NET5_0_OR_GREATER
+            catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.NotFound)
+#else
+            catch (HttpRequestException exception) when (exception.Message.Contains("404"))
+#endif
+            {
+                posts = null;
+            }
 
-            KonachanPost[] posts = await DeserializeAsync<KonachanPost[]>(response, cancellationToken).CAF();
-
-            Error.IfNot<InvalidPostHashException>(posts.Length == 1, hash);
-
-            return posts[0];
+            return posts?.Length is 1 ? posts[0] : throw new InvalidPostHashException(hash);
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
@@ -56,9 +74,9 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Konachan_TagName_Format, escapedName);
 
-            KonachanTag[] tags = await GetResponseAndDeserializeAsync<KonachanTag[]>(uri, cancellationToken).CAF();
+            KonachanTag[]? tags = await HttpClient.GetFromJsonAsync<KonachanTag[]>(uri, cancellationToken).CAF();
 
-            foreach (KonachanTag tag in tags)
+            foreach (KonachanTag tag in tags!)
             {
                 // Tag search is case-sensitive.
                 if (tag.Name == tagName)

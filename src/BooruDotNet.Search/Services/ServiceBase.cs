@@ -42,7 +42,7 @@ namespace BooruDotNet.Search.Services
                 Content = content,
             };
 
-            HttpResponseMessage response = await GetResponseAsync(message, cancellationToken).CAF();
+            HttpResponseMessage response = await HttpClient.SendAsync(message, cancellationToken).CAF();
 
             return await response.Content.ReadAsStreamAsync().CAF();
         }
