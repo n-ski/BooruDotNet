@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -20,11 +20,6 @@ namespace BooruDotNet.Boorus
             : base(httpClient)
         {
         }
-
-        protected JsonSerializerOptions TagSerializerOptions => new JsonSerializerOptions
-        {
-            NumberHandling = JsonNumberHandling.AllowReadingFromString
-        };
 
         public Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default)
         {
@@ -80,14 +75,11 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Gelbooru_TagName_Format, escapedName);
 
-            GelbooruTag[] tags = await GetResponseAndDeserializeAsync<GelbooruTag[]>(
+            GelbooruTag[]? tags = await HttpClient.GetFromJsonAsync<GelbooruTag[]>(
                 uri,
-                cancellationToken,
-                TagSerializerOptions).CAF();
+                cancellationToken).CAF();
 
-            Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
-
-            return tags[0];
+            return tags?.Length is 1 ? tags[0] : throw new InvalidTagNameException(tagName);
         }
 
         // Special method that can handle thrown JsonException.
@@ -96,20 +88,18 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Gelbooru_PostId_Format, id);
 
-            GelbooruPost[] posts;
+            GelbooruPost[]? posts;
 
             try
             {
-                posts = await GetResponseAndDeserializeAsync<GelbooruPost[]>(uri, cancellationToken).CAF();
+                posts = await HttpClient.GetFromJsonAsync<GelbooruPost[]>(uri, cancellationToken).CAF();
             }
             catch (JsonException) when (handleJsonException)
             {
                 throw new InvalidPostIdException(id);
             }
 
-            Error.IfNot<InvalidPostIdException>(posts.Length == 1, id);
-
-            return posts[0];
+            return posts?.Length is 1 ? posts[0] : throw new InvalidPostIdException(id);
         }
     }
 }

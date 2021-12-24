@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus.Resources;
@@ -8,6 +8,10 @@ using BooruDotNet.Helpers;
 using BooruDotNet.Posts;
 using BooruDotNet.Tags;
 using Validation;
+
+#if NET5_0_OR_GREATER
+using System.Net;
+#endif
 
 namespace BooruDotNet.Boorus
 {
@@ -22,12 +26,22 @@ namespace BooruDotNet.Boorus
         {
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_PostId_Format, id);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
+            IPost? post;
 
-            Error.If<InvalidPostIdException>(response.StatusCode == HttpStatusCode.NotFound, id);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                post = await HttpClient.GetFromJsonAsync<DanbooruPost>(uri, cancellationToken).CAF();
+            }
+#if NET5_0_OR_GREATER
+            catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.NotFound)
+#else
+            catch (HttpRequestException exception) when (exception.Message.Contains("404"))
+#endif
+            {
+                post = null;
+            }
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken).CAF();
+            return post ?? throw new InvalidPostIdException(id);
         }
 
         public async Task<IPost> GetPostAsync(string hash, CancellationToken cancellationToken = default)
@@ -36,12 +50,22 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_PostHash_Format, hash);
 
-            using HttpResponseMessage response = await GetResponseAsync(uri, cancellationToken, false).CAF();
+            IPost? post;
 
-            Error.If<InvalidPostHashException>(response.StatusCode == HttpStatusCode.NotFound, hash);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                post = await HttpClient.GetFromJsonAsync<DanbooruPost>(uri, cancellationToken).CAF();
+            }
+#if NET5_0_OR_GREATER
+            catch (HttpRequestException exception) when (exception.StatusCode is HttpStatusCode.NotFound)
+#else
+            catch (HttpRequestException exception) when (exception.Message.Contains("404"))
+#endif
+            {
+                post = null;
+            }
 
-            return await DeserializeAsync<DanbooruPost>(response, cancellationToken).CAF();
+            return post ?? throw new InvalidPostHashException(hash);
         }
 
         public async Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default)
@@ -52,11 +76,9 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Danbooru_TagName_Format, escapedName);
 
-            DanbooruTag[] tags = await GetResponseAndDeserializeAsync<DanbooruTag[]>(uri, cancellationToken).CAF();
+            DanbooruTag[]? tags = await HttpClient.GetFromJsonAsync<DanbooruTag[]>(uri, cancellationToken).CAF();
 
-            Error.IfNot<InvalidTagNameException>(tags.Length == 1, tagName);
-
-            return tags[0];
+            return tags?.Length is 1 ? tags[0] : throw new InvalidTagNameException(tagName);
         }
     }
 }
