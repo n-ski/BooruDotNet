@@ -35,7 +35,7 @@ namespace BooruDotNet.Boorus
         public Uri? Uri => _postUriLazy.Value;
 
         [JsonPropertyName("created_at")]
-        public DateTime CreationDate { get; set; }
+        public DateTimeOffset CreationDate { get; set; }
 
         [JsonPropertyName("image_width")]
         public int Width { get; set; }
