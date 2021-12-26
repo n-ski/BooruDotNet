@@ -9,6 +9,7 @@
     <Compile Include="..\BooruDotNet.Shared\Boorus\Json\RatingConverter.cs" LinkBase="Json" />
     <Compile Include="..\BooruDotNet.Shared\Boorus\Json\TagStringConverter.cs" LinkBase="Json" />
     <Compile Include="..\BooruDotNet.Shared\Boorus\Json\UnixTimeSecondsToDateTimeOffsetConverter.cs" LinkBase="Json" />
+    <Compile Include="..\BooruDotNet.Yandere\Json\TagKindConverter.cs" LinkBase="Json" />
   </ItemGroup>
 
   <ItemGroup>
