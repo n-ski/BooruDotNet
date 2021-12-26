@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\BooruDotNet\Json\RatingConverter.cs" LinkBase="Json" />
-    <Compile Include="..\BooruDotNet\Json\TagStringConverter.cs" LinkBase="Json" />
+    <Compile Include="..\BooruDotNet.Shared\Boorus\Json\RatingConverter.cs" LinkBase="Json" />
+    <Compile Include="..\BooruDotNet.Shared\Boorus\Json\TagStringConverter.cs" LinkBase="Json" />
   </ItemGroup>
 
   <ItemGroup>

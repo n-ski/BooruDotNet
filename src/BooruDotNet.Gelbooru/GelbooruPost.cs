@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 using BooruDotNet.Boorus.Json;
 using BooruDotNet.Boorus.Resources;
 using BooruDotNet.Helpers;
-using BooruDotNet.Json;
 using BooruDotNet.Posts;
 
 namespace BooruDotNet.Boorus

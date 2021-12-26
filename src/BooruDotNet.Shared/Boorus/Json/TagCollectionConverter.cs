@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using BooruDotNet.Tags;
 
-namespace BooruDotNet.Json
+namespace BooruDotNet.Boorus.Json
 {
     internal sealed class TagCollectionConverter<T> : JsonConverter<IReadOnlyList<ITag>> where T : ITag
     {
