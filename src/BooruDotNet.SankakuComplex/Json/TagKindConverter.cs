@@ -5,7 +5,7 @@ using Validation;
 
 namespace BooruDotNet.Boorus.Json
 {
-    internal sealed class YandereTagKindConverter : JsonConverter<TagKind>
+    internal sealed class TagKindConverter : JsonConverter<TagKind>
     {
         public override TagKind Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -15,10 +15,12 @@ namespace BooruDotNet.Boorus.Json
             {
                 0 => TagKind.General,
                 1 => TagKind.Artist,
+                2 => TagKind.General, // Studio
                 3 => TagKind.Copyright,
                 4 => TagKind.Character,
-                5 => TagKind.General, // Circle
-                6 => TagKind.Metadata, // Faults
+                5 => TagKind.General, // Genre
+                8 => TagKind.General, // Medium
+                9 => TagKind.Metadata,
                 _ => throw new JsonException(),
             };
         }
@@ -31,7 +33,7 @@ namespace BooruDotNet.Boorus.Json
                 TagKind.Artist => 1,
                 TagKind.Copyright => 3,
                 TagKind.Character => 4,
-                TagKind.Metadata => 6,
+                TagKind.Metadata => 8,
                 _ => throw Assumes.NotReachable(),
             };
 

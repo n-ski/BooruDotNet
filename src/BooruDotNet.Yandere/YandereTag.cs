@@ -11,7 +11,7 @@ namespace BooruDotNet.Boorus
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
 
-        [JsonPropertyName("type"), JsonConverter(typeof(YandereTagKindConverter))]
+        [JsonPropertyName("type"), JsonConverter(typeof(TagKindConverter))]
         public TagKind Kind { get; set; }
 
         [JsonPropertyName("id")]

@@ -12,7 +12,7 @@ namespace BooruDotNet.Boorus
         public string Name { get; set; } = "";
 
         [JsonPropertyName("category")]
-        [JsonConverter(typeof(DanbooruTagKindConverter))]
+        [JsonConverter(typeof(TagKindConverter))]
         public TagKind Kind { get; set; }
 
         [JsonPropertyName("id")]
