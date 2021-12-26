@@ -40,8 +40,8 @@ namespace BooruDotNet.Boorus
 
         internal class CreationDateInfo
         {
-            [JsonPropertyName("s"), JsonConverter(typeof(UnixTimeSecondsToDateConverter))]
-            public DateTime CreationDate { get; set; }
+            [JsonPropertyName("s"), JsonConverter(typeof(UnixTimeSecondsToDateTimeOffsetConverter))]
+            public DateTimeOffset CreationDate { get; set; }
         }
 
         #endregion
@@ -53,7 +53,7 @@ namespace BooruDotNet.Boorus
 
         public Uri? Uri => _postUriLazy.Value;
 
-        public DateTime CreationDate { get; set; }
+        public DateTimeOffset CreationDate { get; set; }
 
         [JsonPropertyName("width")]
         public int Width { get; set; }

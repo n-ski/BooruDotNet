@@ -42,8 +42,8 @@ namespace BooruDotNet.Boorus
         public Uri? Uri => _postUriLazy.Value;
 
         [JsonPropertyName("created_at")]
-        [JsonConverter(typeof(GelbooruDateTimeConverter))]
-        public DateTime CreationDate { get; set; }
+        [JsonConverter(typeof(GelbooruDateTimeOffsetConverter))]
+        public DateTimeOffset CreationDate { get; set; }
 
         [JsonPropertyName("width")]
         public int Width { get; set; }

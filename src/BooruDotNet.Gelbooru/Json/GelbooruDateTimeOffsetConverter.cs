@@ -5,18 +5,18 @@ using System.Text.Json.Serialization;
 
 namespace BooruDotNet.Boorus.Json
 {
-    internal sealed class GelbooruDateTimeConverter : JsonConverter<DateTime>
+    internal sealed class GelbooruDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
         private const string _dateTimeFormat = "ddd MMM dd HH:mm:ss zzz yyyy";
 
-        public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             string dateString = reader.GetString()!;
 
-            return DateTime.ParseExact(dateString, _dateTimeFormat, CultureInfo.InvariantCulture);
+            return DateTimeOffset.ParseExact(dateString, _dateTimeFormat, CultureInfo.InvariantCulture);
         }
 
-        public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
         {
             string dateString = value.ToString(_dateTimeFormat);
 
