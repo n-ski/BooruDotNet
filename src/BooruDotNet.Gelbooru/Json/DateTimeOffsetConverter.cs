@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace BooruDotNet.Boorus.Json
 {
-    internal sealed class GelbooruDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+    internal sealed class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
         private const string _dateTimeFormat = "ddd MMM dd HH:mm:ss zzz yyyy";
 

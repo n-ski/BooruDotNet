@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace BooruDotNet.Boorus.Json
 {
-    internal sealed class DanbooruTagKindConverter : JsonConverter<TagKind>
+    internal sealed class TagKindConverter : JsonConverter<TagKind>
     {
         public override TagKind Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {

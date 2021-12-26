@@ -6,7 +6,7 @@ using Validation;
 namespace BooruDotNet.Boorus.Json
 {
     // Tag values are assumed to be the same as Yande.re's.
-    internal sealed class KonachanTagKindConverter : JsonConverter<TagKind>
+    internal sealed class TagKindConverter : JsonConverter<TagKind>
     {
         public override TagKind Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
