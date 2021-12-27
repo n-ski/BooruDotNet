@@ -76,6 +76,7 @@ namespace BooruDotNet.Boorus
         [JsonPropertyName("preview_url")]
         public Uri? PreviewImageUri { get; set; }
 
+        [JsonIgnore]
         public IReadOnlyList<string> Tags => _tagsLazy.Value;
 
         [JsonPropertyName("rating"), JsonConverter(typeof(RatingConverter))]
