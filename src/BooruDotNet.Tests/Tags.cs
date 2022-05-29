@@ -10,21 +10,39 @@ namespace BooruDotNet.Tests
 {
     public class Tags
     {
-        private const string _normalTag = "kantai_collection";
-        private const string _weirdTag = ";d";
+        private const string _artistTag = "yohane";
+        private const string _characterTag = "lumine_(genshin_impact)";
         private const string _invalidTag = "ThisDoesNotExist";
+        private const string _copyrightTag = "kantai_collection";
+        private const string _generalTag = "thighhighs";
+        private const string _metadataTag = "highres";
 
         public class GetByName
         {
             [Test]
-            [TestCase(typeof(Danbooru), _normalTag, TagKind.Copyright)]
-            [TestCase(typeof(Gelbooru), _normalTag, TagKind.Copyright)]
-            [TestCase(typeof(Konachan), _normalTag, TagKind.Copyright)]
-            [TestCase(typeof(Yandere), _normalTag, TagKind.Copyright)]
-            [TestCase(typeof(Danbooru), _weirdTag, TagKind.General)]
-            [TestCase(typeof(Gelbooru), _weirdTag, TagKind.General)]
-            [TestCase(typeof(Konachan), _weirdTag, TagKind.General)]
-            [TestCase(typeof(Yandere), _weirdTag, TagKind.General)]
+            [TestCase(typeof(Danbooru), _artistTag, TagKind.Artist)]
+            [TestCase(typeof(Danbooru), _characterTag, TagKind.Character)]
+            [TestCase(typeof(Danbooru), _copyrightTag, TagKind.Copyright)]
+            [TestCase(typeof(Danbooru), _generalTag, TagKind.General)]
+            [TestCase(typeof(Danbooru), _metadataTag, TagKind.Metadata)]
+
+            [TestCase(typeof(Gelbooru), _artistTag, TagKind.Artist)]
+            [TestCase(typeof(Gelbooru), _characterTag, TagKind.Character)]
+            [TestCase(typeof(Gelbooru), _copyrightTag, TagKind.Copyright)]
+            [TestCase(typeof(Gelbooru), _generalTag, TagKind.General)]
+            [TestCase(typeof(Gelbooru), _metadataTag, TagKind.Metadata)]
+
+            [TestCase(typeof(Konachan), _artistTag, TagKind.Artist)]
+            [TestCase(typeof(Konachan), _characterTag, TagKind.Character)]
+            [TestCase(typeof(Konachan), _copyrightTag, TagKind.Copyright)]
+            [TestCase(typeof(Konachan), _generalTag, TagKind.General)]
+            [TestCase(typeof(Konachan), _metadataTag, TagKind.Metadata)]
+
+            [TestCase(typeof(Yandere), _artistTag, TagKind.Artist)]
+            [TestCase(typeof(Yandere), _characterTag, TagKind.Character)]
+            [TestCase(typeof(Yandere), _copyrightTag, TagKind.Copyright)]
+            [TestCase(typeof(Yandere), _generalTag, TagKind.General)]
+            // yande.re doesn't have metadata tags at all it seems.
             public async Task GetByName_Success(Type booruType, string name, TagKind kind)
             {
                 var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
@@ -40,7 +58,7 @@ namespace BooruDotNet.Tests
             [TestCase(typeof(Gelbooru))]
             [TestCase(typeof(Konachan))]
             [TestCase(typeof(Yandere))]
-            public void GetByName_Cancellation(Type booruType, string name = _normalTag)
+            public void GetByName_Cancellation(Type booruType, string name = _copyrightTag)
             {
                 // IMPORTANT: create raw instance here to not mess with other tests.
                 // See TagsCache.cs.
