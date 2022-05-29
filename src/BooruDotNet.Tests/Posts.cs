@@ -11,32 +11,50 @@ namespace BooruDotNet.Tests
     public class Posts
     {
         [Test]
-        [TestCase(typeof(Danbooru), 123456)]
-        [TestCase(typeof(Gelbooru), 5632370)]
-        [TestCase(typeof(Konachan), 75857)]
-        [TestCase(typeof(SankakuComplex), 5235625)]
-        [TestCase(typeof(Yandere), 759835)]
-        public async Task GetById_Success(Type booruType, int id)
+        [TestCase(typeof(Danbooru), 5185077, Rating.General)]
+        [TestCase(typeof(Danbooru), 4498238, Rating.Sensitive)]
+        [TestCase(typeof(Danbooru), 4567856, Rating.Questionable)]
+        [TestCase(typeof(Danbooru), 5220342, Rating.Explicit)]
+
+        [TestCase(typeof(Gelbooru), 7018351, Rating.General)]
+        [TestCase(typeof(Gelbooru), 6073333, Rating.Sensitive)]
+        [TestCase(typeof(Gelbooru), 7261530, Rating.Questionable)]
+        [TestCase(typeof(Gelbooru), 6752549, Rating.Explicit)]
+
+        [TestCase(typeof(Konachan), 75857, Rating.Safe)]
+        [TestCase(typeof(Konachan), 342487, Rating.Questionable)]
+        [TestCase(typeof(Konachan), 342464, Rating.Explicit)]
+
+        [TestCase(typeof(SankakuComplex), 31173056, Rating.Safe)]
+        [TestCase(typeof(SankakuComplex), 31171239, Rating.Questionable)]
+        [TestCase(typeof(SankakuComplex), 31172614, Rating.Explicit)]
+
+        [TestCase(typeof(Yandere), 977522, Rating.Safe)]
+        [TestCase(typeof(Yandere), 971244, Rating.Questionable)]
+        [TestCase(typeof(Yandere), 940023, Rating.Explicit)]
+        public async Task GetById_Success(Type booruType, int id, Rating rating)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostById>(booruType);
 
             var post = await booru.GetPostAsync(id);
 
             Assert.AreEqual(id, post.ID);
+            Assert.AreEqual(rating, post.Rating);
         }
 
         [Test]
-        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253)]
-        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559)]
-        [TestCase(typeof(Konachan), "86818eedf6ddca7a42f88d7f240be1dc", 75857)]
-        [TestCase(typeof(Yandere), "d483d8dfdc9753125d82b4561752d128", 759835)]
-        public async Task GetByHash_Success(Type booruType, string hash, int expectedId)
+        [TestCase(typeof(Danbooru), "a8044be47c86a36f7cf74253accd0752", 539253, Rating.Sensitive)]
+        [TestCase(typeof(Gelbooru), "a8044be47c86a36f7cf74253accd0752", 608559, Rating.Questionable)]
+        [TestCase(typeof(Konachan), "86818eedf6ddca7a42f88d7f240be1dc", 75857, Rating.Safe)]
+        [TestCase(typeof(Yandere), "d483d8dfdc9753125d82b4561752d128", 759835, Rating.Safe)]
+        public async Task GetByHash_Success(Type booruType, string hash, int expectedId, Rating rating)
         {
             var booru = BooruHelper.CreateBooru<IBooruPostByHash>(booruType);
 
             var post = await booru.GetPostAsync(hash);
 
             Assert.AreEqual(expectedId, post.ID);
+            Assert.AreEqual(rating, post.Rating);
         }
 
         [Test]
