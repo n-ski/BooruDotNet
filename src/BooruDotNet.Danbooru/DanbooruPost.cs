@@ -63,7 +63,7 @@ namespace BooruDotNet.Boorus
         public IReadOnlyList<string> Tags { get; set; }
 
         [JsonPropertyName("rating")]
-        [JsonConverter(typeof(RatingConverter))]
+        [JsonConverter(typeof(DanbooruRatingConverter))]
         public Rating Rating { get; set; }
 
         [JsonPropertyName("source")]
