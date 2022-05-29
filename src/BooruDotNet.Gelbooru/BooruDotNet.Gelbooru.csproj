@@ -5,8 +5,12 @@
     <RootNamespace>BooruDotNet.Boorus</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <Compile Remove="ApiResponseAttributes.cs" />
+  </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="..\BooruDotNet.Shared\Boorus\Json\RatingConverter.cs" LinkBase="Json" />
+    <Compile Include="..\BooruDotNet.Danbooru\Json\TagKindConverter.cs" LinkBase="Json" />
     <Compile Include="..\BooruDotNet.Shared\Boorus\Json\TagCollectionConverter.cs" LinkBase="Json" />
     <Compile Include="..\BooruDotNet.Shared\Boorus\Json\TagStringConverter.cs" LinkBase="Json" />
   </ItemGroup>
