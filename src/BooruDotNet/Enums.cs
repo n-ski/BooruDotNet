@@ -4,7 +4,9 @@
     {
         Safe,
         Questionable,
-        Explicit
+        Explicit,
+        General,
+        Sensitive,
     }
 
     public enum TagKind
