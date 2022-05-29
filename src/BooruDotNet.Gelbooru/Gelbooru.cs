@@ -75,11 +75,9 @@ namespace BooruDotNet.Boorus
 
             Uri uri = UriHelper.CreateFormat(Uris.Gelbooru_TagName_Format, escapedName);
 
-            GelbooruTag[]? tags = await HttpClient.GetFromJsonAsync<GelbooruTag[]>(
-                uri,
-                cancellationToken).CAF();
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>(uri, cancellationToken).CAF();
 
-            return tags?.Length is 1 ? tags[0] : throw new InvalidTagNameException(tagName);
+            return response?.Tags?.Length is 1 ? response.Tags[0] : throw new InvalidTagNameException(tagName);
         }
 
         // Special method that can handle thrown JsonException.
@@ -92,7 +90,8 @@ namespace BooruDotNet.Boorus
 
             try
             {
-                posts = await HttpClient.GetFromJsonAsync<GelbooruPost[]>(uri, cancellationToken).CAF();
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse>(uri, cancellationToken).CAF();
+                posts = response?.Posts;
             }
             catch (JsonException) when (handleJsonException)
             {

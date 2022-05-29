@@ -8,7 +8,7 @@ namespace BooruDotNet.Boorus
     [DebuggerDisplay(ITag.DebuggerDisplayString)]
     internal sealed class GelbooruTag : ITag
     {
-        [JsonPropertyName("tag")]
+        [JsonPropertyName("name")]
         public string Name { get; set; } = "";
 
         [JsonPropertyName("type")]
