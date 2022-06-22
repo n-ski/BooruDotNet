@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using BooruDotNet.Boorus;
 
-namespace BooruDotNet.Tests.Shared
+namespace BooruDotNet.Tests
 {
     internal static class BooruHelper
     {

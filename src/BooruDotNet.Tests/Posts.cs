@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using BooruDotNet.Boorus;
 using BooruDotNet.Posts;
-using BooruDotNet.Tests.Shared;
 using NUnit.Framework;
 
 namespace BooruDotNet.Tests
