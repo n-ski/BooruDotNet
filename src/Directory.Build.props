@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <Authors>Sergey Volkov</Authors>
-    <Copyright>Copyright (c) 2020-2021 Sergey Volkov</Copyright>
+    <Copyright>Copyright (c) 2020-2022 Sergey Volkov</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
