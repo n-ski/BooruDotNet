@@ -5,7 +5,7 @@ namespace BooruDotNet.Helpers;
 
 internal static class NetHelper
 {
-    private static readonly Lazy<string> _userAgentLazy = new Lazy<string>(() =>
+    private static readonly Lazy<string> UserAgentLazy = new Lazy<string>(() =>
     {
         var framework = RuntimeInformation.FrameworkDescription;
         var words = framework.Split();
@@ -13,5 +13,5 @@ internal static class NetHelper
         return string.Concat(words[0..^1]) + "/" + words[^1];
     });
 
-    internal static string UserAgentForRuntime => _userAgentLazy.Value;
+    internal static string UserAgentForRuntime => UserAgentLazy.Value;
 }

@@ -9,38 +9,38 @@ namespace BooruDotNet.Tests;
 
 public class Tags
 {
-    private const string _artistTag = "yohane";
-    private const string _characterTag = "lumine_(genshin_impact)";
-    private const string _invalidTag = "ThisDoesNotExist";
-    private const string _copyrightTag = "kantai_collection";
-    private const string _generalTag = "thighhighs";
-    private const string _metadataTag = "highres";
+    private const string ArtistTag = "yohane";
+    private const string CharacterTag = "lumine_(genshin_impact)";
+    private const string InvalidTag = "ThisDoesNotExist";
+    private const string CopyrightTag = "kantai_collection";
+    private const string GeneralTag = "thighhighs";
+    private const string MetadataTag = "highres";
 
     public class GetByName
     {
         [Test]
-        [TestCase(typeof(Danbooru), _artistTag, TagKind.Artist)]
-        [TestCase(typeof(Danbooru), _characterTag, TagKind.Character)]
-        [TestCase(typeof(Danbooru), _copyrightTag, TagKind.Copyright)]
-        [TestCase(typeof(Danbooru), _generalTag, TagKind.General)]
-        [TestCase(typeof(Danbooru), _metadataTag, TagKind.Metadata)]
+        [TestCase(typeof(Danbooru), ArtistTag, TagKind.Artist)]
+        [TestCase(typeof(Danbooru), CharacterTag, TagKind.Character)]
+        [TestCase(typeof(Danbooru), CopyrightTag, TagKind.Copyright)]
+        [TestCase(typeof(Danbooru), GeneralTag, TagKind.General)]
+        [TestCase(typeof(Danbooru), MetadataTag, TagKind.Metadata)]
 
-        [TestCase(typeof(Gelbooru), _artistTag, TagKind.Artist)]
-        [TestCase(typeof(Gelbooru), _characterTag, TagKind.Character)]
-        [TestCase(typeof(Gelbooru), _copyrightTag, TagKind.Copyright)]
-        [TestCase(typeof(Gelbooru), _generalTag, TagKind.General)]
-        [TestCase(typeof(Gelbooru), _metadataTag, TagKind.Metadata)]
+        [TestCase(typeof(Gelbooru), ArtistTag, TagKind.Artist)]
+        [TestCase(typeof(Gelbooru), CharacterTag, TagKind.Character)]
+        [TestCase(typeof(Gelbooru), CopyrightTag, TagKind.Copyright)]
+        [TestCase(typeof(Gelbooru), GeneralTag, TagKind.General)]
+        [TestCase(typeof(Gelbooru), MetadataTag, TagKind.Metadata)]
 
-        [TestCase(typeof(Konachan), _artistTag, TagKind.Artist)]
-        [TestCase(typeof(Konachan), _characterTag, TagKind.Character)]
-        [TestCase(typeof(Konachan), _copyrightTag, TagKind.Copyright)]
-        [TestCase(typeof(Konachan), _generalTag, TagKind.General)]
-        [TestCase(typeof(Konachan), _metadataTag, TagKind.Metadata)]
+        [TestCase(typeof(Konachan), ArtistTag, TagKind.Artist)]
+        [TestCase(typeof(Konachan), CharacterTag, TagKind.Character)]
+        [TestCase(typeof(Konachan), CopyrightTag, TagKind.Copyright)]
+        [TestCase(typeof(Konachan), GeneralTag, TagKind.General)]
+        [TestCase(typeof(Konachan), MetadataTag, TagKind.Metadata)]
 
-        [TestCase(typeof(Yandere), _artistTag, TagKind.Artist)]
-        [TestCase(typeof(Yandere), _characterTag, TagKind.Character)]
-        [TestCase(typeof(Yandere), _copyrightTag, TagKind.Copyright)]
-        [TestCase(typeof(Yandere), _generalTag, TagKind.General)]
+        [TestCase(typeof(Yandere), ArtistTag, TagKind.Artist)]
+        [TestCase(typeof(Yandere), CharacterTag, TagKind.Character)]
+        [TestCase(typeof(Yandere), CopyrightTag, TagKind.Copyright)]
+        [TestCase(typeof(Yandere), GeneralTag, TagKind.General)]
         // yande.re doesn't have metadata tags at all it seems.
         public async Task GetByName_Success(Type booruType, string name, TagKind kind)
         {
@@ -57,7 +57,7 @@ public class Tags
         [TestCase(typeof(Gelbooru))]
         [TestCase(typeof(Konachan))]
         [TestCase(typeof(Yandere))]
-        public void GetByName_Cancellation(Type booruType, string name = _copyrightTag)
+        public void GetByName_Cancellation(Type booruType, string name = CopyrightTag)
         {
             // IMPORTANT: create raw instance here to not mess with other tests.
             // See TagsCache.cs.
@@ -77,7 +77,7 @@ public class Tags
         // Case-sensitive search.
         [TestCase(typeof(Konachan), "Pantyhose")]
         [TestCase(typeof(Yandere), "Kantai_Collection")]
-        public void GetByName_Fail(Type booruType, string name = _invalidTag)
+        public void GetByName_Fail(Type booruType, string name = InvalidTag)
         {
             var booru = BooruHelper.CreateBooru<IBooruTagByName>(booruType);
 

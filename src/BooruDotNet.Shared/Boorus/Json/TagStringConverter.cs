@@ -7,7 +7,7 @@ namespace BooruDotNet.Boorus.Json;
 
 internal sealed class TagStringConverter : JsonConverter<IReadOnlyList<string>>
 {
-    private static readonly char _separator = ' ';
+    private static readonly char Separator = ' ';
 
     public override IReadOnlyList<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -19,13 +19,13 @@ internal sealed class TagStringConverter : JsonConverter<IReadOnlyList<string>>
         }
 
         return tagString.Length > 0
-            ? tagString.Split(_separator) 
+            ? tagString.Split(Separator)
             : Array.Empty<string>();
     }
 
     public override void Write(Utf8JsonWriter writer, IReadOnlyList<string> value, JsonSerializerOptions options)
     {
-        string tagString = string.Join(_separator, value);
+        string tagString = string.Join(Separator, value);
 
         writer.WriteStringValue(tagString);
     }
