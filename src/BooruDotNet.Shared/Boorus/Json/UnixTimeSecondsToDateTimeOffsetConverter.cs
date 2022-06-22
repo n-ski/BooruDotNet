@@ -2,22 +2,21 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Boorus.Json
+namespace BooruDotNet.Boorus.Json;
+
+internal sealed class UnixTimeSecondsToDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 {
-    internal sealed class UnixTimeSecondsToDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+    public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            long timestamp = reader.GetInt64();
+        long timestamp = reader.GetInt64();
 
-            return DateTimeOffset.FromUnixTimeSeconds(timestamp);
-        }
+        return DateTimeOffset.FromUnixTimeSeconds(timestamp);
+    }
 
-        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
-        {
-            long timestamp = value.ToUnixTimeSeconds();
+    public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
+    {
+        long timestamp = value.ToUnixTimeSeconds();
 
-            writer.WriteNumberValue(timestamp);
-        }
+        writer.WriteNumberValue(timestamp);
     }
 }

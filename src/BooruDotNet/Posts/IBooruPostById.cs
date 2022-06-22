@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace BooruDotNet.Posts
+namespace BooruDotNet.Posts;
+
+public interface IBooruPostById
 {
-    public interface IBooruPostById
-    {
-        Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default);
-    }
+    Task<IPost> GetPostAsync(int id, CancellationToken cancellationToken = default);
 }

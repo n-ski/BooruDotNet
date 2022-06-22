@@ -3,31 +3,30 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Boorus.Json
+namespace BooruDotNet.Boorus.Json;
+
+internal sealed class TagStringConverter : JsonConverter<IReadOnlyList<string>>
 {
-    internal sealed class TagStringConverter : JsonConverter<IReadOnlyList<string>>
+    private static readonly char _separator = ' ';
+
+    public override IReadOnlyList<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        private static readonly char _separator = ' ';
+        string tagString = reader.GetString()!;
 
-        public override IReadOnlyList<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        if (tagString is null)
         {
-            string tagString = reader.GetString()!;
-
-            if (tagString is null)
-            {
-                throw new JsonException();
-            }
-
-            return tagString.Length > 0
-                ? tagString.Split(_separator) 
-                : Array.Empty<string>();
+            throw new JsonException();
         }
 
-        public override void Write(Utf8JsonWriter writer, IReadOnlyList<string> value, JsonSerializerOptions options)
-        {
-            string tagString = string.Join(_separator, value);
+        return tagString.Length > 0
+            ? tagString.Split(_separator) 
+            : Array.Empty<string>();
+    }
 
-            writer.WriteStringValue(tagString);
-        }
+    public override void Write(Utf8JsonWriter writer, IReadOnlyList<string> value, JsonSerializerOptions options)
+    {
+        string tagString = string.Join(_separator, value);
+
+        writer.WriteStringValue(tagString);
     }
 }

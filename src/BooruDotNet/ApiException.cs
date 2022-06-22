@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace BooruDotNet
+namespace BooruDotNet;
+
+[Serializable]
+public class ApiException : Exception
 {
-    [Serializable]
-    public class ApiException : Exception
+    public ApiException()
     {
-        public ApiException()
-        {
-        }
+    }
 
-        public ApiException(string? message) : base(message)
-        {
-        }
+    public ApiException(string? message) : base(message)
+    {
+    }
 
-        public ApiException(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
+    public ApiException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
 
-        protected ApiException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+    protected ApiException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

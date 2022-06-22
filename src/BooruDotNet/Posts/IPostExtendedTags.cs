@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using BooruDotNet.Tags;
 
-namespace BooruDotNet.Posts
+namespace BooruDotNet.Posts;
+
+public interface IPostExtendedTags : IPost
 {
-    public interface IPostExtendedTags : IPost
-    {
-        IReadOnlyList<ITag> ExtendedTags { get; }
-    }
+    IReadOnlyList<ITag> ExtendedTags { get; }
 }

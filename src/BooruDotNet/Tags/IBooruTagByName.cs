@@ -1,10 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace BooruDotNet.Tags
+namespace BooruDotNet.Tags;
+
+public interface IBooruTagByName
 {
-    public interface IBooruTagByName
-    {
-        Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default);
-    }
+    Task<ITag> GetTagAsync(string tagName, CancellationToken cancellationToken = default);
 }

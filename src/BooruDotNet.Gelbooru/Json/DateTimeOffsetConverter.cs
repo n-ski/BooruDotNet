@@ -3,24 +3,23 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Boorus.Json
+namespace BooruDotNet.Boorus.Json;
+
+internal sealed class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 {
-    internal sealed class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+    private const string _dateTimeFormat = "ddd MMM dd HH:mm:ss zzz yyyy";
+
+    public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        private const string _dateTimeFormat = "ddd MMM dd HH:mm:ss zzz yyyy";
+        string dateString = reader.GetString()!;
 
-        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-        {
-            string dateString = reader.GetString()!;
+        return DateTimeOffset.ParseExact(dateString, _dateTimeFormat, CultureInfo.InvariantCulture);
+    }
 
-            return DateTimeOffset.ParseExact(dateString, _dateTimeFormat, CultureInfo.InvariantCulture);
-        }
+    public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
+    {
+        string dateString = value.ToString(_dateTimeFormat);
 
-        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
-        {
-            string dateString = value.ToString(_dateTimeFormat);
-
-            writer.WriteStringValue(dateString);
-        }
+        writer.WriteStringValue(dateString);
     }
 }

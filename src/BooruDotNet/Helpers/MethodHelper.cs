@@ -1,17 +1,16 @@
 ﻿using System.Diagnostics;
 
-namespace BooruDotNet.Helpers
-{
-    internal static class MethodHelper
-    {
-        [DebuggerStepThrough]
-        internal static void DoNothing()
-        {
-        }
+namespace BooruDotNet.Helpers;
 
-        [DebuggerStepThrough]
-        internal static void DoNothing<T>(T _)
-        {
-        }
+internal static class MethodHelper
+{
+    [DebuggerStepThrough]
+    internal static void DoNothing()
+    {
+    }
+
+    [DebuggerStepThrough]
+    internal static void DoNothing<T>(T _)
+    {
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BooruDotNet.Boorus
+namespace BooruDotNet.Boorus;
+
+internal sealed class ApiResponseAttributes
 {
-    internal sealed class ApiResponseAttributes
-    {
-        [JsonPropertyName("limit")]
-        public int? Limit { get; set; }
+    [JsonPropertyName("limit")]
+    public int? Limit { get; set; }
 
-        [JsonPropertyName("offset")]
-        public int? Offset { get; set; }
+    [JsonPropertyName("offset")]
+    public int? Offset { get; set; }
 
-        [JsonPropertyName("count")]
-        public int? Count { get; set; }
-    }
+    [JsonPropertyName("count")]
+    public int? Count { get; set; }
 }
